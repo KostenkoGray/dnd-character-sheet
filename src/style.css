@@ -1,0 +1,1010 @@
+/* ==================================================
+   D&D CHARACTER SHEET
+   ОСНОВНІ НАЛАШТУВАННЯ
+   ================================================== */
+
+:root {
+
+  /* ---------- Кольори ---------- */
+
+  --bg: #111116;
+  --surface: #19191f;
+  --surface-light: #222229;
+
+  --text: #e8e5ed;
+  --text-muted: #aaa5b2;
+  --text-dark: #111116;
+
+  --border: #33333c;
+
+  --accent: #aa3bff;
+  --accent-light: #c77aff;
+  --accent-bg: rgba(170, 59, 255, 0.12);
+
+  --gold: #c9a35d;
+  --gold-light: #e0bd78;
+
+  --danger: #d85c5c;
+  --success: #65bd75;
+
+
+  /* ---------- Шрифти ---------- */
+
+  --sans:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+
+
+  /* ---------- Тіні ---------- */
+
+  --shadow:
+    0 8px 20px rgba(0, 0, 0, 0.25);
+
+
+  /* ---------- Загальні налаштування ---------- */
+
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.45;
+
+  color: var(--text);
+  background: var(--bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* ==================================================
+   БАЗОВІ ЕЛЕМЕНТИ
+   ================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+
+html {
+  min-height: 100%;
+  background: var(--bg);
+}
+
+
+body {
+  margin: 0;
+  min-height: 100svh;
+
+  background: var(--bg);
+  color: var(--text);
+}
+
+
+button {
+  font: inherit;
+}
+
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+/* ==================================================
+   ОСНОВНИЙ КОНТЕЙНЕР ЗАСТОСУНКУ
+   ================================================== */
+
+#app {
+
+  width: 100%;
+  max-width: 700px;
+
+  min-height: 100svh;
+
+  margin: 0 auto;
+
+  background: var(--bg);
+
+  position: relative;
+}
+
+
+/* ==================================================
+   ЗАГАЛЬНИЙ ЕКРАН
+   ================================================== */
+
+.app {
+
+  min-height: 100svh;
+
+  position: relative;
+
+  background: var(--bg);
+
+  display: flex;
+  flex-direction: column;
+}
+
+
+/*
+  Основний контент.
+
+  Нижній padding потрібен тому,
+  що внизу постійно знаходиться
+  нижня навігація.
+*/
+
+.app main {
+
+  width: 100%;
+
+  padding: 24px 16px 110px;
+
+  flex: 1;
+}
+
+
+/* ==================================================
+   ЗАГОЛОВКИ
+   ================================================== */
+
+h1,
+h2,
+h3 {
+  margin-top: 0;
+
+  color: var(--text);
+}
+
+
+h1 {
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+
+h2 {
+  font-size: 20px;
+  line-height: 1.25;
+
+  margin-bottom: 16px;
+}
+
+
+h3 {
+  font-size: 14px;
+
+  color: var(--gold);
+
+  letter-spacing: 0.08em;
+}
+
+
+p {
+  margin: 0;
+}
+
+
+/* ==================================================
+   ХРЕСТИК
+   ==================================================
+
+   Використовується:
+
+   Character Sheet:
+   → Character List
+
+   Combat / Inventory / Magic / Dice / Notes:
+   → Character Sheet
+   ================================================== */
+
+.close-character-sheet {
+
+  position: absolute;
+
+  top: 12px;
+  right: 12px;
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 1px solid var(--border);
+  border-radius: 50%;
+
+  background: var(--surface);
+  color: var(--text);
+
+  font-size: 28px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  z-index: 100;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+
+.close-character-sheet:hover {
+
+  background: var(--surface-light);
+
+  border-color: var(--accent);
+
+}
+
+
+.close-character-sheet:active {
+
+  transform: scale(0.92);
+
+}
+
+
+.close-character-sheet:focus-visible {
+
+  outline: 2px solid var(--accent);
+
+  outline-offset: 2px;
+}
+
+
+/* ==================================================
+   CHARACTER HEADER
+   ================================================== */
+
+.character-header {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  padding-right: 48px;
+
+  margin-bottom: 24px;
+}
+
+
+/* ---------- Аватар ---------- */
+
+.avatar {
+
+  background:
+    linear-gradient(
+      135deg,
+      #2a2630,
+      #17171c
+    );
+
+  border: 1px solid var(--border);
+
+  border-radius: 50%;
+}
+
+
+.avatar.large {
+
+  width: 80px;
+  height: 80px;
+
+  flex-shrink: 0;
+}
+
+
+/* ---------- Інформація ---------- */
+
+.character-main-info {
+
+  min-width: 0;
+
+  text-align: left;
+}
+
+
+.character-main-info h1 {
+
+  margin: 0;
+
+  font-size: 24px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+.character-main-info p {
+
+  margin: 5px 0;
+
+  color: var(--text-muted);
+
+  font-size: 14px;
+}
+
+
+.character-main-info span {
+
+  color: var(--gold);
+
+  font-size: 14px;
+}
+
+
+/* ==================================================
+   ХАРАКТЕРИСТИКИ
+   ================================================== */
+
+.stats-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 10px;
+
+  margin-bottom: 28px;
+}
+
+
+/* ---------- Картка характеристики ---------- */
+
+.stat-card {
+
+  min-height: 105px;
+
+  padding: 12px 8px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  text-align: center;
+
+  box-shadow: var(--shadow);
+}
+
+
+/* STR / DEX / etc. */
+
+.stat-name {
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: var(--gold);
+
+  letter-spacing: 0.08em;
+}
+
+
+/* 16 / 18 / etc. */
+
+.stat-value {
+
+  margin-top: 4px;
+
+  font-size: 24px;
+
+  font-weight: 700;
+
+  color: var(--text);
+}
+
+
+/* +3 / +4 / etc. */
+
+.stat-modifier {
+
+  margin-top: 2px;
+
+  min-width: 42px;
+
+  padding: 2px 6px;
+
+  border-radius: 20px;
+
+  background: var(--accent-bg);
+
+  color: var(--accent-light);
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+
+/* ==================================================
+   SKILLS / SAVING THROWS
+   ================================================== */
+
+.skills-section {
+
+  margin-top: 8px;
+}
+
+
+.skills-section > h2 {
+
+  text-align: left;
+
+  margin-bottom: 18px;
+}
+
+
+/* ---------- Група за характеристикою ---------- */
+
+.skills-group {
+
+  margin-bottom: 18px;
+
+  padding: 12px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+}
+
+
+.skills-group h3 {
+
+  margin-bottom: 8px;
+
+  text-align: left;
+}
+
+
+/* ---------- Один skill ---------- */
+
+.skill-row {
+
+  min-height: 36px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 5px 0;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  font-size: 14px;
+
+  text-align: left;
+}
+
+
+.skill-row:last-child {
+
+  border-bottom: none;
+}
+
+
+.skill-row span:last-child {
+
+  min-width: 32px;
+
+  text-align: right;
+
+  color: var(--text);
+
+  font-weight: 600;
+}
+
+
+/* ==================================================
+   НИЖНЯ НАВІГАЦІЯ
+   ================================================== */
+
+.bottom-navigation {
+
+  position: fixed;
+
+  left: 50%;
+
+  bottom: 0;
+
+  transform: translateX(-50%);
+
+  width: 100%;
+
+  max-width: 700px;
+
+  height: 70px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(6, 1fr);
+
+  background: rgba(25, 25, 31, 0.96);
+
+  border-top: 1px solid var(--border);
+
+  backdrop-filter: blur(12px);
+
+  -webkit-backdrop-filter: blur(12px);
+
+  z-index: 90;
+
+  padding-bottom:
+    env(safe-area-inset-bottom);
+}
+
+
+/* ---------- Кнопка меню ---------- */
+
+.nav-item {
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--text-muted);
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 3px;
+
+  padding: 5px 2px;
+
+  cursor: pointer;
+
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+
+.nav-item:active {
+
+  background: var(--accent-bg);
+
+}
+
+
+/* ---------- Активний пункт ---------- */
+
+.nav-item.active {
+
+  color: var(--accent-light);
+
+}
+
+
+.nav-item.active .nav-label {
+
+  font-weight: 600;
+}
+
+
+/* ---------- Іконка ---------- */
+
+.nav-icon {
+
+  font-size: 20px;
+
+  line-height: 1;
+}
+
+
+/* ---------- Назва ---------- */
+
+.nav-label {
+
+  font-size: 10px;
+
+  line-height: 1.1;
+}
+
+
+/* ==================================================
+   COMBAT SCREEN
+   ================================================== */
+
+/* Основні бойові показники */
+
+.combat-main-stats {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 10px;
+
+  margin-bottom: 16px;
+}
+
+
+.combat-stat {
+
+  min-height: 90px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+}
+
+
+.combat-stat span {
+
+  color: var(--text-muted);
+
+  font-size: 13px;
+}
+
+
+.combat-stat strong {
+
+  margin-top: 4px;
+
+  color: var(--text);
+
+  font-size: 24px;
+}
+
+
+/* ==================================================
+   HP
+   ================================================== */
+
+.combat-hp {
+
+  padding: 16px;
+
+  margin-bottom: 16px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+}
+
+
+.combat-hp h2 {
+
+  text-align: left;
+
+  margin-bottom: 12px;
+}
+
+
+.hp-row {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+
+.hp-row button {
+
+  width: 48px;
+  height: 48px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 50%;
+
+  background: var(--surface-light);
+
+  color: var(--text);
+
+  font-size: 26px;
+
+  cursor: pointer;
+}
+
+
+.hp-row button:active {
+
+  transform: scale(0.94);
+
+}
+
+
+.hp-value {
+
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 5px;
+}
+
+
+.hp-value strong {
+
+  font-size: 30px;
+}
+
+
+.hp-value span {
+
+  color: var(--text-muted);
+
+  font-size: 15px;
+}
+
+
+/* ---------- Temporary HP ---------- */
+
+.temp-hp {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-top: 14px;
+
+  padding-top: 12px;
+
+  border-top: 1px solid var(--border);
+
+  color: var(--text-muted);
+}
+
+
+.temp-hp strong {
+
+  color: var(--accent-light);
+}
+
+
+/* ==================================================
+   COMBAT RESOURCES
+   ================================================== */
+
+.combat-resources {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 10px;
+
+  margin-bottom: 16px;
+}
+
+
+.combat-resource {
+
+  padding: 14px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+
+.combat-resource span {
+
+  color: var(--text-muted);
+
+  font-size: 13px;
+}
+
+
+.combat-resource strong {
+
+  font-size: 20px;
+}
+
+
+/* ==================================================
+   COMBAT SUMMARY
+   ================================================== */
+
+.combat-summary {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 8px;
+
+  margin-bottom: 24px;
+}
+
+
+.combat-summary > div {
+
+  padding: 10px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 10px;
+
+  text-align: center;
+}
+
+
+.combat-summary span {
+
+  display: block;
+
+  color: var(--text-muted);
+
+  font-size: 10px;
+}
+
+
+.combat-summary strong {
+
+  display: block;
+
+  margin-top: 3px;
+
+  color: var(--text);
+
+  font-size: 16px;
+}
+
+
+/* ==================================================
+   ЗАГАЛЬНІ СЕКЦІЇ COMBAT
+   ================================================== */
+
+.combat-section {
+
+  margin-bottom: 20px;
+
+  padding: 16px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  text-align: left;
+}
+
+
+.combat-section h2 {
+
+  margin-bottom: 8px;
+}
+
+
+.combat-section p {
+
+  color: var(--text-muted);
+
+  font-size: 14px;
+}
+
+
+/* ==================================================
+   АДАПТАЦІЯ ПІД ДУЖЕ МАЛЕНЬКІ ЕКРАНИ
+   ================================================== */
+
+@media (max-width: 380px) {
+
+  .app main {
+
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+
+  .stats-grid {
+
+    gap: 7px;
+  }
+
+
+  .stat-card {
+
+    min-height: 95px;
+  }
+
+
+  .nav-icon {
+
+    font-size: 18px;
+  }
+
+
+  .nav-label {
+
+    font-size: 9px;
+  }
+
+}
+
+
+/* ==================================================
+   ВЕЛИКІ ЕКРАНИ
+   ================================================== */
+
+@media (min-width: 701px) {
+
+  /*
+    На великому екрані залишаємо
+    застосунок вузьким, щоб він
+    все одно виглядав як мобільний D&D застосунок.
+  */
+
+  #app {
+
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+
+    box-shadow:
+      0 0 40px rgba(0, 0, 0, 0.25);
+  }
+
+}
