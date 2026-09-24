@@ -200,7 +200,13 @@ export function combatScreen(character) {
           </div>
           <div class="temp-hp">
             <span>Temporary HP</span>
-            <strong>${tempHp}</strong>
+            <div class="temp-hp-controls">
+              <button id="temp-hp-minus" type="button" aria-label="Зменшити Temporary HP">−</button>
+              <button id="temp-hp-value-input" class="temp-hp-value" type="button" aria-label="Ввести Temporary HP вручну">
+                <strong>${tempHp}</strong>
+              </button>
+              <button id="temp-hp-plus" type="button" aria-label="Збільшити Temporary HP">+</button>
+            </div>
           </div>
         </section>
 
