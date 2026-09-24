@@ -1160,3 +1160,47 @@ p {
 .death-save-dot.success.filled{background:var(--success)!important;border-color:var(--success)!important;color:#fff!important;}
 .death-save-dot.fail.filled{background:var(--danger)!important;border-color:var(--danger)!important;color:#fff!important;}
 .animal-handling{display:inline-block!important;white-space:normal!important;line-height:1.05;max-width:72px;}
+
+/* Combat v2.6 */
+.hp-value span{color:var(--danger);}
+.death-save-success,
+.death-save-fail{
+  width:34px;
+  height:34px;
+  border:1px solid var(--border);
+  border-radius:50%;
+  background:var(--surface-light);
+  padding:0;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1rem;
+  font-weight:700;
+}
+.death-save-success.filled{
+  background:var(--success);
+  border-color:var(--success);
+  color:#fff;
+}
+.death-save-fail.filled{
+  background:var(--danger);
+  border-color:var(--danger);
+  color:#fff;
+}
+.animal-handling{
+  display:inline-block!important;
+  white-space:normal!important;
+  line-height:1.05;
+  width:72px;
+}
+.combat-skill-row span{
+  flex:1;
+  min-width:0;
+  white-space:normal;
+  line-height:1.05;
+}
+.combat-skill-row strong{
+  flex:0 0 32px;
+  text-align:right;
+}
