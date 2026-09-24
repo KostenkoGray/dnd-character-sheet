@@ -1858,8 +1858,8 @@ p {
 
 .camp-menu-open{
   position:static;
-  width:42px;
-  height:42px;
+  width:56px;
+  height:56px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -1868,7 +1868,7 @@ p {
   border-radius:50%;
   background:var(--surface);
   color:var(--text);
-  font-size:21px;
+  font-size:26px;
   line-height:1;
   cursor:pointer;
   transition:
@@ -1893,31 +1893,29 @@ p {
 
 .camp-fab-menu{
   position:fixed;
-  top:64px;
-  right:62px;
+  top:112px;
+  right:72px;
   z-index:150;
   display:flex;
-  align-items:center;
-  gap:8px;
+  align-items:flex-start;
+  gap:12px;
   pointer-events:none;
 }
 
 .camp-action{
-  width:132px;
-  min-height:44px;
-  padding:0 11px;
+  width:56px;
   display:flex;
+  flex-direction:column;
   align-items:center;
-  justify-content:center;
-  gap:7px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  color:#fff;
-  font-weight:700;
-  box-shadow:0 8px 20px rgba(0,0,0,.28);
+  justify-content:flex-start;
+  gap:4px;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:var(--text);
   cursor:pointer;
   opacity:0;
-  transform:translateX(18px) scale(.96);
+  transform:translateX(18px) scale(.9);
   pointer-events:auto;
   transition:
     opacity .18s ease,
@@ -1925,18 +1923,44 @@ p {
     filter .15s ease;
 }
 
-.camp-action:hover{
-  filter:brightness(1.08);
+.camp-action::before{
+  content:"";
+  width:56px;
+  height:56px;
+  display:block;
+  border:1px solid var(--border);
+  border-radius:50%;
+  box-shadow:0 8px 20px rgba(0,0,0,.28);
 }
 
 .camp-action span{
-  font-size:18px;
+  position:absolute;
+  width:56px;
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
   line-height:1;
+  color:#fff;
 }
 
 .camp-action strong{
-  font-size:12px;
+  font-size:10px;
+  line-height:1.05;
   white-space:nowrap;
+}
+
+.camp-action-short-rest::before{
+  background:#287bd6;
+}
+
+.camp-action-long-rest::before{
+  background:#164a8a;
+}
+
+.camp-action-level-up::before{
+  background:#2f9d5b;
 }
 
 .camp-fab-menu.open .camp-action{
@@ -1954,18 +1978,6 @@ p {
 
 .camp-fab-menu.open .camp-action-level-up{
   transition-delay:.10s;
-}
-
-.camp-action-short-rest{
-  background:#287bd6;
-}
-
-.camp-action-long-rest{
-  background:#164a8a;
-}
-
-.camp-action-level-up{
-  background:#2f9d5b;
 }
 
 .camp-dialog-backdrop{
@@ -2045,27 +2057,31 @@ p {
     gap:8px;
   }
 
-  .character-header-actions .close-character-sheet,
-  .camp-menu-open{
+  .character-header-actions .close-character-sheet{
     width:40px;
     height:40px;
   }
 
-  .camp-fab-menu{
-    top:58px;
-    right:56px;
-    gap:6px;
+  .camp-menu-open{
+    width:56px;
+    height:56px;
   }
 
-  .camp-action{
-    width:112px;
-    min-height:42px;
-    padding:0 8px;
-    gap:5px;
+  .camp-fab-menu{
+    top:104px;
+    right:66px;
+    gap:8px;
+  }
+
+  .camp-action,
+  .camp-action::before,
+  .camp-action span{
+    width:56px;
+    height:56px;
   }
 
   .camp-action strong{
-    font-size:11px;
+    font-size:9px;
   }
 }
 
