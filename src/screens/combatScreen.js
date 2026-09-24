@@ -296,6 +296,7 @@ export function combatScreen(character) {
           </button>
         </section>
 
+        <section class="combat-vitals">
         <section class="combat-hp">
           <h2>Hit Points</h2>
           <div class="hp-row">
@@ -318,6 +319,17 @@ export function combatScreen(character) {
           </div>
         </section>
 
+          <section class="combat-hit-dice">
+            <h2>Hit Dice</h2>
+            <span class="hit-die-label">${hitDie}</span>
+            <strong class="hit-dice-value">${currentHitDice}/${hitDiceTotal}</strong>
+            <div class="hit-dice-controls">
+              <button type="button" id="hit-dice-minus" aria-label="Зменшити Hit Dice">−</button>
+              <button type="button" id="hit-dice-plus" aria-label="Збільшити Hit Dice">+</button>
+            </div>
+          </section>
+        </section>
+
         ${currentHp === 0 ? `
         <section class="death-saves-panel">
           <div class="death-saves-side">
@@ -328,43 +340,6 @@ export function combatScreen(character) {
             <strong>Death Saves</strong>
           </div>
           <div class="death-saves-side">
-            <span>Failure</span>
-            <div class="death-save-dots">${renderFailureDots(deathSaves.fail)}</div>
-          </div>
-        </section>
-        ` : ""}
-
-        <section class="combat-resources">
-          <div class="combat-resource">
-            <span>Hit Dice ${hitDie}</span>
-            <div class="resource-counter">
-              <button type="button" id="hit-dice-minus">−</button>
-              <strong>${currentHitDice}/${hitDiceTotal}</strong>
-              <button type="button" id="hit-dice-plus">+</button>
-            </div>
-          </div>
-
-          <div class="combat-resource death-saves-resource">
-            <span>Death Saves</span>
-            <div class="death-save-row">
-              <span>Success</span>
-              <div class="death-save-dots">${renderSuccessDots(deathSaves.success)}</div>
-            </div>
-            <div class="death-save-row">
-              <span>Failure</span>
-              <div class="death-save-dots">${renderFailureDots(deathSaves.fail)}</div>
-            </div>
-          </div>
-        </section>
-
-        ${currentHp === 0 ? `
-        <section class="combat-section death-saves-conditional">
-          <h2>Death Saves</h2>
-          <div class="death-save-row">
-            <span>Success</span>
-            <div class="death-save-dots">${renderSuccessDots(deathSaves.success)}</div>
-          </div>
-          <div class="death-save-row">
             <span>Failure</span>
             <div class="death-save-dots">${renderFailureDots(deathSaves.fail)}</div>
           </div>
