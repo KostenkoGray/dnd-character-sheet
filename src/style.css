@@ -1538,3 +1538,28 @@ p {
     flex-basis:38px;
   }
 }
+
+/* Combat v3.4.1 */
+.combat-skill-row{
+  display:grid;
+  grid-template-columns:22px minmax(0,1fr) 32px;
+  align-items:center;
+  column-gap:4px;
+}
+.combat-skill-row span{
+  min-width:0;
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+  line-height:1.05;
+}
+.combat-skill-row strong{
+  grid-column:3;
+  text-align:right;
+}
+.combat-skill-row .animal-handling{
+  display:block!important;
+  width:auto;
+  max-width:none;
+  white-space:normal!important;
+}
