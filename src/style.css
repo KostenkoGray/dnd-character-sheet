@@ -1154,3 +1154,9 @@ p {
     gap:4px;
   }
 }
+
+/* Combat v2.5.1 */
+.hp-value strong{color:var(--danger);}
+.death-save-dot.success.filled{background:var(--success)!important;border-color:var(--success)!important;color:#fff!important;}
+.death-save-dot.fail.filled{background:var(--danger)!important;border-color:var(--danger)!important;color:#fff!important;}
+.animal-handling{display:inline-block!important;white-space:normal!important;line-height:1.05;max-width:72px;}
