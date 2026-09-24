@@ -16,11 +16,16 @@ import { charactersScreen } from "./screens/characterListScreen.js";
 import { characterSheetScreen } from "./screens/characterSheetScreen.js";
 import { combatScreen } from "./screens/combatScreen.js";
 import { saveCharacters } from "./services/storageService.js";
+import { bottomNavigation } from "./components/bottomNavigation.js";
 
 const app = document.querySelector("#app");
 
 let currentCharacter = null;
 let currentScreen = "list";
+
+function navigationForCurrentScreen() {
+  return bottomNavigation(currentScreen);
+}
 
 function persistCharacters() {
   saveCharacters(getCharacters());
@@ -51,6 +56,7 @@ function render() {
             <h1>${currentScreen}</h1>
             <p>Екран ще в розробці.</p>
           </main>
+          ${navigationForCurrentScreen()}
         </div>
       `;
       break;
