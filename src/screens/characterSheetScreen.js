@@ -343,13 +343,24 @@ export function characterSheetScreen(character) {
   return `
     <div class="app">
 
-      <button
-        id="close-character-sheet"
-        class="close-character-sheet"
-        aria-label="Повернутися до списку персонажів"
-      >
-        ×
-      </button>
+      <div class="character-header-actions">
+        <button
+          id="camp-menu-open"
+          class="camp-menu-open"
+          type="button"
+          aria-label="Відпочинок і підвищення рівня"
+        >
+          🔥
+        </button>
+
+        <button
+          id="close-character-sheet"
+          class="close-character-sheet"
+          aria-label="Повернутися до списку персонажів"
+        >
+          ×
+        </button>
+      </div>
 
       <main>
 
