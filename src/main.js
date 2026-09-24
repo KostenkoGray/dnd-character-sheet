@@ -114,6 +114,19 @@ function showCampDialog({ title, body, confirmLabel = "OK", onConfirm }) {
   });
 }
 
+function getPrimaryHitDie(character) {
+  const primaryClass = (character.classes ?? [])
+    .slice()
+    .sort((a, b) => Number(b.level ?? 0) - Number(a.level ?? 0))[0];
+
+  return Number(primaryClass ? (CLASSES[primaryClass.classId]?.hitDie ?? 0) : 0);
+}
+
+function getShortRestRecommendedHealing(character) {
+  const hitDie = getPrimaryHitDie(character);
+  return hitDie ? Math.floor(hitDie / 2) + 1 : 0;
+}
+
 function applyShortRestHealing(character, mode, amount) {
   ensureCombatState(character);
 
@@ -131,15 +144,10 @@ function applyShortRestHealing(character, mode, amount) {
   }
 
   const maximumHealing = Math.max(0, maxHp - currentHp);
-
   let healing = 0;
 
   if (mode === ACTION_PREFERENCE_VALUES.AVERAGE) {
-    const primaryClass = (character.classes ?? [])
-      .slice()
-      .sort((a, b) => Number(b.level ?? 0) - Number(a.level ?? 0))[0];
-    const hitDie = Number(primaryClass ? (CLASSES[primaryClass.classId]?.hitDie ?? 0) : 0);
-    healing = Math.floor(hitDie / 2) + 1;
+    healing = getShortRestRecommendedHealing(character);
   }
 
   if (mode === ACTION_PREFERENCE_VALUES.MANUAL) {
@@ -168,15 +176,8 @@ function applyShortRestHealing(character, mode, amount) {
   };
 }
 
-function performShortRest(character) {
-  ensureCombatState(character);
-
-  return {
-    type: REST_TYPES.SHORT,
-    hitDiceAvailable: Number(character.combat.currentHitDice ?? 0),
-    currentHp: Number(character.combat.currentHp ?? character.maxHp ?? 0),
-    maxHp: Number(character.maxHp ?? 0)
-  };
+function performShortRest(character, mode, amount) {
+  return applyShortRestHealing(character, mode, amount);
 }
 
 function performLongRest(character) {
@@ -217,35 +218,30 @@ function showShortRest(character) {
     showCampDialog({
       title: "Short Rest",
       body: `
-        <p>Оберіть спосіб відновлення HP за допомогою Hit Dice. Вибір буде автоматично збережено для наступних Short Rest.</p>
+        <p>Оберіть спосіб відновлення HP. Вибір буде автоматично збережено для наступних Short Rest.</p>
         <div class="rest-summary">
           <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="average">
-            Середнє значення Hit Die
+            Середнє значення Hit Die (+${getShortRestRecommendedHealing(character)})
           </button>
           <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="manual">
             Ручне введення
           </button>
-          <button type="button" class="camp-dialog-button short-rest-method disabled" disabled>
-            Кидок кубика — Скоро
+          <button type="button" class="camp-dialog-button" disabled>
+            🎲 Кидок кубика — Скоро
           </button>
         </div>
       `,
-      confirmLabel: "Скасувати",
-      onConfirm: () => {}
+      confirmLabel: "Скасувати"
     });
-
-    const backdrop = document.querySelector(".camp-dialog-backdrop");
-    backdrop?.addEventListener("click", event => {
-      const methodButton = event.target.closest("[data-rest-method]");
-      if (!methodButton) return;
-
-      const mode = methodButton.dataset.restMethod;
-      setActionPreference(preferenceKey, mode);
-      closeCampDialog();
-      showShortRest(character);
-    });
+    bindShortRestMethodChoice(character);
     return;
   }
+
+  renderShortRestAction(character, savedMode);
+}
+
+function renderShortRestAction(character, mode) {
+  ensureCombatState(character);
 
   const availableHitDice = Number(character.combat.currentHitDice ?? 0);
   const currentHp = Number(character.combat.currentHp ?? 0);
@@ -270,7 +266,7 @@ function showShortRest(character) {
     showCampDialog({
       title: "Short Rest",
       body: `
-        <p>HP вже повністю відновлено. Витрачати Hit Die немає сенсу.</p>
+        <p>HP вже повністю відновлено.</p>
         <div class="rest-summary">
           <div class="rest-row"><span>HP</span><strong>${currentHp}/${maxHp}</strong></div>
           <div class="rest-row"><span>Hit Dice</span><strong>${availableHitDice}</strong></div>
@@ -281,24 +277,29 @@ function showShortRest(character) {
     return;
   }
 
+  const automaticHealing = mode === ACTION_PREFERENCE_VALUES.AVERAGE
+    ? getShortRestRecommendedHealing(character)
+    : null;
+
   showCampDialog({
     title: "Short Rest",
     body: `
-      <p>Автоматичний режим: <strong>${savedMode === ACTION_PREFERENCE_VALUES.AVERAGE ? "Середнє значення" : "Ручне введення"}</strong>.</p>
+      <p>Режим: <strong>${mode === ACTION_PREFERENCE_VALUES.AVERAGE ? "Середнє значення" : "Ручне введення"}</strong>.</p>
       <div class="rest-summary">
         <div class="rest-row"><span>HP</span><strong>${currentHp}/${maxHp}</strong></div>
-        <div class="rest-row"><span>Доступні Hit Dice</span><strong>${availableHitDice}</strong></div>
+        <div class="rest-row"><span>Hit Dice</span><strong>${availableHitDice}</strong></div>
+        <div class="rest-row"><span>Лікування за 1 Hit Die</span><strong>${mode === ACTION_PREFERENCE_VALUES.AVERAGE ? "+" + automaticHealing : "ввести"}</strong></div>
       </div>
       <div class="rest-summary">
         <button type="button" class="camp-dialog-button" id="short-rest-change-method">Змінити спосіб</button>
       </div>
     `,
-    confirmLabel: savedMode === ACTION_PREFERENCE_VALUES.MANUAL ? "Ввести лікування" : "Використати 1 Hit Die",
+    confirmLabel: mode === ACTION_PREFERENCE_VALUES.MANUAL ? "Ввести лікування" : "Використати 1 Hit Die",
     onConfirm: () => {
-      if (savedMode === ACTION_PREFERENCE_VALUES.MANUAL) {
-        const input = prompt("Введіть кількість HP для відновлення", String(calculateRecommendedHpIncrease(character, character.classes?.[0]?.classId ?? "")));
+      if (mode === ACTION_PREFERENCE_VALUES.MANUAL) {
+        const input = prompt("Введіть кількість HP для відновлення", String(getShortRestRecommendedHealing(character)));
         if (input === null) {
-          showShortRest(character);
+          setTimeout(() => renderShortRestAction(character, mode), 0);
           return;
         }
 
@@ -312,73 +313,72 @@ function showShortRest(character) {
           return;
         }
 
-        const result = applyShortRestHealing(character, ACTION_PREFERENCE_VALUES.MANUAL, value);
-        persistCharacters();
-        render();
-
-        showCampDialog({
-          title: "Short Rest завершено",
-          body: `
-            <div class="rest-summary">
-              <div class="rest-row"><span>Відновлено HP</span><strong>+${result.healed}</strong></div>
-              <div class="rest-row"><span>HP</span><strong>${result.currentHp}/${maxHp}</strong></div>
-              <div class="rest-row"><span>Hit Dice</span><strong>${result.currentHitDice}</strong></div>
-            </div>
-          `,
-          confirmLabel: "Готово"
-        });
+        finishShortRest(character, mode, value);
         return;
       }
 
-      const result = applyShortRestHealing(character, ACTION_PREFERENCE_VALUES.AVERAGE);
-      persistCharacters();
-      render();
-
-      showCampDialog({
-        title: "Short Rest завершено",
-        body: `
-          <div class="rest-summary">
-            <div class="rest-row"><span>Відновлено HP</span><strong>+${result.healed}</strong></div>
-            <div class="rest-row"><span>HP</span><strong>${result.currentHp}/${maxHp}</strong></div>
-            <div class="rest-row"><span>Hit Dice</span><strong>${result.currentHitDice}</strong></div>
-          </div>
-        `,
-        confirmLabel: "Готово"
-      });
+      finishShortRest(character, mode);
     }
   });
 
-  const backdrop = document.querySelector(".camp-dialog-backdrop");
-  backdrop?.addEventListener("click", event => {
-    if (event.target.closest("#short-rest-change-method")) {
-      closeCampDialog();
-      setTimeout(() => showShortRestChoice(character), 0);
-    }
+  bindShortRestChangeMethod(character);
+}
+
+function finishShortRest(character, mode, amount) {
+  const result = performShortRest(character, mode, amount);
+
+  persistCharacters();
+  render();
+
+  showCampDialog({
+    title: "Short Rest завершено",
+    body: `
+      <div class="rest-summary">
+        <div class="rest-row"><span>Відновлено HP</span><strong>+${result.healed}</strong></div>
+        <div class="rest-row"><span>HP</span><strong>${result.currentHp}/${character.maxHp}</strong></div>
+        <div class="rest-row"><span>Hit Dice</span><strong>${result.currentHitDice}</strong></div>
+      </div>
+    `,
+    confirmLabel: "Готово"
   });
 }
 
 function showShortRestChoice(character) {
-  const preferenceKey = "shortRestHealing";
   showCampDialog({
     title: "Спосіб Short Rest",
     body: `
-      <p>Зміна способу збереже новий вибір для наступних Short Rest.</p>
+      <p>Новий вибір буде автоматично збережено.</p>
       <div class="rest-summary">
         <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="average">Середнє значення Hit Die</button>
         <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="manual">Ручне введення</button>
-        <button type="button" class="camp-dialog-button" disabled>Кидок кубика — Скоро</button>
+        <button type="button" class="camp-dialog-button" disabled>🎲 Кидок кубика — Скоро</button>
       </div>
     `,
     confirmLabel: "Скасувати"
   });
 
+  bindShortRestMethodChoice(character);
+}
+
+function bindShortRestMethodChoice(character) {
   const backdrop = document.querySelector(".camp-dialog-backdrop");
   backdrop?.addEventListener("click", event => {
     const methodButton = event.target.closest("[data-rest-method]");
     if (!methodButton) return;
-    setActionPreference(preferenceKey, methodButton.dataset.restMethod);
+
+    const mode = methodButton.dataset.restMethod;
+    setActionPreference("shortRestHealing", mode);
     closeCampDialog();
     setTimeout(() => showShortRest(character), 0);
+  });
+}
+
+function bindShortRestChangeMethod(character) {
+  const backdrop = document.querySelector(".camp-dialog-backdrop");
+  backdrop?.addEventListener("click", event => {
+    if (!event.target.closest("#short-rest-change-method")) return;
+    closeCampDialog();
+    setTimeout(() => showShortRestChoice(character), 0);
   });
 }
 
