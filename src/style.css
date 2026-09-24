@@ -1437,3 +1437,104 @@ p {
     font-size:1.1rem;
   }
 }
+
+/* Combat v3.4 */
+.hp-value{
+  flex:1;
+  min-width:96px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:0;
+  text-align:center;
+}
+.hp-value strong{
+  width:3ch;
+  text-align:center;
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.hp-value span{
+  width:5ch;
+  text-align:center;
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.combat-hit-dice{
+  justify-content:space-between;
+  padding:3px;
+  gap:0;
+}
+.combat-hit-dice h2{
+  margin:0;
+  font-size:.62rem;
+  line-height:1;
+}
+.hit-die-label{
+  font-size:.95rem;
+  line-height:1;
+}
+.hit-dice-value{
+  font-size:1.5rem;
+  line-height:1;
+  font-weight:700;
+}
+.hit-dice-plus,
+.hit-dice-minus{
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  font-size:1.3rem;
+}
+.combat-skill-row{
+  display:grid;
+  grid-template-columns:22px minmax(0,1fr) 32px;
+  align-items:center;
+  column-gap:4px;
+}
+.combat-skill-row span{
+  grid-column:1 / span 2;
+  min-width:0;
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+  line-height:1.05;
+}
+.combat-skill-row strong{
+  grid-column:3;
+  text-align:right;
+}
+.combat-skill-row .animal-handling{
+  grid-column:1 / span 2;
+  width:auto;
+  max-width:none;
+  display:block!important;
+}
+@media (max-width:420px){
+  .hp-value{
+    min-width:86px;
+  }
+  .hp-value strong{
+    width:3ch;
+  }
+  .hp-value span{
+    width:5ch;
+  }
+  .combat-hit-dice{
+    padding:2px;
+  }
+  .hit-die-label{
+    font-size:.88rem;
+  }
+  .hit-dice-value{
+    font-size:1.42rem;
+  }
+  .hit-dice-plus,
+  .hit-dice-minus{
+    width:38px;
+    height:38px;
+    flex-basis:38px;
+  }
+}
