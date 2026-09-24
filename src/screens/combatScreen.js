@@ -63,11 +63,12 @@ function renderWeapon(weapon, character) {
   `;
 }
 
-function renderDeathSaveDots(value, symbol) {
+function renderDeathSaveDots(value, symbol, type) {
   return [0, 1, 2].map(index => `
     <button
       type="button"
       class="death-save-dot ${index < value ? "filled" : ""}"
+      data-death-type="${type}"
       data-death-index="${index}"
       aria-label="${index < value ? "Очистити" : "Позначити"}"
     >${index < value ? symbol : "○"}</button>
@@ -217,11 +218,11 @@ export function combatScreen(character) {
             <span>Death Saves</span>
             <div class="death-save-row">
               <span>Success</span>
-              <div class="death-save-dots">${renderDeathSaveDots(deathSaves.success, "✓")}</div>
+              <div class="death-save-dots">${renderDeathSaveDots(deathSaves.success, "✓", "success")}</div>
             </div>
             <div class="death-save-row">
               <span>Failure</span>
-              <div class="death-save-dots">${renderDeathSaveDots(deathSaves.fail, "✕")}</div>
+              <div class="death-save-dots">${renderDeathSaveDots(deathSaves.fail, "✕", "fail")}</div>
             </div>
           </div>
         </section>
