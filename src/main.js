@@ -15,7 +15,8 @@ import {
 import { charactersScreen } from "./screens/characterListScreen.js";
 import { characterSheetScreen } from "./screens/characterSheetScreen.js";
 import { combatScreen } from "./screens/combatScreen.js";
-import { saveCharacters } from "./services/storageService.js";
+import { saveCharacters, loadSettings, saveSettings } from "./services/storageService.js";
+import { DEFAULT_SETTINGS, ACTION_PREFERENCE_VALUES } from "./data/settingsData.js";
 import { bottomNavigation } from "./components/bottomNavigation.js";
 import {
   REST_TYPES,
@@ -33,6 +34,18 @@ const app = document.querySelector("#app");
 
 let currentCharacter = null;
 let currentScreen = "list";
+
+const settings = loadSettings(DEFAULT_SETTINGS);
+
+function getActionPreference(key) {
+  return settings.actionPreferences?.[key] ?? null;
+}
+
+function setActionPreference(key, value) {
+  settings.actionPreferences ??= {};
+  settings.actionPreferences[key] = value;
+  saveSettings(settings);
+}
 
 function navigationForCurrentScreen() {
   return bottomNavigation(currentScreen);
