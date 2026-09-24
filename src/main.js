@@ -297,23 +297,7 @@ function renderShortRestAction(character, mode) {
     confirmLabel: mode === ACTION_PREFERENCE_VALUES.MANUAL ? "Ввести лікування" : "Використати 1 Hit Die",
     onConfirm: () => {
       if (mode === ACTION_PREFERENCE_VALUES.MANUAL) {
-        const input = prompt("Введіть кількість HP для відновлення", String(getShortRestRecommendedHealing(character)));
-        if (input === null) {
-          setTimeout(() => renderShortRestAction(character, mode), 0);
-          return;
-        }
-
-        const value = Number(input);
-        if (!Number.isFinite(value) || value < 0) {
-          showCampDialog({
-            title: "Short Rest",
-            body: "<p>Некоректне значення лікування.</p>",
-            confirmLabel: "Закрити"
-          });
-          return;
-        }
-
-        finishShortRest(character, mode, value);
+        showShortRestManualAmountDialog(character);
         return;
       }
 
@@ -322,6 +306,43 @@ function renderShortRestAction(character, mode) {
   });
 
   bindShortRestChangeMethod(character);
+}
+
+function showShortRestManualAmountDialog(character) {
+  ensureCombatState(character);
+
+  const suggested = getShortRestRecommendedHealing(character);
+
+  showCampDialog({
+    title: "Short Rest — ручне лікування",
+    body: `
+      <p>Вкажіть кількість HP, яку відновлюємо за 1 Hit Die.</p>
+      <div class="rest-summary">
+        <div class="rest-row"><span>Поточне HP</span><strong>${character.combat.currentHp}/${character.maxHp}</strong></div>
+        <div class="rest-row"><span>Доступні Hit Dice</span><strong>${character.combat.currentHitDice}</strong></div>
+        <label class="rest-row" style="gap:12px;align-items:center">
+          <span>Лікування</span>
+          <input id="short-rest-healing-input" type="number" min="0" step="1" value="${suggested}" inputmode="numeric" style="max-width:110px;text-align:center">
+        </label>
+      </div>
+    `,
+    confirmLabel: "Відновити HP",
+    onConfirm: () => {
+      const input = document.querySelector("#short-rest-healing-input");
+      const value = Number(input?.value);
+
+      if (!Number.isFinite(value) || value < 0) {
+        showCampDialog({
+          title: "Short Rest",
+          body: "<p>Вкажіть коректну невід'ємну кількість HP.</p>",
+          confirmLabel: "Закрити"
+        });
+        return;
+      }
+
+      finishShortRest(character, ACTION_PREFERENCE_VALUES.MANUAL, value);
+    }
+  });
 }
 
 function finishShortRest(character, mode, amount) {
@@ -629,6 +650,15 @@ function getHitDiceTotal(character) {
 }
 
 app.addEventListener("click", (event) => {
+  const campAction = event.target.closest("[data-camp-action]");
+  if (campAction && currentCharacter) {
+    const action = campAction.dataset.campAction;
+    if (action === "short-rest") showShortRest(currentCharacter);
+    if (action === "long-rest") showLongRest(currentCharacter);
+    if (action === "level-up") startLevelUp(currentCharacter);
+    return;
+  }
+
   const card = event.target.closest(".character-card");
 
   if (card && currentScreen === "list") {
@@ -642,15 +672,6 @@ app.addEventListener("click", (event) => {
   if (currentScreen === "sheet" && currentCharacter && event.target.closest("#camp-menu-open")) {
     ensureCombatState(currentCharacter);
     openCampMenu();
-    return;
-  }
-
-  const campAction = event.target.closest("[data-camp-action]");
-  if (campAction && currentCharacter) {
-    const action = campAction.dataset.campAction;
-    if (action === "short-rest") showShortRest(currentCharacter);
-    if (action === "long-rest") showLongRest(currentCharacter);
-    if (action === "level-up") startLevelUp(currentCharacter);
     return;
   }
 
