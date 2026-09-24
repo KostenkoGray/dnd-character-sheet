@@ -1687,3 +1687,22 @@ p {
     flex-basis:68px;
   }
 }
+
+/* Combat v3.4.4 */
+.hp-value span{
+  right:-12px;
+  bottom:8px;
+  width:auto;
+  font-size:.8rem;
+  font-weight:600;
+  color:var(--danger);
+  line-height:1;
+  white-space:nowrap;
+}
+@media (max-width:420px){
+  .hp-value span{
+    right:-10px;
+    bottom:8px;
+    font-size:.76rem;
+  }
+}
