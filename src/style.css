@@ -1706,3 +1706,22 @@ p {
     font-size:.76rem;
   }
 }
+
+/* Combat v3.4.5 */
+.hp-value span{
+  right:-18px;
+  bottom:6px;
+  width:auto;
+  font-size:.95rem;
+  font-weight:700;
+  color:var(--danger);
+  line-height:1;
+  white-space:nowrap;
+}
+@media (max-width:420px){
+  .hp-value span{
+    right:-16px;
+    bottom:6px;
+    font-size:.9rem;
+  }
+}
