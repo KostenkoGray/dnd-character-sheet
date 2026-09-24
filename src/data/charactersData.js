@@ -3,12 +3,13 @@ import { RACES } from "./racesData.js";
 import { CLASSES } from "./classesData.js";
 import { WEAPONS } from "./weaponsData.js";
 import { ARMOR } from "./armorData.js";
+import { loadCharacters } from "../services/storageService.js";
 
 // ==================================================
 // CHARACTERS
 // ==================================================
 
-export let characters = [
+const defaultCharacters = [
 
   {
     id: 1,
@@ -171,6 +172,9 @@ export let characters = [
   }
 
 ];
+
+
+export let characters = loadCharacters(defaultCharacters);
 
 // ==================================================
 // CHARACTERS API
