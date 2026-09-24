@@ -321,12 +321,10 @@ export function combatScreen(character) {
 
           <section class="combat-hit-dice">
             <h2>Hit Dice</h2>
+            <button type="button" id="hit-dice-plus" class="hit-dice-plus" aria-label="Збільшити Hit Dice">+</button>
             <span class="hit-die-label">${hitDie}</span>
             <strong class="hit-dice-value">${currentHitDice}/${hitDiceTotal}</strong>
-            <div class="hit-dice-controls">
-              <button type="button" id="hit-dice-minus" aria-label="Зменшити Hit Dice">−</button>
-              <button type="button" id="hit-dice-plus" aria-label="Збільшити Hit Dice">+</button>
-            </div>
+            <button type="button" id="hit-dice-minus" class="hit-dice-minus" aria-label="Зменшити Hit Dice">−</button>
           </section>
         </section>
 
