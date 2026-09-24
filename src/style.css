@@ -1667,3 +1667,23 @@ p {
     border-radius:8px;
   }
 }
+
+/* Combat v3.4.3 */
+.hp-value{
+  width:72px;
+  height:72px;
+  min-width:72px;
+  min-height:72px;
+  flex:0 0 72px;
+  aspect-ratio:1 / 1;
+  border-radius:50%;
+}
+@media (max-width:420px){
+  .hp-value{
+    width:68px;
+    height:68px;
+    min-width:68px;
+    min-height:68px;
+    flex-basis:68px;
+  }
+}
