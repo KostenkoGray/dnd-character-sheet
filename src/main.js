@@ -88,6 +88,16 @@ function ensureCombatState(character) {
     );
   }
 
+  if (character.combat.currentHitDice == null) {
+    const used = Number(character.combat.usedHitDice ?? 0);
+    character.combat.currentHitDice = clamp(
+      hitDiceTotal - used,
+      0,
+      hitDiceTotal
+    );
+    delete character.combat.usedHitDice;
+  }
+
   character.combat.currentHitDice = clamp(
     Number(character.combat.currentHitDice ?? hitDiceTotal),
     0,
@@ -237,13 +247,19 @@ app.addEventListener("click", (event) => {
 
     const deathSaveDot = event.target.closest("[data-save-type]");
 
-    if (deathSaveDot) {
+    if (deathSaveDot && currentCharacter.combat.currentHp === 0) {
       const type = deathSaveDot.dataset.saveType;
       const index = Number(deathSaveDot.dataset.saveIndex);
       const currentValue = currentCharacter.combat.deathSaves[type];
 
       currentCharacter.combat.deathSaves[type] =
         currentValue === index + 1 ? index : index + 1;
+
+      if (type === "success" && currentCharacter.combat.deathSaves.success === 3) {
+        currentCharacter.combat.currentHp = 1;
+        currentCharacter.combat.deathSaves.success = 0;
+        currentCharacter.combat.deathSaves.fail = 0;
+      }
 
       render();
       return;
