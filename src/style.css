@@ -1823,3 +1823,15 @@ p {
     font-size:1.35rem;
   }
 }
+
+/* Combat v3.4.9 */
+.combat-hit-dice{
+  justify-content:space-evenly;
+  gap:1px;
+}
+.hit-die-label{
+  margin:0;
+}
+.hit-dice-value{
+  margin:0;
+}
