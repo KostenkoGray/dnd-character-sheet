@@ -1627,3 +1627,29 @@ wizard: {
 }
 
 };
+
+
+// ==================================================
+// LEVEL-UP METADATA
+// ==================================================
+//
+// ASI levels are PHB 2014 defaults for the 12 core classes.
+// These values are consumed by levelUpService instead of being
+// duplicated in UI code.
+//
+
+
+export const CLASS_LEVEL_UP = {
+  barbarian: { abilityScoreImprovementLevels: [4, 8, 12, 16, 19] },
+  bard: { abilityScoreImprovementLevels: [4, 8, 10, 12, 16, 19] },
+  cleric: { abilityScoreImprovementLevels: [4, 8, 12, 16, 19] },
+  druid: { abilityScoreImprovementLevels: [4, 8, 12, 16, 19] },
+  fighter: { abilityScoreImprovementLevels: [4, 6, 8, 12, 14, 16, 19] },
+  monk: { abilityScoreImprovementLevels: [4, 8, 12, 16, 19] },
+  paladin: { abilityScoreImprovementLevels: [4, 8, 12, 16, 19] },
+  ranger: { abilityScoreImprovementLevels: [4, 8, 12, 16, 19] },
+  rogue: { abilityScoreImprovementLevels: [4, 8, 10, 12, 16, 19] },
+  sorcerer: { abilityScoreImprovementLevels: [4, 8, 12, 16, 19] },
+  warlock: { abilityScoreImprovementLevels: [4, 8, 12, 16, 19] },
+  wizard: { abilityScoreImprovementLevels: [4, 8, 12, 16, 19] }
+};
