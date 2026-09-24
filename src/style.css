@@ -1043,5 +1043,5 @@ p {
 .combat-weapon-main span{font-size:.75rem;opacity:.75;}
 .combat-weapon-damage{text-align:right;font-size:.82rem;}
 .combat-weapon-damage small{font-size:.65rem;opacity:.6;}
-.combat-stats-skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-@media (max-width:420px){.combat-main-stat strong{font-size:1.7rem}.combat-stats-skills-grid{grid-template-columns:1fr}.combat-compact-summary{gap:5px}.combat-compact-summary>div,.combat-inspiration{padding:8px 4px}}
+.combat-stats-skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}.combat-stat-group{min-width:0;}.combat-skill-row span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+@media (max-width:420px){.combat-main-stat strong{font-size:1.7rem}.combat-stats-skills-grid{grid-template-columns:1fr 1fr}.combat-compact-summary{gap:5px}.combat-compact-summary>div,.combat-inspiration{padding:8px 4px}.combat-stat-group{padding:7px}.combat-skill-row,.combat-save-row{font-size:.75rem;gap:4px;}.combat-stats-skills-grid{gap:6px;}}
