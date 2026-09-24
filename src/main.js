@@ -73,6 +73,23 @@ function openCampMenu() {
   `;
 
   document.body.appendChild(menu);
+
+  menu.querySelectorAll('[data-camp-action]').forEach(button => {
+    button.addEventListener('click', () => {
+      const action = button.dataset.campAction;
+      closeCampMenu();
+
+      if (!currentCharacter) return;
+
+      if (action === 'short-rest') {
+        showShortRest(currentCharacter);
+      } else if (action === 'long-rest') {
+        showLongRest(currentCharacter);
+      } else if (action === 'level-up') {
+        startLevelUp(currentCharacter);
+      }
+    });
+  });
 }
 
 function closeCampMenu() {
@@ -650,15 +667,6 @@ function getHitDiceTotal(character) {
 }
 
 app.addEventListener("click", (event) => {
-  const campAction = event.target.closest("[data-camp-action]");
-  if (campAction && currentCharacter) {
-    const action = campAction.dataset.campAction;
-    if (action === "short-rest") showShortRest(currentCharacter);
-    if (action === "long-rest") showLongRest(currentCharacter);
-    if (action === "level-up") startLevelUp(currentCharacter);
-    return;
-  }
-
   const card = event.target.closest(".character-card");
 
   if (card && currentScreen === "list") {
