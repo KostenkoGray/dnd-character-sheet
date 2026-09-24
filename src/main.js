@@ -60,7 +60,7 @@ function ensureCombatState(character) {
     character.combat = {
       currentHp: character.maxHp ?? 0,
       tempHp: 0,
-      usedHitDice: 0,
+      currentHitDice: 0,
       deathSaves: { success: 0, fail: 0 },
       inspiration: false
     };
@@ -77,10 +77,21 @@ function ensureCombatState(character) {
     Number(character.combat.tempHp ?? 0)
   );
 
-  character.combat.usedHitDice = clamp(
-    Number(character.combat.usedHitDice ?? 0),
+  const hitDiceTotal = getHitDiceTotal(character);
+
+  if (character.combat.currentHitDice == null) {
+    const used = Number(character.combat.usedHitDice ?? 0);
+    character.combat.currentHitDice = clamp(
+      hitDiceTotal - used,
+      0,
+      hitDiceTotal
+    );
+  }
+
+  character.combat.currentHitDice = clamp(
+    Number(character.combat.currentHitDice ?? hitDiceTotal),
     0,
-    getHitDiceTotal(character)
+    hitDiceTotal
   );
 
   character.combat.deathSaves ??= { success: 0, fail: 0 };
@@ -205,8 +216,8 @@ app.addEventListener("click", (event) => {
     }
 
     if (event.target.closest("#hit-dice-minus")) {
-      currentCharacter.combat.usedHitDice = clamp(
-        currentCharacter.combat.usedHitDice - 1,
+      currentCharacter.combat.currentHitDice = clamp(
+        currentCharacter.combat.currentHitDice - 1,
         0,
         getHitDiceTotal(currentCharacter)
       );
@@ -215,8 +226,8 @@ app.addEventListener("click", (event) => {
     }
 
     if (event.target.closest("#hit-dice-plus")) {
-      currentCharacter.combat.usedHitDice = clamp(
-        currentCharacter.combat.usedHitDice + 1,
+      currentCharacter.combat.currentHitDice = clamp(
+        currentCharacter.combat.currentHitDice + 1,
         0,
         getHitDiceTotal(currentCharacter)
       );
@@ -237,6 +248,32 @@ app.addEventListener("click", (event) => {
       render();
       return;
     }
+  }
+
+  const classResourceButton = event.target.closest("[data-class-resource]");
+
+  if (currentScreen === "combat" && currentCharacter && classResourceButton) {
+    const key = classResourceButton.dataset.resourceKey;
+    const maximum = Number(classResourceButton.dataset.resourceMax);
+    const delta = classResourceButton.dataset.classResource === "plus" ? 1 : -1;
+
+    currentCharacter.combat[key] = clamp(
+      Number(currentCharacter.combat[key] ?? maximum) + delta,
+      0,
+      maximum
+    );
+
+    render();
+    return;
+  }
+
+  if (
+    currentScreen === "combat" &&
+    currentCharacter &&
+    currentCharacter.combat.currentHp > 0
+  ) {
+    currentCharacter.combat.deathSaves.success = 0;
+    currentCharacter.combat.deathSaves.fail = 0;
   }
 
   const nav = event.target.closest(".nav-item");
