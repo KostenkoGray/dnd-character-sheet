@@ -114,11 +114,68 @@ function showCampDialog({ title, body, confirmLabel = "OK", onConfirm }) {
   });
 }
 
+function applyShortRestHealing(character, mode, amount) {
+  ensureCombatState(character);
+
+  const maxHp = Number(character.maxHp ?? 0);
+  const currentHp = Number(character.combat.currentHp ?? maxHp);
+  const currentHitDice = Number(character.combat.currentHitDice ?? 0);
+
+  if (currentHitDice <= 0 || currentHp >= maxHp) {
+    return {
+      healed: 0,
+      hitDiceSpent: 0,
+      currentHp,
+      currentHitDice
+    };
+  }
+
+  const maximumHealing = Math.max(0, maxHp - currentHp);
+
+  let healing = 0;
+
+  if (mode === ACTION_PREFERENCE_VALUES.AVERAGE) {
+    const primaryClass = (character.classes ?? [])
+      .slice()
+      .sort((a, b) => Number(b.level ?? 0) - Number(a.level ?? 0))[0];
+    const hitDie = Number(primaryClass ? (CLASSES[primaryClass.classId]?.hitDie ?? 0) : 0);
+    healing = Math.floor(hitDie / 2) + 1;
+  }
+
+  if (mode === ACTION_PREFERENCE_VALUES.MANUAL) {
+    healing = Math.max(0, Math.floor(Number(amount ?? 0)));
+  }
+
+  healing = Math.min(healing, maximumHealing);
+
+  if (healing <= 0) {
+    return {
+      healed: 0,
+      hitDiceSpent: 0,
+      currentHp,
+      currentHitDice
+    };
+  }
+
+  character.combat.currentHp = Math.min(maxHp, currentHp + healing);
+  character.combat.currentHitDice = Math.max(0, currentHitDice - 1);
+
+  return {
+    healed: healing,
+    hitDiceSpent: 1,
+    currentHp: character.combat.currentHp,
+    currentHitDice: character.combat.currentHitDice
+  };
+}
+
 function performShortRest(character) {
   ensureCombatState(character);
+
   return {
     type: REST_TYPES.SHORT,
-    hitDiceAvailable: Number(character.combat.currentHitDice ?? 0)
+    hitDiceAvailable: Number(character.combat.currentHitDice ?? 0),
+    currentHp: Number(character.combat.currentHp ?? character.maxHp ?? 0),
+    maxHp: Number(character.maxHp ?? 0)
   };
 }
 
