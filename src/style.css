@@ -1325,3 +1325,61 @@ p {
     font-size:.85rem;
   }
 }
+
+/* Combat v3.3 */
+.combat-hit-dice{
+  justify-content:space-between;
+  padding:7px 4px;
+  gap:2px;
+}
+.combat-hit-dice h2{
+  margin:0;
+  font-size:.62rem;
+}
+.hit-die-label{
+  font-size:.82rem;
+}
+.hit-dice-value{
+  font-size:1.18rem;
+  line-height:1.15;
+  font-weight:700;
+  margin:1px 0;
+}
+.hit-dice-plus,
+.hit-dice-minus{
+  width:28px;
+  height:28px;
+  flex:0 0 28px;
+  padding:0;
+  border:1px solid var(--border);
+  border-radius:50%;
+  background:var(--surface-light);
+  color:inherit;
+  font-size:1.05rem;
+  line-height:1;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+@media (max-width:420px){
+  .combat-hit-dice{
+    padding:6px 3px;
+  }
+  .combat-hit-dice h2{
+    font-size:.56rem;
+  }
+  .hit-die-label{
+    font-size:.76rem;
+  }
+  .hit-dice-value{
+    font-size:1.1rem;
+  }
+  .hit-dice-plus,
+  .hit-dice-minus{
+    width:26px;
+    height:26px;
+    flex-basis:26px;
+    font-size:1rem;
+  }
+}
