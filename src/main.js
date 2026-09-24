@@ -39,44 +39,34 @@ function navigationForCurrentScreen() {
 }
 
 function openCampMenu() {
-  document.querySelector(".camp-menu-backdrop")?.remove();
+  const existing = document.querySelector(".camp-fab-menu");
+  if (existing) {
+    closeCampMenu();
+    return;
+  }
 
-  const backdrop = document.createElement("div");
-  backdrop.className = "camp-menu-backdrop";
-  backdrop.innerHTML = `
-    <aside class="camp-menu-panel" role="dialog" aria-modal="true" aria-label="Camp">
-      <div class="camp-menu-header">
-        <h2>Camp</h2>
-        <button type="button" class="camp-menu-close" aria-label="Закрити меню">×</button>
-      </div>
-      <div class="camp-menu-list">
-        <button type="button" class="camp-menu-item" data-camp-action="short-rest">
-          <span class="camp-menu-icon">☀️</span>
-          <span><strong>Short Rest</strong><small>Короткий відпочинок</small></span>
-        </button>
-        <button type="button" class="camp-menu-item" data-camp-action="long-rest">
-          <span class="camp-menu-icon">🌙</span>
-          <span><strong>Long Rest</strong><small>Довгий відпочинок</small></span>
-        </button>
-        <button type="button" class="camp-menu-item" data-camp-action="level-up">
-          <span class="camp-menu-icon">⬆️</span>
-          <span><strong>Level Up</strong><small>Підвищення рівня</small></span>
-        </button>
-      </div>
-    </aside>
+  const menu = document.createElement("div");
+  menu.className = "camp-fab-menu open";
+  menu.innerHTML = `
+    <button type="button" class="camp-action camp-action-short-rest" data-camp-action="short-rest" aria-label="Short Rest">
+      <span>☀️</span><strong>Short Rest</strong>
+    </button>
+    <button type="button" class="camp-action camp-action-long-rest" data-camp-action="long-rest" aria-label="Long Rest">
+      <span>🌙</span><strong>Long Rest</strong>
+    </button>
+    <button type="button" class="camp-action camp-action-level-up" data-camp-action="level-up" aria-label="Level Up">
+      <span>⬆️</span><strong>Level Up</strong>
+    </button>
   `;
 
-  document.body.appendChild(backdrop);
-  requestAnimationFrame(() => backdrop.classList.add("open"));
-  requestAnimationFrame(() => backdrop.querySelector(".camp-menu-panel")?.classList.add("open"));
+  document.body.appendChild(menu);
 }
 
 function closeCampMenu() {
-  const backdrop = document.querySelector(".camp-menu-backdrop");
-  if (!backdrop) return;
-  backdrop.classList.remove("open");
-  backdrop.querySelector(".camp-menu-panel")?.classList.remove("open");
-  setTimeout(() => backdrop.remove(), 240);
+  const menu = document.querySelector(".camp-fab-menu");
+  if (!menu) return;
+  menu.classList.remove("open");
+  setTimeout(() => menu.remove(), 180);
 }
 
 function closeCampDialog() {
@@ -113,20 +103,9 @@ function showCampDialog({ title, body, confirmLabel = "OK", onConfirm }) {
 
 function performShortRest(character) {
   ensureCombatState(character);
-  const spentHitDice = Math.max(
-    0,
-    getHitDiceTotal(character) - Number(character.combat.currentHitDice ?? 0)
-  );
-
-  character.combat.currentHp = Math.min(
-    Number(character.maxHp ?? 0),
-    Number(character.combat.currentHp ?? 0)
-  );
-
   return {
     type: REST_TYPES.SHORT,
-    hitDiceAvailable: Number(character.combat.currentHitDice ?? 0),
-    spentHitDice
+    hitDiceAvailable: Number(character.combat.currentHitDice ?? 0)
   };
 }
 
@@ -159,6 +138,7 @@ function performLongRest(character) {
 
 function showShortRest(character) {
   closeCampMenu();
+
   showCampDialog({
     title: "Short Rest",
     body: `
@@ -179,10 +159,11 @@ function showShortRest(character) {
 
 function showLongRest(character) {
   closeCampMenu();
+
   showCampDialog({
     title: "Long Rest",
     body: `
-      <p>Повністю відновити HP, скинути Temporary HP, а також відновити частину витрачених Hit Dice.</p>
+      <p>Відновити HP та частину витрачених Hit Dice.</p>
     `,
     confirmLabel: "Відпочити",
     onConfirm: () => {
@@ -195,6 +176,7 @@ function showLongRest(character) {
 
 function startLevelUp(character) {
   closeCampMenu();
+
   const classes = character.classes ?? [];
   const currentClassId = classes.length === 1 ? classes[0].classId : "";
   const options = Object.values(CLASSES).map(cls =>
@@ -214,13 +196,10 @@ function startLevelUp(character) {
     confirmLabel: "Далі",
     onConfirm: () => {
       const selected = document.querySelector("#level-up-class")?.value;
-      if (!selected) {
-        startLevelUp(character);
-        return;
-      }
-      chooseHpMethod(character, selected);
+      if (selected) chooseHpMethod(character, selected);
     }
   });
+
   updateLevelUpDetails(character, currentClassId || Object.values(CLASSES)[0]?.id);
 }
 
@@ -233,7 +212,6 @@ function updateLevelUpDetails(character, classId) {
     <div class="rest-row"><span>Новий рівень класу</span><strong>${result.nextLevel}</strong></div>
     <div class="rest-row"><span>Нові можливості</span><strong>${result.features.length}</strong></div>
     <div class="rest-row"><span>ASI / Feat</span><strong>${result.abilityScoreImprovement ? "Так" : "Ні"}</strong></div>
-    <div class="rest-row"><span>Spell Slots</span><strong>${formatSpellPreview(result.spellcastingAfter)}</strong></div>
   `;
 
   const select = document.querySelector("#level-up-class");
@@ -241,11 +219,6 @@ function updateLevelUpDetails(character, classId) {
     select.dataset.bound = "1";
     select.addEventListener("change", event => updateLevelUpDetails(character, event.target.value));
   }
-}
-
-function formatSpellPreview(slots) {
-  if (!Array.isArray(slots)) return "—";
-  return slots.map(slot => `${slot.level}:${slot.slots}`).join(" • ") || "—";
 }
 
 function chooseHpMethod(character, classId) {
@@ -268,7 +241,7 @@ function chooseHpMethod(character, classId) {
     `,
     confirmLabel: "Застосувати",
     onConfirm: () => {
-      const method = document.querySelector('input[name="hp-method"]:checked')?.value ?? "average";
+      const method = document.querySelector('input[name="hp-method"]:checked')?.value ?? HP_LEVEL_UP_METHODS.AVERAGE;
       character.levelUp.hpIncreaseMethod = method;
       character.levelUp.hpIncreaseMethodLocked = true;
 
@@ -278,22 +251,12 @@ function chooseHpMethod(character, classId) {
         if (Number.isFinite(value) && value >= 0) hpIncrease = Math.floor(value);
       }
 
-      if (method === HP_LEVEL_UP_METHODS.ROLL) {
-        showCampDialog({
-          title: "Кидок Hit Die",
-          body: `<p>Метод кидка збережено. Сам кидок буде доданий на наступному кроці.</p>`,
-          confirmLabel: "Виконати з рекомендованим",
-          onConfirm: () => finishLevelUp(character, classId, recommended, result)
-        });
-        return;
-      }
-
-      finishLevelUp(character, classId, hpIncrease, result);
+      finishLevelUp(character, classId, hpIncrease);
     }
   });
 }
 
-function finishLevelUp(character, classId, hpIncrease, result) {
+function finishLevelUp(character, classId, hpIncrease) {
   const beforeLevel = getNextCharacterLevel(character) - 1;
   const preview = applyLevelUp(character, classId, hpIncrease);
 
@@ -321,8 +284,7 @@ function finishLevelUp(character, classId, hpIncrease, result) {
     showCampDialog({
       title: "Рівень підвищено",
       body: `<div class="rest-summary">${lines.map(line => `<div class="rest-row"><span>${line}</span></div>`).join("")}</div>`,
-      confirmLabel: "Готово",
-      onConfirm: () => {}
+      confirmLabel: "Готово"
     });
   }, 0);
 }
