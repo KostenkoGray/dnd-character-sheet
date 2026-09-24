@@ -1045,3 +1045,16 @@ p {
 .combat-weapon-damage small{font-size:.65rem;opacity:.6;}
 .combat-stats-skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}.combat-stat-group{min-width:0;}.combat-skill-row span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 @media (max-width:420px){.combat-main-stat strong{font-size:1.7rem}.combat-stats-skills-grid{grid-template-columns:1fr 1fr}.combat-compact-summary{gap:5px}.combat-compact-summary>div,.combat-inspiration{padding:8px 4px}.combat-stat-group{padding:7px}.combat-skill-row,.combat-save-row{font-size:.75rem;gap:4px;}.combat-stats-skills-grid{gap:6px;}}
+
+
+/* Combat v2.4 */
+.temp-hp{align-items:center;}
+.temp-hp-controls{display:flex;align-items:center;gap:6px;}
+.temp-hp-controls>button{width:30px;height:30px;border:1px solid var(--border);border-radius:50%;background:var(--surface-light);color:inherit;font-size:1rem;cursor:pointer;}
+.temp-hp-value{min-width:38px;padding:2px 6px;border:0;background:none;color:inherit;cursor:pointer;}
+.death-save-dots{display:flex;gap:6px;}
+.death-save-dot{width:40px;height:40px;border:1px solid var(--border);border-radius:50%;background:var(--surface-light);color:inherit;font-size:1.05rem;font-weight:700;padding:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;}
+.death-save-dot.success.filled{color:#fff;background:var(--success);border-color:var(--success);}
+.death-save-dot.fail.filled{color:#fff;background:var(--danger);border-color:var(--danger);}
+.animal-handling{white-space:normal!important;line-height:1.05;display:inline-block;}
+@media (max-width:420px){.death-save-dot{width:40px;height:40px}.combat-stat-group{padding:7px}.combat-skill-row{font-size:.75rem;gap:4px;}}
