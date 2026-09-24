@@ -318,6 +318,22 @@ export function combatScreen(character) {
           </div>
         </section>
 
+        ${currentHp === 0 ? `
+        <section class="death-saves-panel">
+          <div class="death-saves-side">
+            <span>Success</span>
+            <div class="death-save-dots">${renderSuccessDots(deathSaves.success)}</div>
+          </div>
+          <div class="death-saves-title">
+            <strong>Death Saves</strong>
+          </div>
+          <div class="death-saves-side">
+            <span>Failure</span>
+            <div class="death-save-dots">${renderFailureDots(deathSaves.fail)}</div>
+          </div>
+        </section>
+        ` : ""}
+
         <section class="combat-resources">
           <div class="combat-resource">
             <span>Hit Dice ${hitDie}</span>
