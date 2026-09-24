@@ -1858,8 +1858,8 @@ p {
 
 .camp-menu-open{
   position:static;
-  width:56px;
-  height:56px;
+  width:52px;
+  height:52px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -1868,9 +1868,10 @@ p {
   border-radius:50%;
   background:var(--surface);
   color:var(--text);
-  font-size:26px;
+  font-size:24px;
   line-height:1;
   cursor:pointer;
+  box-shadow:0 8px 20px rgba(0,0,0,.28);
   transition:
     background .15s ease,
     border-color .15s ease,
@@ -1897,13 +1898,16 @@ p {
   right:72px;
   z-index:150;
   display:flex;
+  flex-direction:row-reverse;
   align-items:flex-start;
-  gap:12px;
+  gap:10px;
   pointer-events:none;
 }
 
 .camp-action{
-  width:56px;
+  position:relative;
+  width:52px;
+  flex:0 0 52px;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -1925,8 +1929,8 @@ p {
 
 .camp-action::before{
   content:"";
-  width:56px;
-  height:56px;
+  width:52px;
+  height:52px;
   display:block;
   border:1px solid var(--border);
   border-radius:50%;
@@ -1935,20 +1939,27 @@ p {
 
 .camp-action span{
   position:absolute;
-  width:56px;
-  height:56px;
+  top:0;
+  left:0;
+  width:52px;
+  height:52px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:26px;
+  font-size:24px;
   line-height:1;
   color:#fff;
+  pointer-events:none;
 }
 
 .camp-action strong{
   font-size:10px;
   line-height:1.05;
   white-space:nowrap;
+}
+
+.camp-action:hover{
+  filter:brightness(1.08);
 }
 
 .camp-action-short-rest::before{
@@ -2063,21 +2074,25 @@ p {
   }
 
   .camp-menu-open{
-    width:56px;
-    height:56px;
+    width:52px;
+    height:52px;
   }
 
   .camp-fab-menu{
-    top:104px;
-    right:66px;
+    top:96px;
+    right:64px;
     gap:8px;
   }
 
-  .camp-action,
+  .camp-action{
+    width:52px;
+    flex-basis:52px;
+  }
+
   .camp-action::before,
   .camp-action span{
-    width:56px;
-    height:56px;
+    width:52px;
+    height:52px;
   }
 
   .camp-action strong{
