@@ -429,6 +429,13 @@ app.addEventListener("click", (event) => {
     return;
   }
 
+  const openCampButton = event.target.closest("#camp-menu-open");
+  const fabMenu = event.target.closest(".camp-fab-menu");
+
+  if (document.querySelector(".camp-fab-menu.open") && !openCampButton && !fabMenu) {
+    closeCampMenu();
+  }
+
   if (event.target.closest("#close-character-sheet")) {
     persistCharacters();
     currentCharacter = null;
