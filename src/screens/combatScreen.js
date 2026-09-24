@@ -63,15 +63,27 @@ function renderWeapon(weapon, character) {
   `;
 }
 
-function renderDeathSaveDots(value, symbol, type) {
+function renderSuccessDots(value) {
   return [0, 1, 2].map(index => `
     <button
       type="button"
-      class="death-save-dot ${index < value ? "filled" : ""}"
-      data-death-type="${type}"
-      data-death-index="${index}"
-      aria-label="${index < value ? "Очистити" : "Позначити"}"
-    >${index < value ? symbol : "○"}</button>
+      class="death-save-success ${index < value ? "filled" : ""}"
+      data-save-type="success"
+      data-save-index="${index}"
+      aria-label="${index < value ? "Очистити успіх" : "Позначити успіх"}"
+    >${index < value ? "✓" : "○"}</button>
+  `).join("");
+}
+
+function renderFailureDots(value) {
+  return [0, 1, 2].map(index => `
+    <button
+      type="button"
+      class="death-save-fail ${index < value ? "filled" : ""}"
+      data-save-type="fail"
+      data-save-index="${index}"
+      aria-label="${index < value ? "Очистити провал" : "Позначити провал"}"
+    >${index < value ? "✕" : "○"}</button>
   `).join("");
 }
 
@@ -96,9 +108,13 @@ function renderCompactSavesAndSkills(character) {
               ? "◐"
               : "○";
 
+        const skillLabel = skillKey === "animalHandling"
+          ? `${marker} Поводження<br>з тваринами`
+          : `${marker} ${skill.ukr}`;
+
         return `
           <div class="combat-skill-row">
-            <span>${marker} ${skill.ukr}</span>
+            <span class="${skillKey === "animalHandling" ? "animal-handling" : ""}">${skillLabel}</span>
             <strong>${formatModifier(bonus)}</strong>
           </div>
         `;
@@ -224,11 +240,11 @@ export function combatScreen(character) {
             <span>Death Saves</span>
             <div class="death-save-row">
               <span>Success</span>
-              <div class="death-save-dots">${renderDeathSaveDots(deathSaves.success, "✓", "success")}</div>
+              <div class="death-save-dots">${renderSuccessDots(deathSaves.success)}</div>
             </div>
             <div class="death-save-row">
               <span>Failure</span>
-              <div class="death-save-dots">${renderDeathSaveDots(deathSaves.fail, "✕", "fail")}</div>
+              <div class="death-save-dots">${renderFailureDots(deathSaves.fail)}</div>
             </div>
           </div>
         </section>
