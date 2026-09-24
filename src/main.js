@@ -208,22 +208,177 @@ function performLongRest(character) {
 
 function showShortRest(character) {
   closeCampMenu();
+  ensureCombatState(character);
+
+  const preferenceKey = "shortRestHealing";
+  const savedMode = getActionPreference(preferenceKey);
+
+  if (!savedMode) {
+    showCampDialog({
+      title: "Short Rest",
+      body: `
+        <p>Оберіть спосіб відновлення HP за допомогою Hit Dice. Вибір буде автоматично збережено для наступних Short Rest.</p>
+        <div class="rest-summary">
+          <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="average">
+            Середнє значення Hit Die
+          </button>
+          <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="manual">
+            Ручне введення
+          </button>
+          <button type="button" class="camp-dialog-button short-rest-method disabled" disabled>
+            Кидок кубика — Скоро
+          </button>
+        </div>
+      `,
+      confirmLabel: "Скасувати",
+      onConfirm: () => {}
+    });
+
+    const backdrop = document.querySelector(".camp-dialog-backdrop");
+    backdrop?.addEventListener("click", event => {
+      const methodButton = event.target.closest("[data-rest-method]");
+      if (!methodButton) return;
+
+      const mode = methodButton.dataset.restMethod;
+      setActionPreference(preferenceKey, mode);
+      closeCampDialog();
+      showShortRest(character);
+    });
+    return;
+  }
+
+  const availableHitDice = Number(character.combat.currentHitDice ?? 0);
+  const currentHp = Number(character.combat.currentHp ?? 0);
+  const maxHp = Number(character.maxHp ?? 0);
+
+  if (availableHitDice <= 0) {
+    showCampDialog({
+      title: "Short Rest",
+      body: `
+        <p>Немає доступних Hit Dice для лікування.</p>
+        <div class="rest-summary">
+          <div class="rest-row"><span>HP</span><strong>${currentHp}/${maxHp}</strong></div>
+          <div class="rest-row"><span>Hit Dice</span><strong>0</strong></div>
+        </div>
+      `,
+      confirmLabel: "Закрити"
+    });
+    return;
+  }
+
+  if (currentHp >= maxHp) {
+    showCampDialog({
+      title: "Short Rest",
+      body: `
+        <p>HP вже повністю відновлено. Витрачати Hit Die немає сенсу.</p>
+        <div class="rest-summary">
+          <div class="rest-row"><span>HP</span><strong>${currentHp}/${maxHp}</strong></div>
+          <div class="rest-row"><span>Hit Dice</span><strong>${availableHitDice}</strong></div>
+        </div>
+      `,
+      confirmLabel: "Закрити"
+    });
+    return;
+  }
 
   showCampDialog({
     title: "Short Rest",
     body: `
-      <p>Під час короткого відпочинку можна витрачати Hit Dice для відновлення HP.</p>
+      <p>Автоматичний режим: <strong>${savedMode === ACTION_PREFERENCE_VALUES.AVERAGE ? "Середнє значення" : "Ручне введення"}</strong>.</p>
       <div class="rest-summary">
-        <div class="rest-row"><span>Доступні Hit Dice</span><strong>${character.combat.currentHitDice}</strong></div>
-        <div class="rest-row"><span>Поточне HP</span><strong>${character.combat.currentHp}/${character.maxHp}</strong></div>
+        <div class="rest-row"><span>HP</span><strong>${currentHp}/${maxHp}</strong></div>
+        <div class="rest-row"><span>Доступні Hit Dice</span><strong>${availableHitDice}</strong></div>
+      </div>
+      <div class="rest-summary">
+        <button type="button" class="camp-dialog-button" id="short-rest-change-method">Змінити спосіб</button>
       </div>
     `,
-    confirmLabel: "Завершити",
+    confirmLabel: savedMode === ACTION_PREFERENCE_VALUES.MANUAL ? "Ввести лікування" : "Використати 1 Hit Die",
     onConfirm: () => {
-      performShortRest(character);
+      if (savedMode === ACTION_PREFERENCE_VALUES.MANUAL) {
+        const input = prompt("Введіть кількість HP для відновлення", String(calculateRecommendedHpIncrease(character, character.classes?.[0]?.classId ?? "")));
+        if (input === null) {
+          showShortRest(character);
+          return;
+        }
+
+        const value = Number(input);
+        if (!Number.isFinite(value) || value < 0) {
+          showCampDialog({
+            title: "Short Rest",
+            body: "<p>Некоректне значення лікування.</p>",
+            confirmLabel: "Закрити"
+          });
+          return;
+        }
+
+        const result = applyShortRestHealing(character, ACTION_PREFERENCE_VALUES.MANUAL, value);
+        persistCharacters();
+        render();
+
+        showCampDialog({
+          title: "Short Rest завершено",
+          body: `
+            <div class="rest-summary">
+              <div class="rest-row"><span>Відновлено HP</span><strong>+${result.healed}</strong></div>
+              <div class="rest-row"><span>HP</span><strong>${result.currentHp}/${maxHp}</strong></div>
+              <div class="rest-row"><span>Hit Dice</span><strong>${result.currentHitDice}</strong></div>
+            </div>
+          `,
+          confirmLabel: "Готово"
+        });
+        return;
+      }
+
+      const result = applyShortRestHealing(character, ACTION_PREFERENCE_VALUES.AVERAGE);
       persistCharacters();
       render();
+
+      showCampDialog({
+        title: "Short Rest завершено",
+        body: `
+          <div class="rest-summary">
+            <div class="rest-row"><span>Відновлено HP</span><strong>+${result.healed}</strong></div>
+            <div class="rest-row"><span>HP</span><strong>${result.currentHp}/${maxHp}</strong></div>
+            <div class="rest-row"><span>Hit Dice</span><strong>${result.currentHitDice}</strong></div>
+          </div>
+        `,
+        confirmLabel: "Готово"
+      });
     }
+  });
+
+  const backdrop = document.querySelector(".camp-dialog-backdrop");
+  backdrop?.addEventListener("click", event => {
+    if (event.target.closest("#short-rest-change-method")) {
+      closeCampDialog();
+      setTimeout(() => showShortRestChoice(character), 0);
+    }
+  });
+}
+
+function showShortRestChoice(character) {
+  const preferenceKey = "shortRestHealing";
+  showCampDialog({
+    title: "Спосіб Short Rest",
+    body: `
+      <p>Зміна способу збереже новий вибір для наступних Short Rest.</p>
+      <div class="rest-summary">
+        <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="average">Середнє значення Hit Die</button>
+        <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="manual">Ручне введення</button>
+        <button type="button" class="camp-dialog-button" disabled>Кидок кубика — Скоро</button>
+      </div>
+    `,
+    confirmLabel: "Скасувати"
+  });
+
+  const backdrop = document.querySelector(".camp-dialog-backdrop");
+  backdrop?.addEventListener("click", event => {
+    const methodButton = event.target.closest("[data-rest-method]");
+    if (!methodButton) return;
+    setActionPreference(preferenceKey, methodButton.dataset.restMethod);
+    closeCampDialog();
+    setTimeout(() => showShortRest(character), 0);
   });
 }
 
