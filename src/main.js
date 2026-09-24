@@ -27,6 +27,16 @@ function navigationForCurrentScreen() {
   return bottomNavigation(currentScreen);
 }
 
+function resetDeathSavesWhenAlive(character) {
+  if (!character?.combat) return;
+
+  if (Number(character.combat.currentHp) > 0) {
+    character.combat.deathSaves ??= { success: 0, fail: 0 };
+    character.combat.deathSaves.success = 0;
+    character.combat.deathSaves.fail = 0;
+  }
+}
+
 function persistCharacters() {
   saveCharacters(getCharacters());
 }
@@ -159,6 +169,7 @@ app.addEventListener("click", (event) => {
         0,
         currentCharacter.maxHp
       );
+      resetDeathSavesWhenAlive(currentCharacter);
       render();
       return;
     }
@@ -169,6 +180,7 @@ app.addEventListener("click", (event) => {
         0,
         currentCharacter.maxHp
       );
+      resetDeathSavesWhenAlive(currentCharacter);
       render();
       return;
     }
