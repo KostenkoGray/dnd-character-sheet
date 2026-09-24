@@ -42,3 +42,38 @@ function clone(value) {
     ? structuredClone(value)
     : JSON.parse(JSON.stringify(value));
 }
+
+
+const SETTINGS_KEY = "dnd-character-sheet.settings.v1";
+
+export function loadSettings(fallbackSettings = { actionPreferences: {} }) {
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    if (!raw) {
+      const initial = clone(fallbackSettings);
+      saveSettings(initial);
+      return initial;
+    }
+
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") {
+      const initial = clone(fallbackSettings);
+      saveSettings(initial);
+      return initial;
+    }
+
+    parsed.actionPreferences ??= {};
+    return parsed;
+  } catch (error) {
+    console.error("Не вдалося завантажити налаштування:", error);
+    return clone(fallbackSettings);
+  }
+}
+
+export function saveSettings(settings) {
+  try {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  } catch (error) {
+    console.error("Не вдалося зберегти налаштування:", error);
+  }
+}
