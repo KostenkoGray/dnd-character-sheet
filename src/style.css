@@ -1740,3 +1740,18 @@ p {
     font-size:1rem;
   }
 }
+
+/* Combat v3.4.7 */
+.hp-value span{
+  right:-32px;
+  bottom:4px;
+  font-size:1.15rem;
+  font-weight:700;
+}
+@media (max-width:420px){
+  .hp-value span{
+    right:-28px;
+    bottom:4px;
+    font-size:1.08rem;
+  }
+}
