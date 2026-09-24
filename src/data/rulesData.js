@@ -354,3 +354,23 @@ export const TOOLS = {
   MASONS_TOOLS: "masonsTools",
   TINKERS_TOOLS: "tinkersTools"
 };
+
+// ==================================================
+// REST & LEVEL-UP RULES
+// ==================================================
+
+export const REST_TYPES = {
+  SHORT: "short",
+  LONG: "long"
+};
+
+export const HP_LEVEL_UP_METHODS = {
+  AVERAGE: "average",
+  ROLL: "roll",
+  MANUAL: "manual"
+};
+
+export const LONG_REST_HIT_DICE_RECOVERY = {
+  FRACTION: 0.5,
+  MINIMUM: 1
+};
