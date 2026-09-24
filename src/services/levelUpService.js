@@ -1,4 +1,4 @@
-import { CLASSES } from "../data/classesData.js";
+import { CLASSES, CLASS_LEVEL_UP } from "../data/classesData.js";
 import { FEATURES } from "../data/featuresData.js";
 import { getSpellSlots } from "./characterCalculationsService.js";
 
@@ -41,7 +41,7 @@ export function getLevelUpOptions(character, classId) {
     data: FEATURES[id] ?? null
   }));
 
-  const asiLevels = classData.abilityScoreImprovementLevels ?? [];
+  const asiLevels = CLASS_LEVEL_UP[classId]?.abilityScoreImprovementLevels ?? [];
   const abilityScoreImprovement = asiLevels.includes(nextLevel);
 
   const spellcastingBefore = getSpellSlots(character);
@@ -96,6 +96,7 @@ export function applyLevelUp(character, classId, hpIncrease) {
   const preview = previewLevelUp(character, classId, hpIncrease);
   character.classes = preview.nextCharacter.classes;
   character.maxHp = preview.nextCharacter.maxHp;
+
   if (character.combat) {
     character.combat.currentHp = Math.min(
       Number(character.combat.currentHp ?? character.maxHp),
@@ -103,5 +104,6 @@ export function applyLevelUp(character, classId, hpIncrease) {
     );
     character.combat.currentHitDice = preview.hitDiceTotal;
   }
+
   return preview;
 }
