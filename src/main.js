@@ -15,13 +15,19 @@ import {
 import { charactersScreen } from "./screens/characterListScreen.js";
 import { characterSheetScreen } from "./screens/characterSheetScreen.js";
 import { combatScreen } from "./screens/combatScreen.js";
+import { saveCharacters } from "./services/storageService.js";
 
 const app = document.querySelector("#app");
 
 let currentCharacter = null;
 let currentScreen = "list";
 
+function persistCharacters() {
+  saveCharacters(getCharacters());
+}
+
 function render() {
+  persistCharacters();
   switch (currentScreen) {
     case "list":
       app.innerHTML = charactersScreen(getCharacters());
@@ -131,6 +137,7 @@ app.addEventListener("click", (event) => {
   }
 
   if (event.target.closest("#close-character-sheet")) {
+    persistCharacters();
     currentCharacter = null;
     currentScreen = "list";
     render();
@@ -290,5 +297,7 @@ app.addEventListener("click", (event) => {
   currentScreen = nav.dataset.screen;
   render();
 });
+
+window.addEventListener("pagehide", persistCharacters);
 
 render();
