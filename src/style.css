@@ -1237,3 +1237,91 @@ p {
   .death-saves-title{padding:0 2px;}
   .death-saves-title strong{font-size:.75rem;}
 }
+
+
+/* Combat v3.2 */
+.combat-vitals{
+  display:grid;
+  grid-template-columns:minmax(0,4fr) minmax(70px,1fr);
+  gap:8px;
+  align-items:stretch;
+  margin-bottom:16px;
+}
+.combat-vitals .combat-hp{
+  margin-bottom:0;
+}
+.combat-hit-dice{
+  min-width:0;
+  padding:8px 5px;
+  margin:0;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  gap:4px;
+}
+.combat-hit-dice h2{
+  margin:0;
+  font-size:.68rem;
+  line-height:1.1;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  color:var(--text-muted);
+}
+.hit-die-label{
+  font-size:.75rem;
+  color:var(--text-muted);
+}
+.hit-dice-value{
+  font-size:.98rem;
+  line-height:1.1;
+}
+.hit-dice-controls{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+}
+.hit-dice-controls button{
+  width:25px;
+  height:25px;
+  padding:0;
+  border:1px solid var(--border);
+  border-radius:50%;
+  background:var(--surface-light);
+  color:inherit;
+  font-size:.9rem;
+  line-height:1;
+  cursor:pointer;
+}
+.death-saves-resource,
+.death-saves-conditional{
+  display:none!important;
+}
+@media (max-width:420px){
+  .combat-vitals{
+    grid-template-columns:minmax(0,4fr) minmax(68px,1fr);
+    gap:6px;
+  }
+  .combat-hit-dice{
+    padding:7px 3px;
+  }
+  .combat-hit-dice h2{
+    font-size:.6rem;
+  }
+  .hit-die-label{
+    font-size:.68rem;
+  }
+  .hit-dice-value{
+    font-size:.9rem;
+  }
+  .hit-dice-controls button{
+    width:23px;
+    height:23px;
+    font-size:.85rem;
+  }
+}
