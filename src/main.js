@@ -148,6 +148,34 @@ app.addEventListener("click", (event) => {
       return;
     }
 
+    if (event.target.closest("#temp-hp-minus")) {
+      currentCharacter.combat.tempHp = Math.max(0, currentCharacter.combat.tempHp - 1);
+      render();
+      return;
+    }
+
+    if (event.target.closest("#temp-hp-plus")) {
+      currentCharacter.combat.tempHp += 1;
+      render();
+      return;
+    }
+
+    if (event.target.closest("#temp-hp-value-input")) {
+      const input = prompt(
+        "Введіть Temporary HP",
+        String(currentCharacter.combat.tempHp)
+      );
+
+      if (input !== null && input.trim() !== "") {
+        const value = Number(input);
+        if (Number.isFinite(value)) {
+          currentCharacter.combat.tempHp = Math.max(0, Math.floor(value));
+          render();
+        }
+      }
+      return;
+    }
+
     if (event.target.closest("#hp-value-input")) {
       const input = prompt(
         `Введіть поточне HP (0–${currentCharacter.maxHp})`,
