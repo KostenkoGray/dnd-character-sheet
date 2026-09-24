@@ -1058,3 +1058,99 @@ p {
 .death-save-dot.fail.filled{color:#fff;background:var(--danger);border-color:var(--danger);}
 .animal-handling{white-space:normal!important;line-height:1.05;display:inline-block;}
 @media (max-width:420px){.death-save-dot{width:40px;height:40px}.combat-stat-group{padding:7px}.combat-skill-row{font-size:.75rem;gap:4px;}}
+
+
+/* Combat v2.5 */
+.combat-top-panel{
+  padding:4px 0 8px;
+  gap:8px;
+}
+
+.combat-main-stat{
+  padding:8px 6px;
+  min-height:78px;
+}
+
+.combat-main-stat strong{
+  font-size:1.7rem;
+}
+
+.combat-main-stat em{
+  margin-top:1px;
+}
+
+.temp-hp{
+  align-items:center;
+  border-top-color:rgba(101,189,117,.35);
+}
+
+.temp-hp span,
+.temp-hp strong,
+.temp-hp-value{
+  color:var(--success);
+}
+
+.temp-hp-controls>button{
+  border-color:rgba(101,189,117,.4);
+}
+
+.death-saves-resource{
+  padding:10px 12px;
+}
+
+.death-saves-resource .death-save-row{
+  margin-top:4px;
+}
+
+.death-save-dots{
+  gap:5px;
+}
+
+.death-save-dot{
+  width:34px;
+  height:34px;
+  font-size:1rem;
+}
+
+.death-save-dot.success.filled{
+  background:var(--success);
+  border-color:var(--success);
+  color:#fff;
+}
+
+.death-save-dot.fail.filled{
+  background:var(--danger);
+  border-color:var(--danger);
+  color:#fff;
+}
+
+.animal-handling{
+  display:inline-block;
+  white-space:normal!important;
+  line-height:1.05;
+}
+
+@media (max-width:420px){
+  .combat-main-stat{
+    min-height:72px;
+    padding:7px 5px;
+  }
+
+  .combat-main-stat strong{
+    font-size:1.55rem;
+  }
+
+  .death-save-dot{
+    width:34px;
+    height:34px;
+  }
+
+  .combat-stat-group{
+    padding:7px;
+  }
+
+  .combat-skill-row{
+    font-size:.75rem;
+    gap:4px;
+  }
+}
