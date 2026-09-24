@@ -152,6 +152,98 @@ function getSkillBonusLocal(character, skillKey, skillData) {
   return modifier;
 }
 
+function getResourceValue(resourceTable, classLevel) {
+  const levels = Object.keys(resourceTable)
+    .map(Number)
+    .filter(level => level <= classLevel)
+    .sort((a, b) => a - b);
+
+  return levels.length ? resourceTable[levels[levels.length - 1]] : null;
+}
+
+function formatResourceName(key) {
+  const names = {
+    rage: "Rage",
+    bardicInspiration: "Bardic Inspiration",
+    channelDivinity: "Channel Divinity",
+    wildShape: "Wild Shape",
+    secondWind: "Second Wind",
+    actionSurge: "Action Surge",
+    ki: "Ki",
+    layOnHands: "Lay on Hands",
+    sorceryPoints: "Sorcery Points",
+    invocationsKnown: "Invocations"
+  };
+
+  return names[key] ?? key;
+}
+
+function renderClassResources(character) {
+  const ignored = new Set([
+    "rageDamageBonus",
+    "brutalCriticalDice",
+    "bardicInspirationDie",
+    "destroyUndeadCR",
+    "wildShapeCR",
+    "martialArtsDie",
+    "unarmoredMovement",
+    "extraAttacks",
+    "sneakAttackDice"
+  ]);
+
+  const blocks = (character.classes ?? []).flatMap(cls => {
+    const tables = CLASSES[cls.classId]?.resourcesByLevel ?? {};
+
+    return Object.entries(tables)
+      .filter(([key, table]) =>
+        !ignored.has(key) &&
+        table &&
+        typeof table === "object" &&
+        !Array.isArray(table)
+      )
+      .map(([key, table]) => {
+        const maximum = getResourceValue(table, cls.level);
+
+        if (typeof maximum !== "number" || maximum <= 0) return "";
+
+        const stateKey = `classResource_${cls.classId}_${key}`;
+        const current = Math.min(
+          Math.max(Number(character.combat?.[stateKey] ?? maximum), 0),
+          maximum
+        );
+
+        character.combat[stateKey] = current;
+
+        return `
+          <div class="combat-resource class-resource">
+            <span>${formatResourceName(key)}</span>
+            <div class="resource-counter">
+              <button type="button"
+                data-class-resource="minus"
+                data-resource-key="${stateKey}"
+                data-resource-max="${maximum}">−</button>
+              <strong>${current}/${maximum}</strong>
+              <button type="button"
+                data-class-resource="plus"
+                data-resource-key="${stateKey}"
+                data-resource-max="${maximum}">+</button>
+            </div>
+          </div>
+        `;
+      })
+      .filter(Boolean);
+  });
+
+  if (!blocks.length) return "";
+
+  return `
+    <section class="combat-section combat-class-resources">
+      <h2>Class Resources</h2>
+      <div class="combat-resources">${blocks.join("")}</div>
+    </section>
+  `;
+}
+
 export function combatScreen(character) {
   const armorClass = getArmorClass(character);
   const initiative = getInitiative(character);
@@ -164,13 +256,13 @@ export function combatScreen(character) {
   const maxHp = character.maxHp ?? 0;
   const currentHp = character.combat?.currentHp ?? maxHp;
   const tempHp = character.combat?.tempHp ?? 0;
-  const usedHitDice = character.combat?.usedHitDice ?? 0;
+  const currentHitDice = character.combat?.currentHitDice ?? getCharacterLevel(character);
   const deathSaves = character.combat?.deathSaves ?? { success: 0, fail: 0 };
   const inspiration = character.combat?.inspiration ?? false;
 
   const hitDie = getHitDieLabel(character);
   const primaryClass = getPrimaryClass(character);
-  const hitDiceTotal = primaryClass?.level ?? getCharacterLevel(character);
+  const hitDiceTotal = getCharacterLevel(character);
 
   const weaponsBlock = (character.weapons ?? []).length
     ? character.weapons.map(weapon => renderWeapon(weapon, character)).join("")
@@ -231,7 +323,7 @@ export function combatScreen(character) {
             <span>Hit Dice ${hitDie}</span>
             <div class="resource-counter">
               <button type="button" id="hit-dice-minus">−</button>
-              <strong>${usedHitDice}/${hitDiceTotal}</strong>
+              <strong>${currentHitDice}/${hitDiceTotal}</strong>
               <button type="button" id="hit-dice-plus">+</button>
             </div>
           </div>
@@ -248,6 +340,22 @@ export function combatScreen(character) {
             </div>
           </div>
         </section>
+
+        ${currentHp === 0 ? `
+        <section class="combat-section death-saves-conditional">
+          <h2>Death Saves</h2>
+          <div class="death-save-row">
+            <span>Success</span>
+            <div class="death-save-dots">${renderSuccessDots(deathSaves.success)}</div>
+          </div>
+          <div class="death-save-row">
+            <span>Failure</span>
+            <div class="death-save-dots">${renderFailureDots(deathSaves.fail)}</div>
+          </div>
+        </section>
+        ` : ""}
+
+        ${renderClassResources(character)}
 
         <section class="combat-section">
           <h2>Weapons</h2>
