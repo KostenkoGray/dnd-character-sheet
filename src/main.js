@@ -224,15 +224,14 @@ app.addEventListener("click", (event) => {
       return;
     }
 
-    const deathSaveDot = event.target.closest(".death-save-dot");
+    const deathSaveDot = event.target.closest("[data-save-type]");
 
     if (deathSaveDot) {
-      const type = deathSaveDot.dataset.deathType;
-      const index = Number(deathSaveDot.dataset.deathIndex);
-      const key = type === "success" ? "success" : "fail";
-      const currentValue = currentCharacter.combat.deathSaves[key];
+      const type = deathSaveDot.dataset.saveType;
+      const index = Number(deathSaveDot.dataset.saveIndex);
+      const currentValue = currentCharacter.combat.deathSaves[type];
 
-      currentCharacter.combat.deathSaves[key] =
+      currentCharacter.combat.deathSaves[type] =
         currentValue === index + 1 ? index : index + 1;
 
       render();
