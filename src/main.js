@@ -60,7 +60,7 @@ function ensureCombatState(character) {
     character.combat = {
       currentHp: character.maxHp ?? 0,
       tempHp: 0,
-      currentHitDice: 0,
+      currentHitDice: getHitDiceTotal(character),
       deathSaves: { success: 0, fail: 0 },
       inspiration: false
     };
@@ -78,15 +78,6 @@ function ensureCombatState(character) {
   );
 
   const hitDiceTotal = getHitDiceTotal(character);
-
-  if (character.combat.currentHitDice == null) {
-    const used = Number(character.combat.usedHitDice ?? 0);
-    character.combat.currentHitDice = clamp(
-      hitDiceTotal - used,
-      0,
-      hitDiceTotal
-    );
-  }
 
   if (character.combat.currentHitDice == null) {
     const used = Number(character.combat.usedHitDice ?? 0);
