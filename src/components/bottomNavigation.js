@@ -7,7 +7,7 @@ export function bottomNavigation(activeScreen) {
   const screens = [
     { id: "sheet", icon: "📋", label: "Sheet" },
     { id: "combat", icon: "⚔️", label: "Combat" },
-    { id: "inventory", icon: "🎒", label: "Bag" },
+    { id: "inventory", icon: "🎒", label: "Inventory" },
     { id: "magic", icon: "✨", label: "Magic" },
     { id: "dice", icon: "🎲", label: "Dice" },
     { id: "notes", icon: "📝", label: "Notes" }
