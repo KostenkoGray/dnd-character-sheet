@@ -160,6 +160,97 @@ app.addEventListener("click", (event) => {
     return;
   }
 
+  if (currentScreen === "sheet" && currentCharacter) {
+    ensureCombatState(currentCharacter);
+
+    if (event.target.closest("#sheet-hp-minus")) {
+      currentCharacter.combat.currentHp = clamp(
+        currentCharacter.combat.currentHp - 1,
+        0,
+        currentCharacter.maxHp
+      );
+      resetDeathSavesWhenAlive(currentCharacter);
+      render();
+      return;
+    }
+
+    if (event.target.closest("#sheet-hp-plus")) {
+      currentCharacter.combat.currentHp = clamp(
+        currentCharacter.combat.currentHp + 1,
+        0,
+        currentCharacter.maxHp
+      );
+      resetDeathSavesWhenAlive(currentCharacter);
+      render();
+      return;
+    }
+
+    if (event.target.closest("#sheet-temp-hp-minus")) {
+      currentCharacter.combat.tempHp = Math.max(0,currentCharacter.combat.tempHp - 1);
+      render();
+      return;
+    }
+
+    if (event.target.closest("#sheet-temp-hp-plus")) {
+      currentCharacter.combat.tempHp += 1;
+      render();
+      return;
+    }
+
+    if (event.target.closest("#sheet-temp-hp-value-input")) {
+      const input = prompt("Введіть Temporary HP",String(currentCharacter.combat.tempHp));
+      if (input !== null && input.trim() !== "") {
+        const value = Number(input);
+        if (Number.isFinite(value)) {
+          currentCharacter.combat.tempHp = Math.max(0,Math.floor(value));
+          render();
+        }
+      }
+      return;
+    }
+
+    if (event.target.closest("#sheet-hp-value-input")) {
+      const input = prompt(`Введіть поточне HP (0–${currentCharacter.maxHp})`,String(currentCharacter.combat.currentHp));
+      if (input !== null && input.trim() !== "") {
+        const value = Number(input);
+        if (Number.isFinite(value)) {
+          currentCharacter.combat.currentHp = clamp(
+            Math.floor(value),0,Number(currentCharacter.maxHp ?? 0)
+          );
+          resetDeathSavesWhenAlive(currentCharacter);
+          render();
+        }
+      }
+      return;
+    }
+
+    if (event.target.closest("#sheet-inspiration")) {
+      currentCharacter.combat.inspiration = !currentCharacter.combat.inspiration;
+      render();
+      return;
+    }
+
+    if (event.target.closest("#sheet-hit-dice-minus")) {
+      currentCharacter.combat.currentHitDice = clamp(
+        currentCharacter.combat.currentHitDice - 1,
+        0,
+        getHitDiceTotal(currentCharacter)
+      );
+      render();
+      return;
+    }
+
+    if (event.target.closest("#sheet-hit-dice-plus")) {
+      currentCharacter.combat.currentHitDice = clamp(
+        currentCharacter.combat.currentHitDice + 1,
+        0,
+        getHitDiceTotal(currentCharacter)
+      );
+      render();
+      return;
+    }
+  }
+
   if (currentScreen === "combat" && currentCharacter) {
     ensureCombatState(currentCharacter);
 
@@ -263,7 +354,7 @@ app.addEventListener("click", (event) => {
 
     const deathSaveDot = event.target.closest("[data-save-type]");
 
-    if (deathSaveDot && currentCharacter.combat.currentHp === 0) {
+    if (deathSaveDot && (currentScreen === "combat" || currentScreen === "sheet") && currentCharacter.combat.currentHp === 0) {
       const type = deathSaveDot.dataset.saveType;
       const index = Number(deathSaveDot.dataset.saveIndex);
       const currentValue = currentCharacter.combat.deathSaves[type];
@@ -284,7 +375,7 @@ app.addEventListener("click", (event) => {
 
   const classResourceButton = event.target.closest("[data-class-resource]");
 
-  if (currentScreen === "combat" && currentCharacter && classResourceButton) {
+  if ((currentScreen === "combat" || currentScreen === "sheet") && currentCharacter && classResourceButton) {
     const key = classResourceButton.dataset.resourceKey;
     const maximum = Number(classResourceButton.dataset.resourceMax);
     const delta = classResourceButton.dataset.classResource === "plus" ? 1 : -1;
