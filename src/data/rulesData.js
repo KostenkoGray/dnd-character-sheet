@@ -374,3 +374,13 @@ export const LONG_REST_HIT_DICE_RECOVERY = {
   FRACTION: 0.5,
   MINIMUM: 1
 };
+
+// ==================================================
+// ACTION PREFERENCES
+// ==================================================
+// Generic preference keys for mechanics that support multiple methods.
+
+export const ACTION_PREFERENCES = {
+  SHORT_REST_HEALING: "shortRestHealing",
+  LEVEL_UP_HP: "levelUpHp"
+};
