@@ -6,6 +6,7 @@ window.onerror = (message, source, line, column, error) => {
   alert(message);
   console.error(error);
 };
+
 import {
   getCharacters,
   getCharacterById
@@ -17,20 +18,11 @@ import { combatScreen } from "./screens/combatScreen.js";
 
 const app = document.querySelector("#app");
 
-// =========================================
-// Стан застосунку
-// =========================================
-
 let currentCharacter = null;
 let currentScreen = "list";
 
-// =========================================
-// Рендер екранів
-// =========================================
-
 function render() {
   switch (currentScreen) {
-
     case "list":
       app.innerHTML = charactersScreen(getCharacters());
       break;
@@ -59,27 +51,72 @@ function render() {
   }
 }
 
-// =========================================
-// Глобальна навігація
-// =========================================
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function ensureCombatState(character) {
+  if (!character.combat) {
+    character.combat = {
+      currentHp: character.maxHp ?? 0,
+      tempHp: 0,
+      usedHitDice: 0,
+      deathSaves: { success: 0, fail: 0 },
+      inspiration: false
+    };
+  }
+
+  character.combat.currentHp = clamp(
+    Number(character.combat.currentHp ?? character.maxHp ?? 0),
+    0,
+    Number(character.maxHp ?? 0)
+  );
+
+  character.combat.tempHp = Math.max(
+    0,
+    Number(character.combat.tempHp ?? 0)
+  );
+
+  character.combat.usedHitDice = clamp(
+    Number(character.combat.usedHitDice ?? 0),
+    0,
+    getHitDiceTotal(character)
+  );
+
+  character.combat.deathSaves ??= { success: 0, fail: 0 };
+
+  character.combat.deathSaves.success = clamp(
+    Number(character.combat.deathSaves.success ?? 0),
+    0,
+    3
+  );
+
+  character.combat.deathSaves.fail = clamp(
+    Number(character.combat.deathSaves.fail ?? 0),
+    0,
+    3
+  );
+
+  character.combat.inspiration = Boolean(character.combat.inspiration);
+}
+
+function getHitDiceTotal(character) {
+  return (character.classes ?? []).reduce(
+    (sum, cls) => sum + Number(cls.level ?? 0),
+    0
+  );
+}
 
 app.addEventListener("click", (event) => {
-
-  // ---------- Вибір персонажа ----------
-
   const card = event.target.closest(".character-card");
 
   if (card && currentScreen === "list") {
     const id = Number(card.dataset.characterId);
-
     currentCharacter = getCharacterById(id);
-
     currentScreen = "sheet";
     render();
     return;
   }
-
-  // ---------- Хрестик Character Sheet ----------
 
   if (event.target.closest("#close-character-sheet")) {
     currentCharacter = null;
@@ -88,7 +125,92 @@ app.addEventListener("click", (event) => {
     return;
   }
 
-  // ---------- Нижня навігація ----------
+  if (currentScreen === "combat" && currentCharacter) {
+    ensureCombatState(currentCharacter);
+
+    if (event.target.closest("#hp-minus")) {
+      currentCharacter.combat.currentHp = clamp(
+        currentCharacter.combat.currentHp - 1,
+        0,
+        currentCharacter.maxHp
+      );
+      render();
+      return;
+    }
+
+    if (event.target.closest("#hp-plus")) {
+      currentCharacter.combat.currentHp = clamp(
+        currentCharacter.combat.currentHp + 1,
+        0,
+        currentCharacter.maxHp
+      );
+      render();
+      return;
+    }
+
+    if (event.target.closest("#hp-value-input")) {
+      const input = prompt(
+        `Введіть поточне HP (0–${currentCharacter.maxHp})`,
+        String(currentCharacter.combat.currentHp)
+      );
+
+      if (input !== null && input.trim() !== "") {
+        const value = Number(input);
+
+        if (Number.isFinite(value)) {
+          currentCharacter.combat.currentHp = clamp(
+            Math.floor(value),
+            0,
+            Number(currentCharacter.maxHp ?? 0)
+          );
+          render();
+        }
+      }
+      return;
+    }
+
+    if (event.target.closest("#combat-inspiration")) {
+      currentCharacter.combat.inspiration =
+        !currentCharacter.combat.inspiration;
+      render();
+      return;
+    }
+
+    if (event.target.closest("#hit-dice-minus")) {
+      currentCharacter.combat.usedHitDice = clamp(
+        currentCharacter.combat.usedHitDice - 1,
+        0,
+        getHitDiceTotal(currentCharacter)
+      );
+      render();
+      return;
+    }
+
+    if (event.target.closest("#hit-dice-plus")) {
+      currentCharacter.combat.usedHitDice = clamp(
+        currentCharacter.combat.usedHitDice + 1,
+        0,
+        getHitDiceTotal(currentCharacter)
+      );
+      render();
+      return;
+    }
+
+    const deathSaveDot = event.target.closest(".death-save-dot");
+
+    if (deathSaveDot) {
+      const type = deathSaveDot.dataset.deathType;
+      const index = Number(deathSaveDot.dataset.deathIndex);
+      const key = type === "success" ? "success" : "fail";
+      const currentValue = currentCharacter.combat.deathSaves[key];
+
+      currentCharacter.combat.deathSaves[key] =
+        currentValue === index + 1 ? index : index + 1;
+
+      render();
+      return;
+    }
+  }
 
   const nav = event.target.closest(".nav-item");
 
@@ -97,9 +219,5 @@ app.addEventListener("click", (event) => {
   currentScreen = nav.dataset.screen;
   render();
 });
-
-// =========================================
-// Запуск застосунку
-// =========================================
 
 render();
