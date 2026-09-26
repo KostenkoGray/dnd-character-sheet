@@ -15,6 +15,10 @@ export function getStatModifier(score) {
   return Math.floor((score - 10) / 2);
 }
 
+export function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
 export function getCharacterLevel(character) {
   return character.classes.reduce((sum, cls) => sum + cls.level, 0);
 }
