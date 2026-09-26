@@ -341,11 +341,17 @@ function bindShortRestHitDiceCounter(character, mode, spentHitDice, manualAmount
     if (!button) return;
 
     const delta = Number(button.dataset.shortRestDelta);
-    const nextSpent = clamp(spentHitDice + delta, 0, Number(character.combat.currentHitDice ?? 0));
+    const maxDice = Number(character.combat.currentHitDice ?? 0);
+    let nextSpent = clamp(spentHitDice + delta, 0, maxDice);
+
     const amountInput = document.querySelector("#short-rest-manual-amount");
     const nextManualAmount = mode === ACTION_PREFERENCE_VALUES.MANUAL
       ? (amountInput?.value === "" ? manualAmount : Number(amountInput.value))
       : null;
+
+    if (mode === ACTION_PREFERENCE_VALUES.MANUAL && Number(nextManualAmount ?? 0) > 0) {
+      nextSpent = Math.max(1, nextSpent);
+    }
 
     renderShortRestAction(character, mode, nextSpent, nextManualAmount);
   });
