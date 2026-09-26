@@ -10,7 +10,7 @@ import {
 } from "../services/characterCalculationsService.js";
 import { CLASSES } from "../data/classesData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
-import { renderDeathSaves } from "./combatScreen.js";
+import { renderDeathSaves } from "../components/deathSaves.js";
 
 // ==================================================
 // CHARACTER SHEET
