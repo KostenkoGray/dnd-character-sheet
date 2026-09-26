@@ -352,6 +352,14 @@ function restoreShortRestResources(character) {
 
     restoreWarlockPactMagicSlots(character, cls);
 
+    if (cls.classId === "warlock") {
+      const invocationsTable = tables.invocations ?? tables.invocationsKnown;
+      const maximum = invocationsTable ? getResourceValue(invocationsTable, cls.level) : null;
+      if (typeof maximum === "number" && maximum > 0) {
+        character.combat.classResource_warlock_invocations = maximum;
+      }
+    }
+
     for (const [key, table] of Object.entries(tables)) {
       if (!table || typeof table !== "object" || Array.isArray(table)) continue;
 
