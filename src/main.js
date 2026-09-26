@@ -1000,14 +1000,17 @@ app.addEventListener("click", (event) => {
     }
 
   if (currentCharacter && event.target.closest("[data-death-save-dot]")) {
-    handleDeathSaveClick(
+    const handled = handleDeathSaveClick(
       currentCharacter,
       event.target,
       ensureCombatState
     );
-    persistCharacters();
-    render();
-    return;
+
+    if (handled) {
+      persistCharacters();
+      render();
+      return;
+    }
   }
 
   }
