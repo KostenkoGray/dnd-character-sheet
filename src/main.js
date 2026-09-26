@@ -160,7 +160,12 @@ function getShortRestPreview(character, mode, hitDiceSpent, manualAmount) {
   const availableHitDice = Number(character.combat.currentHitDice ?? 0);
   const spent = clamp(Number(hitDiceSpent ?? 0), 0, availableHitDice);
   const healingPerDie = getShortRestHealingPerDie(character, mode, manualAmount);
-  const healing = Math.min(Math.max(0, maxHp - currentHp), spent * healingPerDie);
+  const healing = Math.min(
+    Math.max(0, maxHp - currentHp),
+    mode === ACTION_PREFERENCE_VALUES.MANUAL
+      ? (spent > 0 ? healingPerDie : 0)
+      : spent * healingPerDie
+  );
 
   return {
     currentHp,
@@ -283,7 +288,7 @@ function renderShortRestAction(character, mode, spentHitDice = 0, manualAmount =
         </div>
         ${mode === ACTION_PREFERENCE_VALUES.MANUAL && manualAmount === null ? `
           <div class="rest-summary">
-            <label class="rest-row"><span>HP за 1 Hit Die</span><input id="short-rest-manual-amount" type="number" min="0" step="1" inputmode="numeric" placeholder="HP"></label>
+            <label class="rest-row"><span>Кількість відновлених HP</span><input id="short-rest-manual-amount" type="number" min="0" step="1" inputmode="numeric" placeholder="HP"></label>
           </div>` : ""}
         
       </div>
@@ -299,12 +304,8 @@ function renderShortRestAction(character, mode, spentHitDice = 0, manualAmount =
         : null;
 
       if (mode === ACTION_PREFERENCE_VALUES.MANUAL && (!Number.isFinite(amount) || amount < 0)) {
-        renderShortRestAction(character, mode, spentHitDice, null);
-        showCampDialog({
-          title: "Short Rest",
-          body: "<p>Вкажіть коректну кількість HP за 1 Hit Die.</p>",
-          confirmLabel: "Закрити"
-        });
+        closeCampDialog();
+        setTimeout(() => renderShortRestAction(character, mode, spentHitDice, null), 0);
         return;
       }
 
@@ -340,7 +341,7 @@ function bindShortRestHitDiceCounter(character, mode, spentHitDice, manualAmount
     const nextSpent = clamp(spentHitDice + delta, 0, Number(character.combat.currentHitDice ?? 0));
     const amountInput = document.querySelector("#short-rest-manual-amount");
     const nextManualAmount = mode === ACTION_PREFERENCE_VALUES.MANUAL
-      ? (manualAmount ?? (amountInput?.value === "" ? null : Number(amountInput.value)))
+      ? (amountInput?.value === "" ? manualAmount : Number(amountInput.value))
       : null;
 
     renderShortRestAction(character, mode, nextSpent, nextManualAmount);
