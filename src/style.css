@@ -2246,3 +2246,15 @@ p {
     min-height:34px;
   }
 }
+
+
+/* Camp FAB alignment v2 */
+.camp-fab-menu{
+  top:54px;
+  align-items:center;
+}
+@media (max-width:420px){
+  .camp-fab-menu{
+    top:47px;
+  }
+}
