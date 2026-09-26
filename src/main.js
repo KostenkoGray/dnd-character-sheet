@@ -21,6 +21,7 @@ import { CLASSES } from "./data/classesData.js";
 import { saveCharacters, loadSettings, saveSettings } from "./services/storageService.js";
 import { DEFAULT_SETTINGS, ACTION_PREFERENCE_VALUES } from "./data/settingsData.js";
 import { bottomNavigation } from "./components/bottomNavigation.js";
+import { handleDeathSaveClick } from "./components/deathSaves.js";
 import {
   REST_TYPES,
   HP_LEVEL_UP_METHODS,
@@ -710,10 +711,6 @@ function render() {
   }
 }
 
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
-}
-
 function ensureCombatState(character) {
   if (!character.combat) {
     character.combat = {
@@ -1002,39 +999,17 @@ app.addEventListener("click", (event) => {
       return;
     }
 
-    const deathSaveDot = event.target.closest("[data-save-type]");
+  if (currentCharacter && event.target.closest("[data-death-save-dot]")) {
+    handleDeathSaveClick(
+      currentCharacter,
+      event.target,
+      ensureCombatState
+    );
+    persistCharacters();
+    render();
+    return;
+  }
 
-    if (deathSaveDot && currentCharacter?.combat) {
-      const type = deathSaveDot.dataset.saveType;
-      const index = Number(deathSaveDot.dataset.saveIndex);
-
-      if (Number(currentCharacter.combat.currentHp) !== 0) return;
-
-      currentCharacter.combat.deathSaves ??= {
-        success: 0,
-        fail: 0
-      };
-
-      const currentValue = Number(
-        currentCharacter.combat.deathSaves[type] ?? 0
-      );
-
-      currentCharacter.combat.deathSaves[type] =
-        currentValue === index + 1 ? index : index + 1;
-
-      if (
-        type === "success" &&
-        currentCharacter.combat.deathSaves.success === 3
-      ) {
-        currentCharacter.combat.currentHp = 1;
-        currentCharacter.combat.deathSaves.success = 0;
-        currentCharacter.combat.deathSaves.fail = 0;
-      }
-
-      persistCharacters();
-      render();
-      return;
-    }
   }
 
   const classResourceButton = event.target.closest("[data-class-resource]");
