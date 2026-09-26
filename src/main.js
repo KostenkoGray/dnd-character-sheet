@@ -532,10 +532,6 @@ function bindShortRestMethodChoice(character) {
   });
 }
 
-// TODO: Manual healing mode (future)
-// The manual healing implementation is intentionally disabled for now.
-// Keep it here as the placeholder for the future input/state implementation.
-
 function showLongRest(character) {
   closeCampMenu();
 
