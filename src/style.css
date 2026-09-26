@@ -2318,3 +2318,19 @@ p {
     gap:8px;
   }
 }
+
+/* Death Saves: ensure Character Sheet dots are clickable */
+.death-saves-panel,
+.death-save-dots,
+.death-save-success,
+.death-save-fail {
+  position: relative;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.death-save-success,
+.death-save-fail {
+  touch-action: manipulation;
+  cursor: pointer;
+}
