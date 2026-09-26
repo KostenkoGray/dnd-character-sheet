@@ -2282,3 +2282,39 @@ p {
     gap:8px;
   }
 }
+
+
+/* Camp header restored */
+.character-header-actions{
+  position:absolute;
+  top:12px;
+  right:12px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  z-index:101;
+}
+.camp-fab-menu{
+  position:absolute;
+  top:calc(52px + 10px);
+  right:62px;
+  z-index:150;
+  display:flex;
+  flex-direction:row-reverse;
+  align-items:center;
+  gap:10px;
+  pointer-events:none;
+}
+@media (max-width:420px){
+  .character-header-actions{
+    top:10px;
+    right:10px;
+    gap:8px;
+  }
+  .camp-fab-menu{
+    top:calc(52px + 8px);
+    right:60px;
+    gap:8px;
+  }
+}
