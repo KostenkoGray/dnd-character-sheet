@@ -1004,20 +1004,34 @@ app.addEventListener("click", (event) => {
 
     const deathSaveDot = event.target.closest("[data-save-type]");
 
-    if (deathSaveDot && currentCharacter.combat.currentHp === 0) {
+    if (deathSaveDot && currentCharacter?.combat) {
       const type = deathSaveDot.dataset.saveType;
       const index = Number(deathSaveDot.dataset.saveIndex);
-      const currentValue = currentCharacter.combat.deathSaves[type];
+
+      if (Number(currentCharacter.combat.currentHp) !== 0) return;
+
+      currentCharacter.combat.deathSaves ??= {
+        success: 0,
+        fail: 0
+      };
+
+      const currentValue = Number(
+        currentCharacter.combat.deathSaves[type] ?? 0
+      );
 
       currentCharacter.combat.deathSaves[type] =
         currentValue === index + 1 ? index : index + 1;
 
-      if (type === "success" && currentCharacter.combat.deathSaves.success === 3) {
+      if (
+        type === "success" &&
+        currentCharacter.combat.deathSaves.success === 3
+      ) {
         currentCharacter.combat.currentHp = 1;
         currentCharacter.combat.deathSaves.success = 0;
         currentCharacter.combat.deathSaves.fail = 0;
       }
 
+      persistCharacters();
       render();
       return;
     }
