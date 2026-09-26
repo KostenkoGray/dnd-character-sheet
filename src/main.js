@@ -201,29 +201,93 @@ function performShortRest(character, mode, hitDiceSpent, manualAmount) {
   return applyShortRestHealing(character, mode, hitDiceSpent, manualAmount);
 }
 
+function restoreLongRestResources(character) {
+  character.combat ??= {};
+
+  for (const cls of character.classes ?? []) {
+    const classData = CLASSES[cls.classId];
+    const tables = classData?.resourcesByLevel ?? {};
+    const recoveryMetadata = classData?.resourceRecovery ?? {};
+
+    for (const [key, table] of Object.entries(tables)) {
+      if (!table || typeof table !== "object" || Array.isArray(table)) continue;
+
+      const recovery = recoveryMetadata[key];
+      const restoresOnLongRest =
+        recovery === REST_TYPES.LONG ||
+        recovery === "shortOrLongRest";
+
+      if (!restoresOnLongRest) continue;
+
+      const maximum = getResourceValue(table, cls.level);
+      if (typeof maximum !== "number" || maximum <= 0) continue;
+
+      character.combat[`classResource_${cls.classId}_${key}`] = maximum;
+    }
+  }
+
+  restoreLongRestSpellSlots(character);
+}
+
+function restoreLongRestSpellSlots(character) {
+  character.combat ??= {};
+
+  for (const cls of character.classes ?? []) {
+    const spellcasting = CLASSES[cls.classId]?.spellcasting;
+    const slotsTable = spellcasting?.slotsTable;
+
+    if (!slotsTable || typeof slotsTable !== "object") continue;
+
+    const levelData =
+      slotsTable[cls.level] ??
+      slotsTable[String(cls.level)];
+
+    if (!levelData || typeof levelData !== "object") continue;
+
+    const maxSlots = Number(levelData.slots);
+    if (!Number.isFinite(maxSlots) || maxSlots <= 0) continue;
+
+    if (spellcasting.pactMagic) {
+      character.combat.pactMagicSlots = maxSlots;
+      character.combat.currentPactMagicSlots = maxSlots;
+      character.combat.pactMagicSlotLevel = Number(levelData.slotLevel) || 0;
+      continue;
+    }
+
+    const spellSlotLevels = Object.keys(levelData)
+      .filter(key => /^\d+$/.test(key))
+      .reduce((result, key) => {
+        const level = Number(key);
+        const value = Number(levelData[key]);
+        if (Number.isFinite(value)) result[level] = value;
+        return result;
+      }, {});
+
+    character.combat.spellSlots = spellSlotLevels;
+    character.combat.currentSpellSlots = { ...spellSlotLevels };
+  }
+}
+
 function performLongRest(character) {
   ensureCombatState(character);
 
+  restoreShortRestResources(character);
+  restoreLongRestResources(character);
+
   const totalHitDice = getHitDiceTotal(character);
-  const currentHitDice = Number(character.combat.currentHitDice ?? totalHitDice);
-  const recoveredHitDice = Math.max(
-    LONG_REST_HIT_DICE_RECOVERY.MINIMUM,
-    Math.floor(totalHitDice * LONG_REST_HIT_DICE_RECOVERY.FRACTION)
-  );
 
   character.combat.currentHp = Number(character.maxHp ?? 0);
   character.combat.tempHp = 0;
-  character.combat.currentHitDice = clamp(
-    currentHitDice + recoveredHitDice,
-    0,
-    totalHitDice
-  );
+  character.combat.currentHitDice = totalHitDice;
   character.combat.deathSaves = { success: 0, fail: 0 };
   character.combat.inspiration = false;
 
   return {
     type: REST_TYPES.LONG,
-    recoveredHitDice,
+    recoveredHitDice: Math.max(
+      0,
+      totalHitDice - Number(character.combat.currentHitDice ?? totalHitDice)
+    ),
     currentHitDice: character.combat.currentHitDice
   };
 }
