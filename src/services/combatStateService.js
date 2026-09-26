@@ -1,3 +1,5 @@
+import { clamp } from "./characterCalculationsService.js";
+
 export function ensureCombatState(character, getHitDiceTotal) {
   character.combat ??= {
     currentHp: character.maxHp ?? 0,
