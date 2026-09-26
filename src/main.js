@@ -15,6 +15,7 @@ import {
 import { charactersScreen } from "./screens/characterListScreen.js";
 import { characterSheetScreen } from "./screens/characterSheetScreen.js";
 import { combatScreen } from "./screens/combatScreen.js";
+import { getStatModifier } from "./services/characterCalculationsService.js";
 import { CLASSES } from "./data/classesData.js";
 import { saveCharacters, loadSettings, saveSettings } from "./services/storageService.js";
 import { DEFAULT_SETTINGS, ACTION_PREFERENCE_VALUES } from "./data/settingsData.js";
@@ -140,62 +141,59 @@ function getPrimaryHitDie(character) {
   return Number(primaryClass ? (CLASSES[primaryClass.classId]?.hitDie ?? 0) : 0);
 }
 
-function getShortRestRecommendedHealing(character) {
+function getShortRestHealingPerDie(character, mode, manualAmount) {
+  if (mode === ACTION_PREFERENCE_VALUES.MANUAL) {
+    return Math.max(0, Math.floor(Number(manualAmount ?? 0)));
+  }
+
   const hitDie = getPrimaryHitDie(character);
-  return hitDie ? Math.floor(hitDie / 2) + 1 : 0;
+  if (!hitDie) return 0;
+
+  return Math.max(0, Math.floor(hitDie / 2) + 1 + getStatModifier(character.stats?.constitution ?? 10));
 }
 
-function applyShortRestHealing(character, mode, amount) {
+function getShortRestPreview(character, mode, hitDiceSpent, manualAmount) {
   ensureCombatState(character);
 
+  const currentHp = Number(character.combat.currentHp ?? 0);
   const maxHp = Number(character.maxHp ?? 0);
-  const currentHp = Number(character.combat.currentHp ?? maxHp);
-  const currentHitDice = Number(character.combat.currentHitDice ?? 0);
-
-  if (currentHitDice <= 0 || currentHp >= maxHp) {
-    return {
-      healed: 0,
-      hitDiceSpent: 0,
-      currentHp,
-      currentHitDice
-    };
-  }
-
-  const maximumHealing = Math.max(0, maxHp - currentHp);
-  let healing = 0;
-
-  if (mode === ACTION_PREFERENCE_VALUES.AVERAGE) {
-    healing = getShortRestRecommendedHealing(character);
-  }
-
-  if (mode === ACTION_PREFERENCE_VALUES.MANUAL) {
-    healing = Math.max(0, Math.floor(Number(amount ?? 0)));
-  }
-
-  healing = Math.min(healing, maximumHealing);
-
-  if (healing <= 0) {
-    return {
-      healed: 0,
-      hitDiceSpent: 0,
-      currentHp,
-      currentHitDice
-    };
-  }
-
-  character.combat.currentHp = Math.min(maxHp, currentHp + healing);
-  character.combat.currentHitDice = Math.max(0, currentHitDice - 1);
+  const availableHitDice = Number(character.combat.currentHitDice ?? 0);
+  const spent = clamp(Number(hitDiceSpent ?? 0), 0, availableHitDice);
+  const healingPerDie = getShortRestHealingPerDie(character, mode, manualAmount);
+  const healing = Math.min(Math.max(0, maxHp - currentHp), spent * healingPerDie);
 
   return {
-    healed: healing,
-    hitDiceSpent: 1,
-    currentHp: character.combat.currentHp,
-    currentHitDice: character.combat.currentHitDice
+    currentHp,
+    maxHp,
+    availableHitDice,
+    hitDiceSpent: spent,
+    healingPerDie,
+    healing,
+    resultingHp: Math.min(maxHp, currentHp + healing)
   };
 }
 
-function performShortRest(character, mode, amount) {
-  return applyShortRestHealing(character, mode, amount);
+function applyShortRestHealing(character, mode, hitDiceSpent, manualAmount) {
+  const preview = getShortRestPreview(character, mode, hitDiceSpent, manualAmount);
+
+  if (preview.hitDiceSpent <= 0 || preview.healing <= 0) {
+    return { ...preview, hitDiceSpent: 0, healing: 0, resultingHp: preview.currentHp };
+  }
+
+  character.combat.currentHp = preview.resultingHp;
+  character.combat.currentHitDice = Math.max(
+    0,
+    preview.availableHitDice - preview.hitDiceSpent
+  );
+
+  return {
+    ...preview,
+    currentHp: character.combat.currentHp
+  };
+}
+
+function performShortRest(character, mode, hitDiceSpent, manualAmount) {
+  return applyShortRestHealing(character, mode, hitDiceSpent, manualAmount);
 }
 
 function performLongRest(character) {
@@ -234,19 +232,13 @@ function showShortRest(character) {
 
   if (!savedMode) {
     showCampDialog({
-      title: "Short Rest",
+      title: "Short Rest — спосіб лікування",
       body: `
-        <p>Оберіть спосіб відновлення HP. Вибір буде автоматично збережено для наступних Short Rest.</p>
+        <p>Оберіть спосіб лікування. Вибір зберігається автоматично.</p>
         <div class="rest-summary">
-          <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="average">
-            Середнє значення Hit Die (+${getShortRestRecommendedHealing(character)})
-          </button>
-          <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="manual">
-            Ручне введення
-          </button>
-          <button type="button" class="camp-dialog-button" disabled>
-            🎲 Кидок кубика — Скоро
-          </button>
+          <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="average">Середнє значення <strong>(рекомендовано)</strong></button>
+          <button type="button" class="camp-dialog-button" disabled>🎲 Кидок кубика — Скоро</button>
+          <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="manual">Мануальне введення</button>
         </div>
       `,
       confirmLabel: "Скасувати"
@@ -255,116 +247,95 @@ function showShortRest(character) {
     return;
   }
 
-  renderShortRestAction(character, savedMode);
+  renderShortRestAction(character, savedMode, 0);
 }
 
-function renderShortRestAction(character, mode) {
+function renderShortRestAction(character, mode, spentHitDice = 0, manualAmount = null) {
   ensureCombatState(character);
 
-  const availableHitDice = Number(character.combat.currentHitDice ?? 0);
-  const currentHp = Number(character.combat.currentHp ?? 0);
-  const maxHp = Number(character.maxHp ?? 0);
+  const preview = getShortRestPreview(character, mode, spentHitDice, manualAmount);
+  const modeLabel = mode === ACTION_PREFERENCE_VALUES.AVERAGE ? "Середнє значення" : "Мануальне введення";
+  const healingDescription = mode === ACTION_PREFERENCE_VALUES.AVERAGE
+    ? `+${preview.healingPerDie} HP за 1 Hit Die`
+    : manualAmount === null ? "введіть HP за 1 Hit Die" : `+${preview.healingPerDie} HP за 1 Hit Die`;
 
-  if (availableHitDice <= 0) {
-    showCampDialog({
-      title: "Short Rest",
-      body: `
-        <p>Немає доступних Hit Dice для лікування.</p>
-        <div class="rest-summary">
-          <div class="rest-row"><span>HP</span><strong>${currentHp}/${maxHp}</strong></div>
-          <div class="rest-row"><span>Hit Dice</span><strong>0</strong></div>
-        </div>
-      `,
-      confirmLabel: "Закрити"
-    });
-    return;
-  }
-
-  if (currentHp >= maxHp) {
-    showCampDialog({
-      title: "Short Rest",
-      body: `
-        <p>HP вже повністю відновлено.</p>
-        <div class="rest-summary">
-          <div class="rest-row"><span>HP</span><strong>${currentHp}/${maxHp}</strong></div>
-          <div class="rest-row"><span>Hit Dice</span><strong>${availableHitDice}</strong></div>
-        </div>
-      `,
-      confirmLabel: "Закрити"
-    });
-    return;
-  }
-
-  const automaticHealing = mode === ACTION_PREFERENCE_VALUES.AVERAGE
-    ? getShortRestRecommendedHealing(character)
-    : null;
+  const canSpend = preview.availableHitDice > 0 && preview.currentHp < preview.maxHp;
 
   showCampDialog({
     title: "Short Rest",
     body: `
-      <p>Режим: <strong>${mode === ACTION_PREFERENCE_VALUES.AVERAGE ? "Середнє значення" : "Ручне введення"}</strong>.</p>
       <div class="rest-summary">
-        <div class="rest-row"><span>HP</span><strong>${currentHp}/${maxHp}</strong></div>
-        <div class="rest-row"><span>Hit Dice</span><strong>${availableHitDice}</strong></div>
-        <div class="rest-row"><span>Лікування за 1 Hit Die</span><strong>${mode === ACTION_PREFERENCE_VALUES.AVERAGE ? "+" + automaticHealing : "ввести"}</strong></div>
+        <div class="rest-row"><span>Поточне HP</span><strong>${preview.currentHp}/${preview.maxHp}</strong></div>
+        <div class="rest-row"><span>Доступні Hit Dice</span><strong>${preview.availableHitDice} / ${getHitDiceTotal(character)} · d${getPrimaryHitDie(character)}</strong></div>
+        <div class="rest-row"><span>Спосіб</span><strong>${modeLabel}</strong></div>
+        <div class="rest-row"><span>Лікування</span><strong>${healingDescription}</strong></div>
+        <div class="short-rest-hit-dice-control">
+          <span>Використати Hit Dice</span>
+          <div class="short-rest-counter">
+            <button type="button" class="camp-dialog-button" data-short-rest-delta="-1" ${spentHitDice <= 0 ? "disabled" : ""}>−</button>
+            <strong id="short-rest-hit-dice-spent">${spentHitDice}</strong>
+            <button type="button" class="camp-dialog-button" data-short-rest-delta="1" ${!canSpend || spentHitDice >= preview.availableHitDice ? "disabled" : ""}>+</button>
+          </div>
+        </div>
+        ${mode === ACTION_PREFERENCE_VALUES.MANUAL && manualAmount === null ? `
+          <div class="rest-summary">
+            <label class="rest-row"><span>HP за 1 Hit Die</span><input id="short-rest-manual-amount" type="number" min="0" step="1" inputmode="numeric" placeholder="Наприклад 7"></label>
+          </div>` : ""}
+        <div class="rest-row"><span>Після відпочинку</span><strong id="short-rest-preview-hp">${preview.resultingHp}/${preview.maxHp}</strong></div>
       </div>
       <div class="rest-summary">
         <button type="button" class="camp-dialog-button" id="short-rest-change-method">Змінити спосіб</button>
       </div>
     `,
-    confirmLabel: mode === ACTION_PREFERENCE_VALUES.MANUAL ? "Ввести лікування" : "Використати 1 Hit Die",
+    confirmLabel: "Відпочити",
     onConfirm: () => {
-      if (mode === ACTION_PREFERENCE_VALUES.MANUAL) {
-        showShortRestManualAmountDialog(character);
-        return;
-      }
+      const amountInput = document.querySelector("#short-rest-manual-amount");
+      const amount = mode === ACTION_PREFERENCE_VALUES.MANUAL
+        ? (manualAmount ?? Number(amountInput?.value))
+        : null;
 
-      finishShortRest(character, mode);
-    }
-  });
-
-  bindShortRestChangeMethod(character);
-}
-
-function showShortRestManualAmountDialog(character) {
-  ensureCombatState(character);
-
-  const suggested = getShortRestRecommendedHealing(character);
-
-  showCampDialog({
-    title: "Short Rest — ручне лікування",
-    body: `
-      <p>Вкажіть кількість HP, яку відновлюємо за 1 Hit Die.</p>
-      <div class="rest-summary">
-        <div class="rest-row"><span>Поточне HP</span><strong>${character.combat.currentHp}/${character.maxHp}</strong></div>
-        <div class="rest-row"><span>Доступні Hit Dice</span><strong>${character.combat.currentHitDice}</strong></div>
-        <label class="rest-row" style="gap:12px;align-items:center">
-          <span>Лікування</span>
-          <input id="short-rest-healing-input" type="number" min="0" step="1" value="${suggested}" inputmode="numeric" style="max-width:110px;text-align:center">
-        </label>
-      </div>
-    `,
-    confirmLabel: "Відновити HP",
-    onConfirm: () => {
-      const input = document.querySelector("#short-rest-healing-input");
-      const value = Number(input?.value);
-
-      if (!Number.isFinite(value) || value < 0) {
+      if (mode === ACTION_PREFERENCE_VALUES.MANUAL && (!Number.isFinite(amount) || amount < 0)) {
+        renderShortRestAction(character, mode, spentHitDice, null);
         showCampDialog({
           title: "Short Rest",
-          body: "<p>Вкажіть коректну невід'ємну кількість HP.</p>",
+          body: "<p>Вкажіть коректну кількість HP за 1 Hit Die.</p>",
           confirmLabel: "Закрити"
         });
         return;
       }
 
-      finishShortRest(character, ACTION_PREFERENCE_VALUES.MANUAL, value);
+      if (spentHitDice <= 0) {
+        showCampDialog({ title: "Short Rest", body: "<p>Оберіть хоча б 1 Hit Die.</p>", confirmLabel: "Закрити" });
+        return;
+      }
+
+      finishShortRest(character, mode, spentHitDice, amount);
     }
+  });
+
+  bindShortRestChangeMethod(character);
+  bindShortRestHitDiceCounter(character, mode, spentHitDice, manualAmount);
+}
+
+function bindShortRestHitDiceCounter(character, mode, spentHitDice, manualAmount) {
+  const backdrop = document.querySelector(".camp-dialog-backdrop");
+  backdrop?.addEventListener("click", event => {
+    const button = event.target.closest("[data-short-rest-delta]");
+    if (!button) return;
+
+    const delta = Number(button.dataset.shortRestDelta);
+    const nextSpent = clamp(spentHitDice + delta, 0, Number(character.combat.currentHitDice ?? 0));
+    const amountInput = document.querySelector("#short-rest-manual-amount");
+    const nextManualAmount = mode === ACTION_PREFERENCE_VALUES.MANUAL
+      ? (manualAmount ?? (amountInput?.value === "" ? null : Number(amountInput.value)))
+      : null;
+
+    renderShortRestAction(character, mode, nextSpent, nextManualAmount);
   });
 }
 
-function finishShortRest(character, mode, amount) {
-  const result = performShortRest(character, mode, amount);
+function finishShortRest(character, mode, hitDiceSpent, manualAmount) {
+  const result = performShortRest(character, mode, hitDiceSpent, manualAmount);
 
   persistCharacters();
   render();
@@ -373,9 +344,10 @@ function finishShortRest(character, mode, amount) {
     title: "Short Rest завершено",
     body: `
       <div class="rest-summary">
-        <div class="rest-row"><span>Відновлено HP</span><strong>+${result.healed}</strong></div>
-        <div class="rest-row"><span>HP</span><strong>${result.currentHp}/${character.maxHp}</strong></div>
-        <div class="rest-row"><span>Hit Dice</span><strong>${result.currentHitDice}</strong></div>
+        <div class="rest-row"><span>Використано Hit Dice</span><strong>${result.hitDiceSpent}</strong></div>
+        <div class="rest-row"><span>Відновлено HP</span><strong>+${result.healing}</strong></div>
+        <div class="rest-row"><span>HP</span><strong>${result.currentHp}/${result.maxHp}</strong></div>
+        <div class="rest-row"><span>Hit Dice залишилось</span><strong>${result.availableHitDice - result.hitDiceSpent}</strong></div>
       </div>
     `,
     confirmLabel: "Готово"
@@ -388,37 +360,15 @@ function showShortRestChoice(character) {
     body: `
       <p>Новий вибір буде автоматично збережено.</p>
       <div class="rest-summary">
-        <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="average">Середнє значення Hit Die</button>
-        <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="manual">Ручне введення</button>
+        <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="average">Середнє значення <strong>(рекомендовано)</strong></button>
         <button type="button" class="camp-dialog-button" disabled>🎲 Кидок кубика — Скоро</button>
+        <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="manual">Мануальне введення</button>
       </div>
     `,
     confirmLabel: "Скасувати"
   });
 
   bindShortRestMethodChoice(character);
-}
-
-function bindShortRestMethodChoice(character) {
-  const backdrop = document.querySelector(".camp-dialog-backdrop");
-  backdrop?.addEventListener("click", event => {
-    const methodButton = event.target.closest("[data-rest-method]");
-    if (!methodButton) return;
-
-    const mode = methodButton.dataset.restMethod;
-    setActionPreference("shortRestHealing", mode);
-    closeCampDialog();
-    setTimeout(() => showShortRest(character), 0);
-  });
-}
-
-function bindShortRestChangeMethod(character) {
-  const backdrop = document.querySelector(".camp-dialog-backdrop");
-  backdrop?.addEventListener("click", event => {
-    if (!event.target.closest("#short-rest-change-method")) return;
-    closeCampDialog();
-    setTimeout(() => showShortRestChoice(character), 0);
-  });
 }
 
 function showLongRest(character) {
