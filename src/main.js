@@ -286,11 +286,13 @@ function renderShortRestAction(character, mode, spentHitDice = 0, manualAmount =
             <strong>${preview.resultingHp}/${preview.maxHp}</strong>
           </div>
         </div>
-        ${mode === ACTION_PREFERENCE_VALUES.MANUAL && manualAmount === null ? `
+        ${mode === ACTION_PREFERENCE_VALUES.MANUAL ? `
           <div class="rest-summary">
-            <label class="rest-row"><span>Кількість відновлених HP</span><input id="short-rest-manual-amount" type="number" min="0" step="1" inputmode="numeric" placeholder="HP"></label>
+            <label class="rest-row">
+              <span>Кількість відновлених HP</span>
+              <input id="short-rest-manual-amount" type="number" min="0" step="1" inputmode="numeric" value="${manualAmount ?? ""}" placeholder="HP">
+            </label>
           </div>` : ""}
-        
       </div>
       <div class="short-rest-change-wrap">
         <button type="button" class="camp-dialog-button" id="short-rest-change-method">Змінити спосіб</button>
@@ -306,6 +308,12 @@ function renderShortRestAction(character, mode, spentHitDice = 0, manualAmount =
       if (mode === ACTION_PREFERENCE_VALUES.MANUAL && (!Number.isFinite(amount) || amount < 0)) {
         closeCampDialog();
         setTimeout(() => renderShortRestAction(character, mode, spentHitDice, null), 0);
+        return;
+      }
+
+      if (mode === ACTION_PREFERENCE_VALUES.MANUAL && amount > 0 && spentHitDice < 1) {
+        closeCampDialog();
+        setTimeout(() => renderShortRestAction(character, mode, 1, amount), 0);
         return;
       }
 
