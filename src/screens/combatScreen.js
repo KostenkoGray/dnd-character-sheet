@@ -63,30 +63,6 @@ function renderWeapon(weapon, character) {
   `;
 }
 
-export function renderSuccessDots(value) {
-  return [0, 1, 2].map(index => `
-    <button
-      type="button"
-      class="death-save-success ${index < value ? "filled" : ""}"
-      data-save-type="success"
-      data-save-index="${index}"
-      aria-label="${index < value ? "Очистити успіх" : "Позначити успіх"}"
-    >${index < value ? "✓" : "○"}</button>
-  `).join("");
-}
-
-export function renderFailureDots(value) {
-  return [0, 1, 2].map(index => `
-    <button
-      type="button"
-      class="death-save-fail ${index < value ? "filled" : ""}"
-      data-save-type="fail"
-      data-save-index="${index}"
-      aria-label="${index < value ? "Очистити провал" : "Позначити провал"}"
-    >${index < value ? "✕" : "○"}</button>
-  `).join("");
-}
-
 function renderCompactSavesAndSkills(character) {
   return Object.entries(STATS).map(([statKey, stat]) => {
     const save = SKILLS[`${statKey}ST`];
