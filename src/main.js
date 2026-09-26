@@ -342,23 +342,14 @@ function restoreShortRestResources(character) {
     "channelDivinity",
     "secondWind",
     "actionSurge",
-    "wildShape"
+    "wildShape",
+    "invocationsKnown"
   ]);
 
   for (const cls of character.classes ?? []) {
     const classData = CLASSES[cls.classId];
     const tables = classData?.resourcesByLevel ?? {};
     const recoveryMetadata = classData?.resourceRecovery ?? {};
-
-    restoreWarlockPactMagicSlots(character, cls);
-
-    if (cls.classId === "warlock") {
-      const invocationsTable = tables.invocations ?? tables.invocationsKnown;
-      const maximum = invocationsTable ? getResourceValue(invocationsTable, cls.level) : null;
-      if (typeof maximum === "number" && maximum > 0) {
-        character.combat.classResource_warlock_invocations = maximum;
-      }
-    }
 
     for (const [key, table] of Object.entries(tables)) {
       if (!table || typeof table !== "object" || Array.isArray(table)) continue;
@@ -376,6 +367,8 @@ function restoreShortRestResources(character) {
 
       character.combat[`classResource_${cls.classId}_${key}`] = maximum;
     }
+
+    restoreWarlockPactMagicSlots(character, cls);
   }
 }
 
@@ -385,7 +378,10 @@ function restoreWarlockPactMagicSlots(character, cls) {
   const spellSlots = CLASSES[cls.classId]?.spellcasting?.slotsTable;
   if (!spellSlots || typeof spellSlots !== "object") return;
 
-  const levelData = spellSlots[cls.level] ?? spellSlots[String(cls.level)];
+  const levelData =
+    spellSlots[cls.level] ??
+    spellSlots[String(cls.level)];
+
   if (!levelData || typeof levelData !== "object") return;
 
   const pactSlots = Number(levelData.slots);
