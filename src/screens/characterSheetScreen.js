@@ -10,6 +10,7 @@ import {
 } from "../services/characterCalculationsService.js";
 import { CLASSES } from "../data/classesData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
+import { renderSuccessDots, renderFailureDots } from "./combatScreen.js";
 
 // ==================================================
 // CHARACTER SHEET
@@ -37,28 +38,6 @@ function getHitDieLabel(character) {
 
 function getHitDiceTotal(character) {
   return getCharacterLevel(character);
-}
-
-function renderSuccessDots(value) {
-  return [0, 1, 2].map(index => `
-    <button type="button"
-      class="death-save-success ${index < value ? "filled" : ""}"
-      data-save-type="success"
-      data-save-index="${index}">
-      ${index < value ? "✓" : "○"}
-    </button>
-  `).join("");
-}
-
-function renderFailureDots(value) {
-  return [0, 1, 2].map(index => `
-    <button type="button"
-      class="death-save-fail ${index < value ? "filled" : ""}"
-      data-save-type="fail"
-      data-save-index="${index}">
-      ${index < value ? "✕" : "○"}
-    </button>
-  `).join("");
 }
 
 function renderCompactSavesAndSkills(character) {
