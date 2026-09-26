@@ -255,10 +255,15 @@ function showShortRest(character) {
   renderShortRestAction(character, savedMode, 0);
 }
 
-function renderShortRestAction(character, mode, spentHitDice = 0, manualAmount = null) {
+function renderShortRestAction(character, mode, spentHitDice = 0) {
   ensureCombatState(character);
 
-  const preview = getShortRestPreview(character, mode, spentHitDice, manualAmount);
+  const preview = getShortRestPreview(
+    character,
+    ACTION_PREFERENCE_VALUES.AVERAGE,
+    spentHitDice,
+    null
+  );
   const canSpend = preview.availableHitDice > 0 && preview.currentHp < preview.maxHp;
 
   showCampDialog({
@@ -286,13 +291,6 @@ function renderShortRestAction(character, mode, spentHitDice = 0, manualAmount =
             <strong>${preview.resultingHp}/${preview.maxHp}</strong>
           </div>
         </div>
-        ${mode === ACTION_PREFERENCE_VALUES.MANUAL ? `
-          <div class="rest-summary">
-            <label class="rest-row">
-              <span>Кількість відновлених HP</span>
-              <input id="short-rest-manual-amount" type="number" min="0" step="1" inputmode="numeric" value="${manualAmount ?? ""}" placeholder="HP">
-            </label>
-          </div>` : ""}
       </div>
       <div class="short-rest-change-wrap">
         <button type="button" class="camp-dialog-button" id="short-rest-change-method">Змінити спосіб</button>
@@ -300,30 +298,17 @@ function renderShortRestAction(character, mode, spentHitDice = 0, manualAmount =
     `,
     confirmLabel: "Відпочити",
     onConfirm: () => {
-//       const amountInput = document.querySelector("#short-rest-manual-amount");
-//       const amount = mode === ACTION_PREFERENCE_VALUES.MANUAL
-//         ? (manualAmount ?? Number(amountInput?.value))
-//         : null;
-// 
-//       if (mode === ACTION_PREFERENCE_VALUES.MANUAL && (!Number.isFinite(amount) || amount < 0)) {
-//         closeCampDialog();
-//         setTimeout(() => renderShortRestAction(character, mode, spentHitDice, null), 0);
-//         return;
-//       }
-// 
-//       if (mode === ACTION_PREFERENCE_VALUES.MANUAL && amount > 0 && spentHitDice < 1) {
-//         closeCampDialog();
-//         setTimeout(() => renderShortRestAction(character, mode, 1, amount), 0);
-//         return;
-//       }
-// 
-//       finishShortRest(character, mode, spentHitDice, amount);
-      finishShortRest(character, mode, spentHitDice, null);
+      finishShortRest(
+        character,
+        ACTION_PREFERENCE_VALUES.AVERAGE,
+        spentHitDice,
+        null
+      );
     }
   });
 
   bindShortRestChangeMethod(character);
-  bindShortRestHitDiceCounter(character, mode, spentHitDice, manualAmount);
+  bindShortRestHitDiceCounter(character, spentHitDice);
 }
 
 function bindShortRestChangeMethod(character) {
@@ -335,7 +320,7 @@ function bindShortRestChangeMethod(character) {
   });
 }
 
-function bindShortRestHitDiceCounter(character, mode, spentHitDice, manualAmount) {
+function bindShortRestHitDiceCounter(character, spentHitDice) {
   const backdrop = document.querySelector(".camp-dialog-backdrop");
   backdrop?.addEventListener("click", event => {
     const button = event.target.closest("[data-short-rest-delta]");
@@ -343,34 +328,37 @@ function bindShortRestHitDiceCounter(character, mode, spentHitDice, manualAmount
 
     const delta = Number(button.dataset.shortRestDelta);
     const maxDice = Number(character.combat.currentHitDice ?? 0);
-    let nextSpent = clamp(spentHitDice + delta, 0, maxDice);
+    const nextSpent = clamp(spentHitDice + delta, 0, maxDice);
 
-//     const amountInput = document.querySelector("#short-rest-manual-amount");
-//     const nextManualAmount = mode === ACTION_PREFERENCE_VALUES.MANUAL
-//       ? (amountInput?.value === "" ? manualAmount : Number(amountInput.value))
-//       : null;
-    const nextManualAmount = null;
-
-    if (mode === ACTION_PREFERENCE_VALUES.MANUAL && Number(nextManualAmount ?? 0) > 0) {
-      nextSpent = Math.max(1, nextSpent);
-    }
-
-    renderShortRestAction(character, mode, nextSpent, nextManualAmount);
+    renderShortRestAction(character, ACTION_PREFERENCE_VALUES.AVERAGE, nextSpent);
   });
 }
 
 function restoreShortRestResources(character) {
   character.combat ??= {};
 
+  const fallbackShortRestResources = new Set([
+    "ki",
+    "channelDivinity",
+    "secondWind",
+    "wildShape"
+  ]);
+
   for (const cls of character.classes ?? []) {
     const classData = CLASSES[cls.classId];
-    const recovery = classData?.resourceRecovery ?? {};
+    const tables = classData?.resourcesByLevel ?? {};
+    const recoveryMetadata = classData?.resourceRecovery ?? {};
 
-    for (const [key, recoveryType] of Object.entries(recovery)) {
-      if (recoveryType !== REST_TYPES.SHORT && recoveryType !== "shortOrLongRest") continue;
-
-      const table = classData.resourcesByLevel?.[key];
+    for (const [key, table] of Object.entries(tables)) {
       if (!table || typeof table !== "object" || Array.isArray(table)) continue;
+
+      const recovery = recoveryMetadata[key];
+      const restoresOnShortRest =
+        recovery === REST_TYPES.SHORT ||
+        recovery === "shortOrLongRest" ||
+        (!recovery && fallbackShortRestResources.has(key));
+
+      if (!restoresOnShortRest) continue;
 
       const maximum = getResourceValue(table, cls.level);
       if (typeof maximum !== "number" || maximum <= 0) continue;
@@ -395,7 +383,12 @@ function getResourceValue(table, level) {
 }
 
 function finishShortRest(character, mode, hitDiceSpent, manualAmount) {
-  const result = performShortRest(character, mode, hitDiceSpent, manualAmount);
+  const result = performShortRest(
+    character,
+    ACTION_PREFERENCE_VALUES.AVERAGE,
+    hitDiceSpent,
+    null
+  );
 
   restoreShortRestResources(character);
   persistCharacters();
@@ -446,6 +439,10 @@ function bindShortRestMethodChoice(character) {
     setTimeout(() => showShortRest(character), 0);
   });
 }
+
+// TODO: Manual healing mode (future)
+// The manual healing implementation is intentionally disabled for now.
+// Keep it here as the placeholder for the future input/state implementation.
 
 function showLongRest(character) {
   closeCampMenu();
