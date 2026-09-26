@@ -1,6 +1,6 @@
-import { clamp } from "./characterCalculationsService.js";
+import { clamp, getHitDiceTotal } from "./characterCalculationsService.js";
 
-export function ensureCombatState(character, getHitDiceTotal) {
+export function ensureCombatState(character) {
   character.combat ??= {
     currentHp: character.maxHp ?? 0,
     tempHp: 0,
