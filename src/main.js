@@ -16,7 +16,7 @@ import {
 import { charactersScreen } from "./screens/characterListScreen.js";
 import { characterSheetScreen } from "./screens/characterSheetScreen.js";
 import { combatScreen } from "./screens/combatScreen.js";
-import { getStatModifier } from "./services/characterCalculationsService.js";
+import { getStatModifier, getHitDiceTotal } from "./services/characterCalculationsService.js";
 import { CLASSES } from "./data/classesData.js";
 import { saveCharacters, loadSettings, saveSettings } from "./services/storageService.js";
 import { DEFAULT_SETTINGS, ACTION_PREFERENCE_VALUES } from "./data/settingsData.js";
