@@ -22,7 +22,7 @@ import { saveCharacters, loadSettings, saveSettings } from "./services/storageSe
 import { DEFAULT_SETTINGS, ACTION_PREFERENCE_VALUES } from "./data/settingsData.js";
 import { bottomNavigation } from "./components/bottomNavigation.js";
 import { handleDeathSaveClick } from "./components/deathSaves.js";
-import { ensureCombatState, clamp } from "./services/combatStateService.js";
+import { ensureCombatState } from "./services/combatStateService.js";
 import {
   REST_TYPES,
   HP_LEVEL_UP_METHODS,
