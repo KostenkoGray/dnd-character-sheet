@@ -63,7 +63,7 @@ function renderWeapon(weapon, character) {
   `;
 }
 
-function renderSuccessDots(value) {
+export function renderSuccessDots(value) {
   return [0, 1, 2].map(index => `
     <button
       type="button"
@@ -75,7 +75,7 @@ function renderSuccessDots(value) {
   `).join("");
 }
 
-function renderFailureDots(value) {
+export function renderFailureDots(value) {
   return [0, 1, 2].map(index => `
     <button
       type="button"
