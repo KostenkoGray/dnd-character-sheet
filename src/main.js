@@ -341,6 +341,7 @@ function restoreShortRestResources(character) {
     "ki",
     "channelDivinity",
     "secondWind",
+    "actionSurge",
     "wildShape"
   ]);
 
@@ -348,6 +349,8 @@ function restoreShortRestResources(character) {
     const classData = CLASSES[cls.classId];
     const tables = classData?.resourcesByLevel ?? {};
     const recoveryMetadata = classData?.resourceRecovery ?? {};
+
+    restoreWarlockPactMagicSlots(character, cls);
 
     for (const [key, table] of Object.entries(tables)) {
       if (!table || typeof table !== "object" || Array.isArray(table)) continue;
@@ -366,6 +369,26 @@ function restoreShortRestResources(character) {
       character.combat[`classResource_${cls.classId}_${key}`] = maximum;
     }
   }
+}
+
+function restoreWarlockPactMagicSlots(character, cls) {
+  if (cls.classId !== "warlock") return;
+
+  const spellSlots = CLASSES[cls.classId]?.spellcasting?.slotsTable;
+  if (!spellSlots || typeof spellSlots !== "object") return;
+
+  const levelData = spellSlots[cls.level] ?? spellSlots[String(cls.level)];
+  if (!levelData || typeof levelData !== "object") return;
+
+  const pactSlots = Number(levelData.slots);
+  const pactSlotLevel = Number(levelData.slotLevel);
+
+  if (!Number.isFinite(pactSlots) || pactSlots <= 0) return;
+  if (!Number.isFinite(pactSlotLevel) || pactSlotLevel <= 0) return;
+
+  character.combat.pactMagicSlots = pactSlots;
+  character.combat.pactMagicSlotLevel = pactSlotLevel;
+  character.combat.currentPactMagicSlots = pactSlots;
 }
 
 function getResourceValue(table, level) {
