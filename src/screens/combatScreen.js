@@ -63,7 +63,7 @@ function renderWeapon(weapon, character) {
   `;
 }
 
-function renderDeathSaves(character) {
+export function renderDeathSaves(character) {
   const currentHp = Number(character.combat?.currentHp ?? character.maxHp ?? 0);
   if (currentHp !== 0) return "";
 
