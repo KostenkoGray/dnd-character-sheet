@@ -254,36 +254,40 @@ function renderShortRestAction(character, mode, spentHitDice = 0, manualAmount =
   ensureCombatState(character);
 
   const preview = getShortRestPreview(character, mode, spentHitDice, manualAmount);
-  const modeLabel = mode === ACTION_PREFERENCE_VALUES.AVERAGE ? "Середнє значення" : "Мануальне введення";
-  const healingDescription = mode === ACTION_PREFERENCE_VALUES.AVERAGE
-    ? `+${preview.healingPerDie} HP за 1 Hit Die`
-    : manualAmount === null ? "введіть HP за 1 Hit Die" : `+${preview.healingPerDie} HP за 1 Hit Die`;
-
   const canSpend = preview.availableHitDice > 0 && preview.currentHp < preview.maxHp;
 
   showCampDialog({
     title: "Short Rest",
     body: `
       <div class="rest-summary">
-        <div class="rest-row"><span>Поточне HP</span><strong>${preview.currentHp}/${preview.maxHp}</strong></div>
-        <div class="rest-row"><span>Доступні Hit Dice</span><strong>${preview.availableHitDice} / ${getHitDiceTotal(character)} · d${getPrimaryHitDie(character)}</strong></div>
-        <div class="rest-row"><span>Спосіб</span><strong>${modeLabel}</strong></div>
-        <div class="rest-row"><span>Лікування</span><strong>${healingDescription}</strong></div>
-        <div class="short-rest-hit-dice-control">
-          <span>Використати Hit Dice</span>
-          <div class="short-rest-counter">
-            <button type="button" class="camp-dialog-button" data-short-rest-delta="-1" ${spentHitDice <= 0 ? "disabled" : ""}>−</button>
-            <strong id="short-rest-hit-dice-spent">${spentHitDice}</strong>
-            <button type="button" class="camp-dialog-button" data-short-rest-delta="1" ${!canSpend || spentHitDice >= preview.availableHitDice ? "disabled" : ""}>+</button>
+        <div class="short-rest-layout">
+          <div class="short-rest-panel current">
+            <span>HP зараз</span>
+            <strong>${preview.currentHp}/${preview.maxHp}</strong>
+          </div>
+          <div class="short-rest-panel dice">
+            <span>Hit Dice</span>
+            <strong>${preview.availableHitDice}</strong>
+            <small>d${getPrimaryHitDie(character)}</small>
+            <div class="short-rest-counter">
+              <button type="button" class="camp-dialog-button" data-short-rest-delta="-1" ${spentHitDice <= 0 ? "disabled" : ""}>−</button>
+              <strong>${spentHitDice}</strong>
+              <button type="button" class="camp-dialog-button" data-short-rest-delta="1" ${!canSpend || spentHitDice >= preview.availableHitDice ? "disabled" : ""}>+</button>
+            </div>
+            <small>використати</small>
+          </div>
+          <div class="short-rest-panel after">
+            <span>HP після</span>
+            <strong>${preview.resultingHp}/${preview.maxHp}</strong>
           </div>
         </div>
         ${mode === ACTION_PREFERENCE_VALUES.MANUAL && manualAmount === null ? `
           <div class="rest-summary">
-            <label class="rest-row"><span>HP за 1 Hit Die</span><input id="short-rest-manual-amount" type="number" min="0" step="1" inputmode="numeric" placeholder="Наприклад 7"></label>
+            <label class="rest-row"><span>HP за 1 Hit Die</span><input id="short-rest-manual-amount" type="number" min="0" step="1" inputmode="numeric" placeholder="HP"></label>
           </div>` : ""}
         <div class="rest-row"><span>Після відпочинку</span><strong id="short-rest-preview-hp">${preview.resultingHp}/${preview.maxHp}</strong></div>
       </div>
-      <div class="rest-summary">
+      <div class="short-rest-change-wrap">
         <button type="button" class="camp-dialog-button" id="short-rest-change-method">Змінити спосіб</button>
       </div>
     `,
@@ -315,6 +319,15 @@ function renderShortRestAction(character, mode, spentHitDice = 0, manualAmount =
 
   bindShortRestChangeMethod(character);
   bindShortRestHitDiceCounter(character, mode, spentHitDice, manualAmount);
+}
+
+function bindShortRestChangeMethod(character) {
+  const backdrop = document.querySelector(".camp-dialog-backdrop");
+  backdrop?.addEventListener("click", event => {
+    if (!event.target.closest("#short-rest-change-method")) return;
+    closeCampDialog();
+    setTimeout(() => showShortRestChoice(character), 0);
+  });
 }
 
 function bindShortRestHitDiceCounter(character, mode, spentHitDice, manualAmount) {
