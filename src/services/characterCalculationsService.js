@@ -23,6 +23,10 @@ export function getCharacterLevel(character) {
   return character.classes.reduce((sum, cls) => sum + cls.level, 0);
 }
 
+export function getHitDiceTotal(character) {
+  return character.classes.reduce((sum, cls) => sum + Number(cls.level ?? 0), 0);
+}
+
 export function getProficiencyBonus(character) {
   const level = getCharacterLevel(character);
 
