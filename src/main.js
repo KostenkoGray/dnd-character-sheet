@@ -181,8 +181,8 @@ function getShortRestPreview(character, mode, hitDiceSpent, manualAmount) {
 function applyShortRestHealing(character, mode, hitDiceSpent, manualAmount) {
   const preview = getShortRestPreview(character, mode, hitDiceSpent, manualAmount);
 
-  if (preview.hitDiceSpent <= 0 || preview.healing <= 0) {
-    return { ...preview, hitDiceSpent: 0, healing: 0, resultingHp: preview.currentHp };
+  if (preview.hitDiceSpent <= 0) {
+    return { ...preview, healing: 0, resultingHp: preview.currentHp };
   }
 
   character.combat.currentHp = preview.resultingHp;
@@ -306,11 +306,6 @@ function renderShortRestAction(character, mode, spentHitDice = 0, manualAmount =
       if (mode === ACTION_PREFERENCE_VALUES.MANUAL && (!Number.isFinite(amount) || amount < 0)) {
         closeCampDialog();
         setTimeout(() => renderShortRestAction(character, mode, spentHitDice, null), 0);
-        return;
-      }
-
-      if (spentHitDice <= 0) {
-        showCampDialog({ title: "Short Rest", body: "<p>Оберіть хоча б 1 Hit Die.</p>", confirmLabel: "Закрити" });
         return;
       }
 
