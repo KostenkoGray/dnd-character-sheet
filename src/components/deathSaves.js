@@ -1,4 +1,4 @@
-import { clamp } from "../services/combatStateService.js";
+import { clamp } from "../services/characterCalculationsService.js";
 
 export function renderDeathSaves(character) {
   const currentHp = Number(character.combat?.currentHp ?? character.maxHp ?? 0);
