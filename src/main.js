@@ -243,7 +243,7 @@ function showShortRest(character) {
         <div class="rest-summary">
           <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="average">Середнє значення <strong>(рекомендовано)</strong></button>
           <button type="button" class="camp-dialog-button" disabled>🎲 Кидок кубика — Скоро</button>
-          <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="manual">Мануальне введення</button>
+          <button type="button" class="camp-dialog-button" disabled>🛠️ Мануальне введення — Скоро</button>
         </div>
       `,
       confirmLabel: "Скасувати"
@@ -300,24 +300,25 @@ function renderShortRestAction(character, mode, spentHitDice = 0, manualAmount =
     `,
     confirmLabel: "Відпочити",
     onConfirm: () => {
-      const amountInput = document.querySelector("#short-rest-manual-amount");
-      const amount = mode === ACTION_PREFERENCE_VALUES.MANUAL
-        ? (manualAmount ?? Number(amountInput?.value))
-        : null;
-
-      if (mode === ACTION_PREFERENCE_VALUES.MANUAL && (!Number.isFinite(amount) || amount < 0)) {
-        closeCampDialog();
-        setTimeout(() => renderShortRestAction(character, mode, spentHitDice, null), 0);
-        return;
-      }
-
-      if (mode === ACTION_PREFERENCE_VALUES.MANUAL && amount > 0 && spentHitDice < 1) {
-        closeCampDialog();
-        setTimeout(() => renderShortRestAction(character, mode, 1, amount), 0);
-        return;
-      }
-
-      finishShortRest(character, mode, spentHitDice, amount);
+//       const amountInput = document.querySelector("#short-rest-manual-amount");
+//       const amount = mode === ACTION_PREFERENCE_VALUES.MANUAL
+//         ? (manualAmount ?? Number(amountInput?.value))
+//         : null;
+// 
+//       if (mode === ACTION_PREFERENCE_VALUES.MANUAL && (!Number.isFinite(amount) || amount < 0)) {
+//         closeCampDialog();
+//         setTimeout(() => renderShortRestAction(character, mode, spentHitDice, null), 0);
+//         return;
+//       }
+// 
+//       if (mode === ACTION_PREFERENCE_VALUES.MANUAL && amount > 0 && spentHitDice < 1) {
+//         closeCampDialog();
+//         setTimeout(() => renderShortRestAction(character, mode, 1, amount), 0);
+//         return;
+//       }
+// 
+//       finishShortRest(character, mode, spentHitDice, amount);
+      finishShortRest(character, mode, spentHitDice, null);
     }
   });
 
@@ -344,10 +345,11 @@ function bindShortRestHitDiceCounter(character, mode, spentHitDice, manualAmount
     const maxDice = Number(character.combat.currentHitDice ?? 0);
     let nextSpent = clamp(spentHitDice + delta, 0, maxDice);
 
-    const amountInput = document.querySelector("#short-rest-manual-amount");
-    const nextManualAmount = mode === ACTION_PREFERENCE_VALUES.MANUAL
-      ? (amountInput?.value === "" ? manualAmount : Number(amountInput.value))
-      : null;
+//     const amountInput = document.querySelector("#short-rest-manual-amount");
+//     const nextManualAmount = mode === ACTION_PREFERENCE_VALUES.MANUAL
+//       ? (amountInput?.value === "" ? manualAmount : Number(amountInput.value))
+//       : null;
+    const nextManualAmount = null;
 
     if (mode === ACTION_PREFERENCE_VALUES.MANUAL && Number(nextManualAmount ?? 0) > 0) {
       nextSpent = Math.max(1, nextSpent);
@@ -357,9 +359,45 @@ function bindShortRestHitDiceCounter(character, mode, spentHitDice, manualAmount
   });
 }
 
+function restoreShortRestResources(character) {
+  character.combat ??= {};
+
+  for (const cls of character.classes ?? []) {
+    const classData = CLASSES[cls.classId];
+    const recovery = classData?.resourceRecovery ?? {};
+
+    for (const [key, recoveryType] of Object.entries(recovery)) {
+      if (recoveryType !== REST_TYPES.SHORT && recoveryType !== "shortOrLongRest") continue;
+
+      const table = classData.resourcesByLevel?.[key];
+      if (!table || typeof table !== "object" || Array.isArray(table)) continue;
+
+      const maximum = getResourceValue(table, cls.level);
+      if (typeof maximum !== "number" || maximum <= 0) continue;
+
+      character.combat[`classResource_${cls.classId}_${key}`] = maximum;
+    }
+  }
+}
+
+function getResourceValue(table, level) {
+  const levels = Object.keys(table)
+    .map(Number)
+    .filter(Number.isFinite)
+    .sort((a, b) => a - b);
+
+  let value = null;
+  for (const tableLevel of levels) {
+    if (tableLevel <= Number(level)) value = table[tableLevel];
+  }
+
+  return value;
+}
+
 function finishShortRest(character, mode, hitDiceSpent, manualAmount) {
   const result = performShortRest(character, mode, hitDiceSpent, manualAmount);
 
+  restoreShortRestResources(character);
   persistCharacters();
   render();
 
@@ -385,7 +423,7 @@ function showShortRestChoice(character) {
       <div class="rest-summary">
         <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="average">Середнє значення <strong>(рекомендовано)</strong></button>
         <button type="button" class="camp-dialog-button" disabled>🎲 Кидок кубика — Скоро</button>
-        <button type="button" class="camp-dialog-button short-rest-method" data-rest-method="manual">Мануальне введення</button>
+        <button type="button" class="camp-dialog-button" disabled>🛠️ Мануальне введення — Скоро</button>
       </div>
     `,
     confirmLabel: "Скасувати"
@@ -401,7 +439,7 @@ function bindShortRestMethodChoice(character) {
     if (!methodButton) return;
 
     const mode = methodButton.dataset.restMethod;
-    if (mode !== ACTION_PREFERENCE_VALUES.AVERAGE && mode !== ACTION_PREFERENCE_VALUES.MANUAL) return;
+    if (mode !== ACTION_PREFERENCE_VALUES.AVERAGE) return;
 
     setActionPreference("shortRestHealing", mode);
     closeCampDialog();
