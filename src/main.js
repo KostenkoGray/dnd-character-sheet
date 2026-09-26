@@ -1007,7 +1007,7 @@ app.addEventListener("click", (event) => {
 
     const deathSaveDot = event.target.closest("[data-save-type]");
 
-    if (deathSaveDot && (currentScreen === "combat" || currentScreen === "sheet") && currentCharacter.combat.currentHp === 0) {
+    if (deathSaveDot && currentCharacter.combat.currentHp === 0) {
       const type = deathSaveDot.dataset.saveType;
       const index = Number(deathSaveDot.dataset.saveIndex);
       const currentValue = currentCharacter.combat.deathSaves[type];
