@@ -712,13 +712,6 @@ function render() {
   }
 }
 
-function getHitDiceTotal(character) {
-  return (character.classes ?? []).reduce(
-    (sum, cls) => sum + Number(cls.level ?? 0),
-    0
-  );
-}
-
 app.addEventListener("click", (event) => {
   const card = event.target.closest(".character-card");
 
