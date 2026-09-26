@@ -1,4 +1,4 @@
-import { clamp, ensureCombatState } from "../services/combatStateService.js";
+import { clamp } from "../services/combatStateService.js";
 
 export function renderDeathSaves(character) {
   const currentHp = Number(character.combat?.currentHp ?? character.maxHp ?? 0);
@@ -48,7 +48,7 @@ function renderDeathSaveDots(type, value) {
   `).join("");
 }
 
-export function handleDeathSaveClick(character, target) {
+export function handleDeathSaveClick(character, target, ensureCombatState) {
   const deathSaveDot = target?.closest?.("[data-death-save-dot]");
   if (!deathSaveDot || !character) return false;
 
@@ -68,7 +68,8 @@ export function handleDeathSaveClick(character, target) {
     3
   );
 
-  character.combat.deathSaves[type] = currentValue === index + 1 ? index : index + 1;
+  character.combat.deathSaves[type] =
+    currentValue === index + 1 ? index : index + 1;
 
   if (
     type === "success" &&
