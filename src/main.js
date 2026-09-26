@@ -285,7 +285,7 @@ function renderShortRestAction(character, mode, spentHitDice = 0, manualAmount =
           <div class="rest-summary">
             <label class="rest-row"><span>HP за 1 Hit Die</span><input id="short-rest-manual-amount" type="number" min="0" step="1" inputmode="numeric" placeholder="HP"></label>
           </div>` : ""}
-        <div class="rest-row"><span>Після відпочинку</span><strong id="short-rest-preview-hp">${preview.resultingHp}/${preview.maxHp}</strong></div>
+        
       </div>
       <div class="short-rest-change-wrap">
         <button type="button" class="camp-dialog-button" id="short-rest-change-method">Змінити спосіб</button>
@@ -382,6 +382,21 @@ function showShortRestChoice(character) {
   });
 
   bindShortRestMethodChoice(character);
+}
+
+function bindShortRestMethodChoice(character) {
+  const backdrop = document.querySelector(".camp-dialog-backdrop");
+  backdrop?.addEventListener("click", event => {
+    const methodButton = event.target.closest("[data-rest-method]");
+    if (!methodButton) return;
+
+    const mode = methodButton.dataset.restMethod;
+    if (mode !== ACTION_PREFERENCE_VALUES.AVERAGE && mode !== ACTION_PREFERENCE_VALUES.MANUAL) return;
+
+    setActionPreference("shortRestHealing", mode);
+    closeCampDialog();
+    setTimeout(() => showShortRest(character), 0);
+  });
 }
 
 function showLongRest(character) {
