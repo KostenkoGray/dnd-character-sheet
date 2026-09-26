@@ -9,6 +9,7 @@ import {
 import { STATS, SKILLS, PROFICIENCY } from "../data/rulesData.js";
 import { CLASSES } from "../data/classesData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
+import { renderDeathSaves } from "../components/deathSaves.js";
 
 function formatModifier(value) {
   return value >= 0 ? `+${value}` : `${value}`;
@@ -61,52 +62,6 @@ function renderWeapon(weapon, character) {
       </div>
     </article>
   `;
-}
-
-export function renderDeathSaves(character) {
-  const currentHp = Number(character.combat?.currentHp ?? character.maxHp ?? 0);
-  if (currentHp !== 0) return "";
-
-  const deathSaves = character.combat?.deathSaves ?? { success: 0, fail: 0 };
-
-  return `
-    <section class="death-saves-panel">
-      <div class="death-saves-side">
-        <span>Success</span>
-        <div class="death-save-dots">
-          ${renderDeathSaveDots("success", deathSaves.success)}
-        </div>
-      </div>
-
-      <div class="death-saves-title">
-        <strong>Death Saves</strong>
-      </div>
-
-      <div class="death-saves-side">
-        <span>Failure</span>
-        <div class="death-save-dots">
-          ${renderDeathSaveDots("fail", deathSaves.fail)}
-        </div>
-      </div>
-    </section>
-  `;
-}
-
-function renderDeathSaveDots(type, value) {
-  const filledMark = type === "success" ? "✓" : "✕";
-  const className = type === "success" ? "death-save-success" : "death-save-fail";
-
-  return [0, 1, 2].map(index => `
-    <button
-      type="button"
-      class="${className} ${index < value ? "filled" : ""}"
-      data-save-type="${type}"
-      data-save-index="${index}"
-      aria-label="${index < value
-        ? (type === "success" ? "Очистити успіх" : "Очистити провал")
-        : (type === "success" ? "Позначити успіх" : "Позначити провал")}"
-    >${index < value ? filledMark : "○"}</button>
-  `).join("");
 }
 
 function renderCompactSavesAndSkills(character) {
