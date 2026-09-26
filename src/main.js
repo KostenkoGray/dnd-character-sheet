@@ -1,5 +1,6 @@
 import "./style.css";
 import eruda from "eruda";
+
 eruda.init();
 
 window.onerror = (message, source, line, column, error) => {
