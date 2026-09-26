@@ -10,7 +10,7 @@ import {
 } from "../services/characterCalculationsService.js";
 import { CLASSES } from "../data/classesData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
-import { renderSuccessDots, renderFailureDots } from "./combatScreen.js";
+import { renderDeathSaves } from "./combatScreen.js";
 
 // ==================================================
 // CHARACTER SHEET
@@ -424,19 +424,7 @@ export function characterSheetScreen(character) {
           </section>
         </section>
 
-        ${currentHp === 0 ? `
-        <section class="death-saves-panel">
-          <div class="death-saves-side">
-            <span>Success</span>
-            <div class="death-save-dots">${renderSuccessDots(deathSaves.success)}</div>
-          </div>
-          <div class="death-saves-title"><strong>Death Saves</strong></div>
-          <div class="death-saves-side">
-            <span>Failure</span>
-            <div class="death-save-dots">${renderFailureDots(deathSaves.fail)}</div>
-          </div>
-        </section>
-        ` : ""}
+        ${renderDeathSaves(character)}
 
         ${renderClassResources(character)}
 
