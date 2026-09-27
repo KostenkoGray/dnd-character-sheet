@@ -1,6 +1,12 @@
 import { PROFICIENCY } from "../data/rulesData.js";
 import { CLASSES } from "../data/classesData.js";
 import {
+  getEquipmentBonuses,
+  getEffectiveAbilityScore,
+  getEquippedArmor,
+  getEquippedShield
+} from "./inventoryService.js";
+import {
   FULL_CASTER_SLOTS,
   HALF_CASTER_SLOTS,
   THIRD_CASTER_SLOTS,
@@ -44,37 +50,61 @@ export function getProficiencyBonus(character) {
 }
 
 // ==================================================
+// EQUIPMENT-AFFECTED ABILITY SCORES
+// ==================================================
+
+export { getEffectiveAbilityScore };
+
+// ==================================================
 // SAVES & SKILLS
 // ==================================================
 
 export function getSaveBonus(character, statKey) {
-  const modifier = getStatModifier(character.stats[statKey]);
+  const modifier = getStatModifier(
+    getEffectiveAbilityScore(character, statKey)
+  );
   const proficiencyBonus = getProficiencyBonus(character);
+  const equipmentBonus = Number(
+    getEquipmentBonuses(character).saveBonuses?.[statKey] ?? 0
+  );
 
   const hasProficiency = character.classes.some(cls => {
     const classData = CLASSES[cls.classId];
     return classData?.savingThrows.includes(statKey);
   });
 
-  return modifier + (hasProficiency ? proficiencyBonus : 0);
+  return modifier +
+    (hasProficiency ? proficiencyBonus : 0) +
+    equipmentBonus;
 }
 
 export function getSkillBonus(character, skillKey, skillData) {
-  const modifier = getStatModifier(character.stats[skillData.stat]);
+  const modifier = getStatModifier(
+    getEffectiveAbilityScore(character, skillData.stat)
+  );
   const proficiencyBonus = getProficiencyBonus(character);
+  const equipment = getEquipmentBonuses(character);
+  const prof =
+    character.skills?.[skillKey] ??
+    equipment.skillProficiencies?.[skillKey] ??
+    PROFICIENCY.NONE;
+  const flatBonus = Number(equipment.skillBonuses?.[skillKey] ?? 0);
 
-  const prof = character.skills?.[skillKey] ?? PROFICIENCY.NONE;
+  let bonus = modifier;
 
   switch (prof) {
     case PROFICIENCY.PROFICIENT:
-      return modifier + proficiencyBonus;
+      bonus += proficiencyBonus;
+      break;
     case PROFICIENCY.EXPERTISE:
-      return modifier + proficiencyBonus * 2;
+      bonus += proficiencyBonus * 2;
+      break;
     case PROFICIENCY.HALF:
-      return modifier + Math.floor(proficiencyBonus / 2);
-    default:
-      return modifier;
+      bonus += Math.floor(proficiencyBonus / 2);
+      break;
   }
+
+  return bonus + flatBonus;
 }
 
 // ==================================================
@@ -82,7 +112,9 @@ export function getSkillBonus(character, skillKey, skillData) {
 // ==================================================
 
 export function getInitiative(character) {
-  return getStatModifier(character.stats.dexterity);
+  return getStatModifier(
+    getEffectiveAbilityScore(character, "dexterity")
+  ) + Number(getEquipmentBonuses(character).initiativeBonus ?? 0);
 }
 
 export function getArmorClass(character) {
@@ -161,4 +193,38 @@ export function getPassivePerception(character) {
       stat: "wisdom"
     })
   );
+}
+
+// ==================================================
+// WEAPON CALCULATIONS
+// ==================================================
+
+export function getWeaponAbilityScore(character, weapon) {
+  const strength = getEffectiveAbilityScore(character, "strength");
+  const dexterity = getEffectiveAbilityScore(character, "dexterity");
+
+  if (weapon?.properties?.includes("finesse")) {
+    return Math.max(strength, dexterity);
+  }
+
+  return weapon?.type === "ranged" ? dexterity : strength;
+}
+
+export function getWeaponAttackBonus(character, weapon) {
+  const abilityModifier = getStatModifier(
+    getWeaponAbilityScore(character, weapon)
+  );
+  const proficiencyBonus = getProficiencyBonus(character);
+  const itemBonus = Number(weapon?.effects?.attackBonus ?? 0);
+
+  return abilityModifier + proficiencyBonus + itemBonus;
+}
+
+export function getWeaponDamageBonus(character, weapon) {
+  const abilityModifier = getStatModifier(
+    getWeaponAbilityScore(character, weapon)
+  );
+  const itemBonus = Number(weapon?.effects?.damageBonus ?? 0);
+
+  return abilityModifier + itemBonus;
 }
