@@ -27,7 +27,8 @@ import { ensureCombatState } from "./services/combatStateService.js";
 import {
   REST_TYPES,
   HP_LEVEL_UP_METHODS,
-  LONG_REST_HIT_DICE_RECOVERY
+  LONG_REST_HIT_DICE_RECOVERY,
+  STATS
 } from "./data/rulesData.js";
 import {
   getNextCharacterLevel,
