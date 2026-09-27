@@ -835,6 +835,20 @@ app.addEventListener("click", (event) => {
     }
   }
 
+  if (currentCharacter && event.target.closest("[data-death-save-dot]")) {
+    const handled = handleDeathSaveClick(
+      currentCharacter,
+      event.target,
+      ensureCombatState
+    );
+
+    if (handled) {
+      persistCharacters();
+      render();
+      return;
+    }
+  }
+
   if (currentScreen === "combat" && currentCharacter) {
     ensureCombatState(currentCharacter);
 
@@ -936,19 +950,6 @@ app.addEventListener("click", (event) => {
       return;
     }
 
-  if (currentCharacter && event.target.closest("[data-death-save-dot]")) {
-    const handled = handleDeathSaveClick(
-      currentCharacter,
-      event.target,
-      ensureCombatState
-    );
-
-    if (handled) {
-      persistCharacters();
-      render();
-      return;
-    }
-  }
 
   }
 
