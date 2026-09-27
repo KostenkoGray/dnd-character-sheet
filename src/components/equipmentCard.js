@@ -28,6 +28,7 @@ function renderSlot({ label, item, types, emptyText = "Не екіпірован
       class="equipment-slot ${item ? "filled" : "empty"}"
       data-equipment-picker="${escapeHtml(types[0])}"
       data-equipment-types="${escapeHtml(typeAttribute)}"
+      data-equipment-current-id="${escapeHtml(item?.instanceId ?? "")}"
       aria-label="${escapeHtml(label)}"
     >
       <span class="equipment-slot-label">${escapeHtml(label)}</span>
@@ -44,6 +45,7 @@ function renderWeaponSlot(item, index) {
       class="equipment-slot equipment-weapon-slot ${item ? "filled" : "empty"}"
       data-equipment-picker="weapon"
       data-equipment-types="${ITEM_TYPES.WEAPON}"
+      data-equipment-current-id="${escapeHtml(item?.instanceId ?? "")}"
       aria-label="Зброя ${index + 1}"
     >
       <span class="equipment-slot-label">Зброя ${index + 1}</span>
@@ -62,6 +64,7 @@ function renderArtifactSlots(artifacts) {
       class="equipment-slot equipment-artifact-slot filled"
       data-equipment-picker="artifact"
       data-equipment-types="${ITEM_TYPES.ARTIFACT}"
+      data-equipment-current-id="${escapeHtml(item?.instanceId ?? "")}"
       aria-label="Артефакт"
     >
       <span class="equipment-slot-label">Артефакт</span>
