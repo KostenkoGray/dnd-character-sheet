@@ -16,7 +16,10 @@ import { CLASSES } from "../data/classesData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
 import { renderDeathSaves } from "../components/deathSaves.js";
 import { equipmentCard } from "../components/equipmentCard.js";
-import { getEquippedWeapons } from "../services/inventoryService.js";
+import {
+  getEquippedWeapons,
+  getEquipmentBonuses
+} from "../services/inventoryService.js";
 
 function formatModifier(value) {
   return value >= 0 ? `+${value}` : `${value}`;
