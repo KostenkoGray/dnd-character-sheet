@@ -199,23 +199,22 @@ export const ARMOR = {
     strengthRequirement: 15,
 
     stealthDisadvantage: true
-  }
+  },
 
-};
-
-
-// ==================================================
-// ЩИТИ PHB 2014
-// ==================================================
-
-export const SHIELDS = {
+  // ================= SHIELD =================
 
   shield: {
     id: "shield",
     name: "Shield",
     ukr: "Щит",
 
-    acBonus: 2
+    category: "shield",
+
+    acBonus: 2,
+
+    equipable: true,
+
+    equipmentSlot: "shield"
   }
 
 };
