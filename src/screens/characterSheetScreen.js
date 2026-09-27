@@ -228,6 +228,65 @@ function renderClassResources(character) {
 function renderCharacterFeatures(character) {
   const groups = [];
 
+  const race = character.race?.race;
+  const subrace = character.race?.subrace;
+  const raceEntries = [];
+
+  if (race?.darkvision || subrace?.darkvision) {
+    raceEntries.push({
+      ukr: "Темний зір",
+      short: `${race?.darkvision ?? subrace?.darkvision} футів`
+    });
+  }
+
+  if (race?.speed || subrace?.speed) {
+    raceEntries.push({
+      ukr: "Швидкість",
+      short: `${race?.speed ?? subrace?.speed} футів`
+    });
+  }
+
+  if ((race?.languages ?? []).length) {
+    raceEntries.push({
+      ukr: "Мови",
+      short: race.languages.join(", ")
+    });
+  }
+
+  if ((race?.skillProficiencies ?? []).length) {
+    raceEntries.push({
+      ukr: "Володіння навичками",
+      short: race.skillProficiencies.join(", ")
+    });
+  }
+
+  if ((race?.weaponProficiencies ?? []).length) {
+    raceEntries.push({
+      ukr: "Володіння зброєю",
+      short: race.weaponProficiencies.map(item => item?.ukr ?? item?.name ?? item).join(", ")
+    });
+  }
+
+  if (race?.abilityScoreIncrease && Object.keys(race.abilityScoreIncrease).length) {
+    raceEntries.push({
+      ukr: "Збільшення характеристик",
+      short: Object.entries(race.abilityScoreIncrease).map(([stat, value]) => `${STATS[stat]?.short ?? stat} +${value}`).join(", ")
+    });
+  }
+
+  if (subrace?.armorProficiencies?.length) {
+    raceEntries.push({
+      ukr: "Володіння бронею",
+      short: subrace.armorProficiencies.join(", ")
+    });
+  }
+
+  if (raceEntries.length) {
+    groups.push({
+      title: subrace?.ukr ? `${race?.ukr ?? "Раса"} — ${subrace.ukr}` : (race?.ukr ?? "Раса"),
+      entries: raceEntries.map(feature => ({ feature, race: true }))
+    });
+  }
   for (const cls of character.classes ?? []) {
     const classData = CLASSES[cls.classId];
     if (!classData) continue;
@@ -272,7 +331,7 @@ function renderCharacterFeatures(character) {
       <div class="character-features-group-heading">${escapeHtml(group.title)}</div>
       ${group.entries.map(entry => {
         const feature = entry.feature;
-        const source = entry.item ? "Предмет" : entry.subclass ? "Підклас" : "Клас";
+        const source = entry.item ? "Предмет" : entry.race ? "Раса" : entry.subclass ? "Підклас" : "Клас";
         const levelText = entry.level ? `Рівень ${entry.level}` : "";
         return `<article class="character-feature-row">
           <div class="character-feature-main"><strong>${escapeHtml(feature.ukr ?? feature.name ?? feature.id)}</strong><span>${escapeHtml(source)}${levelText ? ` · ${levelText}` : ""}</span></div>
