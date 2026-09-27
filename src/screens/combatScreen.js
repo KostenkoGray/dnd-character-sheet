@@ -16,6 +16,7 @@ import { CLASSES } from "../data/classesData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
 import { renderDeathSaves } from "../components/deathSaves.js";
 import { equipmentCard } from "../components/equipmentCard.js";
+import { getEquippedWeapons } from "../services/inventoryService.js";
 
 function formatModifier(value) {
   return value >= 0 ? `+${value}` : `${value}`;
@@ -215,6 +216,11 @@ export function combatScreen(character) {
   const speedFeet = baseSpeedFeet + Number(getEquipmentBonuses(character).speedBonus ?? 0);
   const speedSquares = Math.floor(speedFeet / 5);
 
+  const equippedWeapons = getEquippedWeapons(character);
+  const weaponsBlock = equippedWeapons.length
+    ? equippedWeapons.map(weapon => renderWeapon(weapon, character)).join("")
+    : "<p>Немає спорядженої зброї.</p>";
+
   const maxHp = character.maxHp ?? 0;
   const currentHp = character.combat?.currentHp ?? maxHp;
   const tempHp = character.combat?.tempHp ?? 0;
@@ -293,6 +299,11 @@ export function combatScreen(character) {
         ${renderClassResources(character)}
 
         ${equipmentCard(character)}
+
+        <section class="combat-section">
+          <h2>Weapons</h2>
+          <div class="combat-weapons-list">${weaponsBlock}</div>
+        </section>
 
         <section class="combat-section">
           <h2>Prepared Spells</h2>
