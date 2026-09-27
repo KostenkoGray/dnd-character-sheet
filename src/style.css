@@ -2301,3 +2301,5 @@ p {
   .level-up-two-stat-grid{grid-template-columns:1fr;}
   .level-up-feature-heading{align-items:flex-start;flex-direction:column;gap:2px;}
 }
+
+.camp-action-undo::before{background:#6b7280;}
