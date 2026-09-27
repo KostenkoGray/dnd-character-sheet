@@ -1,8 +1,6 @@
 import { PROFICIENCY } from "./rulesData.js";
 import { RACES } from "./racesData.js";
 import { CLASSES } from "./classesData.js";
-import { WEAPONS } from "./weaponsData.js";
-import { ARMOR } from "./armorData.js";
 import { loadCharacters } from "../services/storageService.js";
 
 // ==================================================
@@ -10,7 +8,6 @@ import { loadCharacters } from "../services/storageService.js";
 // ==================================================
 
 const defaultCharacters = [
-
   {
     id: 1,
     name: "Severus Grey",
@@ -39,10 +36,21 @@ const defaultCharacters = [
 
     maxHp: 45,
 
-    armor: ARMOR.leather,
-
-    weapons: [
-      WEAPONS.dagger
+    inventory: [
+      {
+        instanceId: "char-1-leather",
+        source: "armor",
+        itemId: "leather",
+        equipped: true,
+        quantity: 1
+      },
+      {
+        instanceId: "char-1-dagger",
+        source: "weapon",
+        itemId: "dagger",
+        equipped: true,
+        quantity: 1
+      }
     ],
 
     skills: {
@@ -55,7 +63,7 @@ const defaultCharacters = [
     combat: {
       currentHp: 45,
       tempHp: 0,
-      usedHitDice: 0,
+      currentHitDice: 7,
       deathSaves: {
         success: 0,
         fail: 0
@@ -92,11 +100,21 @@ const defaultCharacters = [
 
     maxHp: 24,
 
-    armor: null,
-
-    weapons: [
-      WEAPONS.quarterstaff,
-      WEAPONS.dagger
+    inventory: [
+      {
+        instanceId: "char-2-quarterstaff",
+        source: "weapon",
+        itemId: "quarterstaff",
+        equipped: true,
+        quantity: 1
+      },
+      {
+        instanceId: "char-2-dagger",
+        source: "weapon",
+        itemId: "dagger",
+        equipped: true,
+        quantity: 1
+      }
     ],
 
     skills: {
@@ -108,7 +126,7 @@ const defaultCharacters = [
     combat: {
       currentHp: 24,
       tempHp: 0,
-      usedHitDice: 0,
+      currentHitDice: 3,
       deathSaves: {
         success: 0,
         fail: 0
@@ -145,11 +163,28 @@ const defaultCharacters = [
 
     maxHp: 17,
 
-    armor: ARMOR.leather,
-
-    weapons: [
-      WEAPONS.shortsword,
-      WEAPONS.dagger
+    inventory: [
+      {
+        instanceId: "char-3-leather",
+        source: "armor",
+        itemId: "leather",
+        equipped: true,
+        quantity: 1
+      },
+      {
+        instanceId: "char-3-shortsword",
+        source: "weapon",
+        itemId: "shortsword",
+        equipped: true,
+        quantity: 1
+      },
+      {
+        instanceId: "char-3-dagger",
+        source: "weapon",
+        itemId: "dagger",
+        equipped: true,
+        quantity: 1
+      }
     ],
 
     skills: {
@@ -162,7 +197,7 @@ const defaultCharacters = [
     combat: {
       currentHp: 17,
       tempHp: 0,
-      usedHitDice: 0,
+      currentHitDice: 2,
       deathSaves: {
         success: 0,
         fail: 0
@@ -170,9 +205,7 @@ const defaultCharacters = [
       inspiration: false
     }
   }
-
 ];
-
 
 export let characters = loadCharacters(defaultCharacters);
 
