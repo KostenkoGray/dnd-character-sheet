@@ -8,8 +8,7 @@ import {
   getSaveBonus,
   getSkillBonus,
   getWeaponAttackBonus,
-  getWeaponDamageBonus,
-  getEquipmentBonuses
+  getWeaponDamageBonus
 } from "../services/characterCalculationsService.js";
 import { STATS, SKILLS, PROFICIENCY } from "../data/rulesData.js";
 import { CLASSES } from "../data/classesData.js";
