@@ -331,7 +331,13 @@ function renderCharacterFeatures(character) {
       <div class="character-features-group-heading">${escapeHtml(group.title)}</div>
       ${group.entries.map(entry => {
         const feature = entry.feature;
-        const source = entry.item ? "Предмет" : entry.race ? "Раса" : entry.subclass ? "Підклас" : "Клас";
+        const source = entry.item
+          ? `Предмет: ${entry.feature.sourceItem ?? "спорядження"}`
+          : entry.race
+            ? "Раса"
+            : entry.subclass
+              ? "Підклас"
+              : "Клас";
         const levelText = entry.level ? `Рівень ${entry.level}` : "";
         return `<article class="character-feature-row">
           <div class="character-feature-main"><strong>${escapeHtml(feature.ukr ?? feature.name ?? feature.id)}</strong><span>${escapeHtml(source)}${levelText ? ` · ${levelText}` : ""}</span></div>
