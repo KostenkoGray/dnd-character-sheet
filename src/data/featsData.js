@@ -1,0 +1,48 @@
+// ==================================================
+// D&D Character Sheet — Feats Data
+// Короткі назви та короткі описи для Level Up.
+// ==================================================
+
+export const FEATS = {
+  alert: { id:"alert", name:"Alert", ukr:"Насторожений", short:"Покращує готовність до небезпеки та ініціативу." },
+  athlete: { id:"athlete", name:"Athlete", ukr:"Атлет", short:"Покращує фізичну мобільність." },
+  actor: { id:"actor", name:"Actor", ukr:"Актор", short:"Покращує імітацію та соціальні перевірки." },
+  charger: { id:"charger", name:"Charger", ukr:"Штурмовик", short:"Підсилює атаку після руху." },
+  crossbowExpert: { id:"crossbowExpert", name:"Crossbow Expert", ukr:"Експерт арбалета", short:"Покращує використання арбалетів у бою." },
+  defensiveDuelist: { id:"defensiveDuelist", name:"Defensive Duelist", ukr:"Оборонний дуелянт", short:"Може реакцією підвищувати захист проти атаки." },
+  dualWielder: { id:"dualWielder", name:"Dual Wielder", ukr:"Дворучний боєць", short:"Покращує бій двома одноручними зброями." },
+  durable: { id:"durable", name:"Durable", ukr:"Витривалий", short:"Покращує лікування через Hit Dice." },
+  elementalAdept: { id:"elementalAdept", name:"Elemental Adept", ukr:"Майстер стихії", short:"Покращує закляття обраного типу стихійної шкоди." },
+  grappler: { id:"grappler", name:"Grappler", ukr:"Борець", short:"Підсилює захоплення та боротьбу." },
+  greatWeaponMaster: { id:"greatWeaponMaster", name:"Great Weapon Master", ukr:"Майстер великої зброї", short:"Підсилює атаки великою зброєю." },
+  healer: { id:"healer", name:"Healer", ukr:"Цілитель", short:"Покращує використання лікувального набору." },
+  heavilyArmored: { id:"heavilyArmored", name:"Heavily Armored", ukr:"Важко озброєний", short:"Дає володіння важкою бронею." },
+  heavyArmorMaster: { id:"heavyArmorMaster", name:"Heavy Armor Master", ukr:"Майстер важкої броні", short:"Зменшує частину фізичної шкоди у важкій броні." },
+  inspiringLeader: { id:"inspiringLeader", name:"Inspiring Leader", ukr:"Натхненний лідер", short:"Дає союзникам тимчасові HP після промови." },
+  keenMind: { id:"keenMind", name:"Keen Mind", ukr:"Гострий розум", short:"Покращує пам'ять і роботу з інформацією." },
+  lightlyArmored: { id:"lightlyArmored", name:"Lightly Armored", ukr:"Легко озброєний", short:"Дає володіння легкою бронею." },
+  linguist: { id:"linguist", name:"Linguist", ukr:"Лінгвіст", short:"Додає мови та покращує писемність." },
+  lucky: { id:"lucky", name:"Lucky", ukr:"Щасливчик", short:"Дає кілька додаткових шансів на важливих кидках." },
+  mageSlayer: { id:"mageSlayer", name:"Mage Slayer", ukr:"Мисливець на магів", short:"Покращує бій проти чаклунів." },
+  magicInitiate: { id:"magicInitiate", name:"Magic Initiate", ukr:"Магічний ініціат", short:"Дає заговори та одне закляття 1 рівня." },
+  martialAdept: { id:"martialAdept", name:"Martial Adept", ukr:"Майстер бою", short:"Дає маневри та кубики для них." },
+  mediumArmorMaster: { id:"mediumArmorMaster", name:"Medium Armor Master", ukr:"Майстер середньої броні", short:"Покращує використання середньої броні." },
+  mobile: { id:"mobile", name:"Mobile", ukr:"Мобільний", short:"Збільшує швидкість та мобільність у бою." },
+  moderatelyArmored: { id:"moderatelyArmored", name:"Moderately Armored", ukr:"Помірно озброєний", short:"Дає володіння середньою бронею та щитами." },
+  mountedCombatant: { id:"mountedCombatant", name:"Mounted Combatant", ukr:"Вершник", short:"Покращує бій верхи." },
+  observant: { id:"observant", name:"Observant", ukr:"Спостережливий", short:"Покращує уважність та пасивне сприйняття." },
+  polearmMaster: { id:"polearmMaster", name:"Polearm Master", ukr:"Майстер древкової зброї", short:"Додає особливі атаки древковою зброєю." },
+  resilient: { id:"resilient", name:"Resilient", ukr:"Стійкий", short:"Підвищує характеристику та дає володіння її ряткидком." },
+  ritualCaster: { id:"ritualCaster", name:"Ritual Caster", ukr:"Ритуальний чаклун", short:"Дає книгу ритуалів." },
+  savageAttacker: { id:"savageAttacker", name:"Savage Attacker", ukr:"Жорстокий нападник", short:"Дозволяє перекидати кубики шкоди ближньої зброї." },
+  sentinel: { id:"sentinel", name:"Sentinel", ukr:"Вартовий", short:"Покращує атаки нагоди та контроль руху." },
+  sharpshooter: { id:"sharpshooter", name:"Sharpshooter", ukr:"Влучний стрілець", short:"Покращує дальню стрільбу." },
+  shieldMaster: { id:"shieldMaster", name:"Shield Master", ukr:"Майстер щита", short:"Розширює бойове використання щита." },
+  skilled: { id:"skilled", name:"Skilled", ukr:"Умілець", short:"Дає три додаткові володіння." },
+  skulker: { id:"skulker", name:"Skulker", ukr:"Скритник", short:"Покращує скритність та стрільбу з укриття." },
+  spellSniper: { id:"spellSniper", name:"Spell Sniper", ukr:"Магічний снайпер", short:"Покращує дальні атаки закляттями." },
+  tavernBrawler: { id:"tavernBrawler", name:"Tavern Brawler", ukr:"Таверний забіяка", short:"Покращує беззбройний бій та імпровізовану зброю." },
+  tough: { id:"tough", name:"Tough", ukr:"Міцний", short:"Збільшує максимальні HP." },
+  warCaster: { id:"warCaster", name:"War Caster", ukr:"Бойовий заклинач", short:"Покращує концентрацію та закляття в бою." },
+  weaponMaster: { id:"weaponMaster", name:"Weapon Master", ukr:"Майстер зброї", short:"Дає володіння чотирма додатковими видами зброї." }
+};
