@@ -589,11 +589,11 @@ function getStatChoiceOptions(character, selected, amount) {
       const numericValue = Number(value);
       const blocked = numericValue + amount > 20;
 
-      return \`
+      return `
         <option value="${key}" ${key === selected ? "selected" : ""} ${blocked ? "disabled" : ""}>
-          ${stat?.short ?? key.toUpperCase()} — ${stat?.ukr ?? key} (${numericValue})${blocked ? " — максимум" : \` → ${numericValue + amount}\`}
+          ${stat?.short ?? key.toUpperCase()} — ${stat?.ukr ?? key} (${numericValue})${blocked ? " — максимум" : ` → ${numericValue + amount}`}
         </option>
-      \`;
+      `;
     })
     .join("");
 }
@@ -605,7 +605,7 @@ function renderLevelUpFeatures(result) {
     const type = feature.data?.type === "choice" ? "Потрібен вибір" : "Можливість";
     const source = feature.source === "subclass" ? "Підклас" : "Клас";
 
-    return \`
+    return `
       <div class="level-up-feature ${feature.data?.type === "choice" ? "level-up-feature-choice" : ""}">
         <div class="level-up-feature-heading">
           <strong>${escapeHtml(title)}</strong>
@@ -613,11 +613,11 @@ function renderLevelUpFeatures(result) {
         </div>
         <p>${escapeHtml(short)}</p>
       </div>
-    \`;
+    `;
   });
 
   for (const change of result.resourceChanges ?? []) {
-    featureItems.push(\`
+    featureItems.push(`
       <div class="level-up-feature level-up-feature-resource">
         <div class="level-up-feature-heading">
           <strong>${escapeHtml(formatLevelUpResourceName(change.key))}</strong>
@@ -625,11 +625,11 @@ function renderLevelUpFeatures(result) {
         </div>
         <p>${escapeHtml(String(change.before))} → ${escapeHtml(String(change.after))}</p>
       </div>
-    \`);
+    `);
   }
 
   if (JSON.stringify(result.spellcastingBefore ?? null) !== JSON.stringify(result.spellcastingAfter ?? null)) {
-    featureItems.push(\`
+    featureItems.push(`
       <div class="level-up-feature level-up-feature-resource">
         <div class="level-up-feature-heading">
           <strong>Заклинання</strong>
@@ -637,14 +637,14 @@ function renderLevelUpFeatures(result) {
         </div>
         <p>Комірки заклять оновляться відповідно до нового рівня.</p>
       </div>
-    \`);
+    `);
   }
 
   if (!featureItems.length) {
-    return \`<p class="level-up-empty">Нових можливостей у даних цього рівня не зазначено.</p>\`;
+    return `<p class="level-up-empty">Нових можливостей у даних цього рівня не зазначено.</p>`;
   }
 
-  return \`<div class="level-up-feature-list">${featureItems.join("")}</div>\`;
+  return `<div class="level-up-feature-list">${featureItems.join("")}</div>`;
 }
 
 function renderLevelUpAsi(character, result, draft) {
@@ -661,14 +661,14 @@ function renderLevelUpAsi(character, result, draft) {
 
   if (asi.mode === "feat") {
     const featOptions = Object.values(FEATS)
-      .map(feat => \`
+      .map(feat => `
         <option value="${feat.id}" ${feat.id === asi.featId ? "selected" : ""}>
           ${escapeHtml(feat.ukr)} · ${escapeHtml(feat.name)}
         </option>
-      \`)
+      `)
       .join("");
 
-    body = \`
+    body = `
       <label class="level-up-select-label">
         Риса
         <select id="level-up-feat" class="level-up-select">
@@ -679,14 +679,14 @@ function renderLevelUpAsi(character, result, draft) {
       <div class="level-up-feat-description">
         ${
           selectedFeat
-            ? \`<strong>${escapeHtml(selectedFeat.ukr)}</strong><p>${escapeHtml(selectedFeat.short)}</p>\`
-            : \`<p>Оберіть рису зі списку.</p>\`
+            ? `<strong>${escapeHtml(selectedFeat.ukr)}</strong><p>${escapeHtml(selectedFeat.short)}</p>`
+            : `<p>Оберіть рису зі списку.</p>`
         }
         <small>Перевірка передумов буде додана окремим етапом.</small>
       </div>
-    \`;
+    `;
   } else if (asi.scoreMode === "split") {
-    body = \`
+    body = `
       <div class="level-up-two-stat-grid">
         <label class="level-up-select-label">
           Перша характеристика
@@ -706,13 +706,13 @@ function renderLevelUpAsi(character, result, draft) {
       <p class="level-up-asi-preview">
         ${
           asi.stat1 && asi.stat2
-            ? \`+1 ${STATS[asi.stat1]?.short ?? asi.stat1} · +1 ${STATS[asi.stat2]?.short ?? asi.stat2}\`
+            ? `+1 ${STATS[asi.stat1]?.short ?? asi.stat1} · +1 ${STATS[asi.stat2]?.short ?? asi.stat2}`
             : "Оберіть дві різні характеристики."
         }
       </p>
-    \`;
+    `;
   } else {
-    body = \`
+    body = `
       <label class="level-up-select-label">
         Характеристика
         <select id="level-up-asi-stat1" class="level-up-select">
@@ -723,14 +723,14 @@ function renderLevelUpAsi(character, result, draft) {
       <p class="level-up-asi-preview">
         ${
           asi.stat1
-            ? \`+2 ${STATS[asi.stat1]?.short ?? asi.stat1}\`
+            ? `+2 ${STATS[asi.stat1]?.short ?? asi.stat1}`
             : "Оберіть характеристику для +2."
         }
       </p>
-    \`;
+    `;
   }
 
-  return \`
+  return `
     <section class="level-up-section level-up-asi-section">
       <div class="level-up-section-title">
         <div>
@@ -759,7 +759,7 @@ function renderLevelUpAsi(character, result, draft) {
 
       <div class="level-up-asi-body">${body}</div>
     </section>
-  \`;
+  `;
 }
 
 function getDefaultLevelUpDraft(character, classId) {
@@ -787,13 +787,13 @@ function renderLevelUpBody(character, draft) {
   });
 
   const classOptions = Object.values(CLASSES)
-    .map(cls => \`
+    .map(cls => `
       <option value="${cls.id}" ${cls.id === draft.classId ? "selected" : ""}>${escapeHtml(cls.ukr)}</option>
-    \`)
+    `)
     .join("");
 
   const subclassBlock = result.subclassRequired
-    ? \`
+    ? `
       <section class="level-up-section level-up-choice-section">
         <div class="level-up-section-title">
           <div>
@@ -804,16 +804,16 @@ function renderLevelUpBody(character, draft) {
 
         <select id="level-up-subclass" class="level-up-select">
           <option value="">Оберіть підклас</option>
-          ${result.subclassOptions.map(subclass => \`
+          ${result.subclassOptions.map(subclass => `
             <option value="${subclass.id}" ${subclass.id === draft.subclassId ? "selected" : ""}>
               ${escapeHtml(subclass.ukr)}
             </option>
-          \`).join("")}
+          `).join("")}
         </select>
       </section>
-    \`
+    `
     : result.subclassId
-      ? \`
+      ? `
         <section class="level-up-section level-up-choice-section">
           <div class="level-up-section-title">
             <div>
@@ -822,13 +822,13 @@ function renderLevelUpBody(character, draft) {
             </div>
           </div>
         </section>
-      \`
+      `
       : "";
 
   const recommendedHp = calculateRecommendedHpIncrease(character, draft.classId);
   const hpMethod = draft.hpMethod ?? HP_LEVEL_UP_METHODS.AVERAGE;
 
-  return \`
+  return `
     <div class="level-up-content">
       <div class="level-up-section level-up-class-section">
         <div class="level-up-section-title">
@@ -857,7 +857,7 @@ function renderLevelUpBody(character, draft) {
       </div>
 
       ${result.totalLevelAfter > 20
-        ? \`<div class="level-up-error">Загальний рівень персонажа не може перевищувати 20.</div>\`
+        ? `<div class="level-up-error">Загальний рівень персонажа не може перевищувати 20.</div>`
         : ""}
 
       ${subclassBlock}
@@ -904,7 +904,7 @@ function renderLevelUpBody(character, draft) {
         </div>
 
         ${hpMethod === HP_LEVEL_UP_METHODS.MANUAL
-          ? \`
+          ? `
             <label class="level-up-select-label level-up-manual-hp">
               Приріст HP
               <input
@@ -916,11 +916,11 @@ function renderLevelUpBody(character, draft) {
                 value="${Math.max(0, Math.floor(Number(draft.manualHp ?? recommendedHp)))}"
               >
             </label>
-          \`
+          `
           : ""}
       </section>
     </div>
-  \`;
+  `;
 }
 
 function showLevelUpError(message) {
@@ -936,7 +936,7 @@ function showLevelUpError(message) {
 
   body.insertAdjacentHTML(
     "afterbegin",
-    \`<div class="level-up-error">${escapeHtml(message)}</div>\`
+    `<div class="level-up-error">${escapeHtml(message)}</div>`
   );
 }
 
@@ -1106,10 +1106,10 @@ function finishLevelUp(character, classId, hpIncrease, draft) {
   };
 
   const lines = [
-    \`Загальний рівень ${beforeTotalLevel} → ${preview.totalLevelAfter}\`,
-    \`${CLASSES[classId].ukr}: ${preview.currentLevel || 0} → ${preview.nextLevel}\`,
-    \`Макс. HP: ${Number(character.maxHp) - hpIncrease} → ${character.maxHp}\`,
-    hpIncrease ? \`HP +${hpIncrease}\` : "HP без змін"
+    `Загальний рівень ${beforeTotalLevel} → ${preview.totalLevelAfter}`,
+    `${CLASSES[classId].ukr}: ${preview.currentLevel || 0} → ${preview.nextLevel}`,
+    `Макс. HP: ${Number(character.maxHp) - hpIncrease} → ${character.maxHp}`,
+    hpIncrease ? `HP +${hpIncrease}` : "HP без змін"
   ];
 
   if (draft.subclassId) {
@@ -1117,7 +1117,7 @@ function finishLevelUp(character, classId, hpIncrease, draft) {
       CLASSES[classId].subclasses?.[draft.subclassId];
 
     if (subclass) {
-      lines.push(\`Підклас: ${subclass.ukr}\`);
+      lines.push(`Підклас: ${subclass.ukr}`);
     }
   }
 
@@ -1127,22 +1127,22 @@ function finishLevelUp(character, classId, hpIncrease, draft) {
 
   if (featureNames.length) {
     lines.push(
-      \`Нові можливості: ${featureNames.join(", ")}\`
+      `Нові можливості: ${featureNames.join(", ")}`
     );
   }
 
   if (preview.abilityScoreImprovement) {
     if (draft.asi.mode === "feat") {
       lines.push(
-        \`Риса: ${FEATS[draft.asi.featId]?.ukr ?? draft.asi.featId}\`
+        `Риса: ${FEATS[draft.asi.featId]?.ukr ?? draft.asi.featId}`
       );
     } else if (draft.asi.scoreMode === "split") {
       lines.push(
-        \`Характеристики: +1 ${STATS[draft.asi.stat1]?.short ?? draft.asi.stat1}, +1 ${STATS[draft.asi.stat2]?.short ?? draft.asi.stat2}\`
+        `Характеристики: +1 ${STATS[draft.asi.stat1]?.short ?? draft.asi.stat1}, +1 ${STATS[draft.asi.stat2]?.short ?? draft.asi.stat2}`
       );
     } else {
       lines.push(
-        \`Характеристика: +2 ${STATS[draft.asi.stat1]?.short ?? draft.asi.stat1}\`
+        `Характеристика: +2 ${STATS[draft.asi.stat1]?.short ?? draft.asi.stat1}`
       );
     }
   }
@@ -1153,7 +1153,7 @@ function finishLevelUp(character, classId, hpIncrease, draft) {
   setTimeout(() => {
     showCampDialog({
       title: "Рівень підвищено",
-      body: \`<div class="rest-summary">${lines.map(line => \`<div class="rest-row"><span>${escapeHtml(line)}</span></div>\`).join("")}</div>\`,
+      body: `<div class="rest-summary">${lines.map(line => `<div class="rest-row"><span>${escapeHtml(line)}</span></div>`).join("")}</div>`,
       confirmLabel: "Готово"
     });
   }, 0);
