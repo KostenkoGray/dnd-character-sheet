@@ -4,12 +4,18 @@ import {
   getPassivePerception,
   getProficiencyBonus,
   getStatModifier,
-  getCharacterLevel
+  getCharacterLevel,
+  getSaveBonus,
+  getSkillBonus,
+  getWeaponAttackBonus,
+  getWeaponDamageBonus,
+  getEquipmentBonuses
 } from "../services/characterCalculationsService.js";
 import { STATS, SKILLS, PROFICIENCY } from "../data/rulesData.js";
 import { CLASSES } from "../data/classesData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
 import { renderDeathSaves } from "../components/deathSaves.js";
+import { equipmentCard } from "../components/equipmentCard.js";
 
 function formatModifier(value) {
   return value >= 0 ? `+${value}` : `${value}`;
@@ -28,21 +34,16 @@ function getHitDieLabel(character) {
 }
 
 function getWeaponAbility(character, weapon) {
-  const strength = character.stats.strength;
-  const dexterity = character.stats.dexterity;
-
-  if (weapon.properties?.includes("finesse")) {
-    return Math.max(strength, dexterity);
-  }
-
-  return weapon.type === "ranged" ? dexterity : strength;
+  return weapon?.type === "ranged"
+    ? getEffectiveAbilityScoreLocal(character, "dexterity")
+    : getEffectiveAbilityScoreLocal(character, "strength");
 }
 
 function renderWeapon(weapon, character) {
-  const abilityModifier = getStatModifier(getWeaponAbility(character, weapon));
-  const attackBonus = abilityModifier + getProficiencyBonus(character);
+  const attackBonus = getWeaponAttackBonus(character, weapon);
+  const damageBonus = getWeaponDamageBonus(character, weapon);
   const damage = weapon.damage
-    ? `${weapon.damage} ${formatModifier(abilityModifier)}`
+    ? `${weapon.damage} ${formatModifier(damageBonus)}`
     : "Без шкоди";
 
   const properties = weapon.properties?.length
@@ -64,10 +65,13 @@ function renderWeapon(weapon, character) {
   `;
 }
 
+function getEffectiveAbilityScoreLocal(character, statKey) {
+  const base = Number(character.stats?.[statKey] ?? 10);
+  return base + Number(getEquipmentBonuses(character).statBonuses?.[statKey] ?? 0);
+}
 function renderCompactSavesAndSkills(character) {
   return Object.entries(STATS).map(([statKey, stat]) => {
-    const save = SKILLS[`${statKey}ST`];
-    const saveBonus = getSaveBonusLocal(character, statKey);
+    const saveBonus = getSaveBonus(character, statKey);
     const saveProficient = character.classes?.some(cls =>
       CLASSES[cls.classId]?.savingThrows?.includes(statKey)
     );
@@ -76,7 +80,7 @@ function renderCompactSavesAndSkills(character) {
       .filter(([, skill]) => skill.stat === statKey && skill.type === "skill")
       .map(([skillKey, skill]) => {
         const proficiency = character.skills?.[skillKey] ?? PROFICIENCY.NONE;
-        const bonus = getSkillBonusLocal(character, skillKey, skill);
+        const bonus = getSkillBonus(character, skillKey, skill);
         const marker = proficiency === PROFICIENCY.EXPERTISE
           ? "◆"
           : proficiency === PROFICIENCY.PROFICIENT
@@ -109,26 +113,6 @@ function renderCompactSavesAndSkills(character) {
     `;
   }).join("");
 }
-
-function getSaveBonusLocal(character, statKey) {
-  const modifier = getStatModifier(character.stats[statKey]);
-  const proficiency = character.classes?.some(cls =>
-    CLASSES[cls.classId]?.savingThrows?.includes(statKey)
-  );
-  return modifier + (proficiency ? getProficiencyBonus(character) : 0);
-}
-
-function getSkillBonusLocal(character, skillKey, skillData) {
-  const modifier = getStatModifier(character.stats[skillData.stat]);
-  const proficiencyBonus = getProficiencyBonus(character);
-  const proficiency = character.skills?.[skillKey] ?? PROFICIENCY.NONE;
-
-  if (proficiency === PROFICIENCY.EXPERTISE) return modifier + proficiencyBonus * 2;
-  if (proficiency === PROFICIENCY.PROFICIENT) return modifier + proficiencyBonus;
-  if (proficiency === PROFICIENCY.HALF) return modifier + Math.floor(proficiencyBonus / 2);
-  return modifier;
-}
-
 function getResourceValue(resourceTable, classLevel) {
   const levels = Object.keys(resourceTable)
     .map(Number)
@@ -227,7 +211,8 @@ export function combatScreen(character) {
   const proficiency = getProficiencyBonus(character);
   const passivePerception = getPassivePerception(character);
 
-  const speedFeet = character.race.subrace?.speed ?? character.race.race.speed;
+  const baseSpeedFeet = character.race.subrace?.speed ?? character.race.race.speed;
+  const speedFeet = baseSpeedFeet + Number(getEquipmentBonuses(character).speedBonus ?? 0);
   const speedSquares = Math.floor(speedFeet / 5);
 
   const maxHp = character.maxHp ?? 0;
@@ -241,9 +226,7 @@ export function combatScreen(character) {
   const primaryClass = getPrimaryClass(character);
   const hitDiceTotal = getCharacterLevel(character);
 
-  const weaponsBlock = (character.weapons ?? []).length
-    ? character.weapons.map(weapon => renderWeapon(weapon, character)).join("")
-    : "<p>Немає спорядженої зброї.</p>";
+
 
   return `
     <div class="app">
@@ -309,10 +292,7 @@ export function combatScreen(character) {
 
         ${renderClassResources(character)}
 
-        <section class="combat-section">
-          <h2>Weapons</h2>
-          <div class="combat-weapons-list">${weaponsBlock}</div>
-        </section>
+        ${equipmentCard(character)}
 
         <section class="combat-section">
           <h2>Prepared Spells</h2>
