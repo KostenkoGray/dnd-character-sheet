@@ -41,6 +41,31 @@ const app = document.querySelector("#app");
 
 let currentCharacter = null;
 let currentScreen = "list";
+let undoState = null;
+
+function cloneCharacterState(character) {
+  return typeof structuredClone === "function"
+    ? structuredClone(character)
+    : JSON.parse(JSON.stringify(character));
+}
+
+function getUndoLabel(character) {
+  return undoState?.characterId === character?.id
+    ? undoState.label
+    : null;
+}
+
+function undoLastAction(character) {
+  if (!undoState || undoState.characterId !== character.id) return false;
+
+  const restored = cloneCharacterState(undoState.snapshot);
+
+  Object.keys(character).forEach(key => delete character[key]);
+  Object.assign(character, restored);
+
+  undoState = null;
+  return true;
+}
 
 const settings = loadSettings(DEFAULT_SETTINGS);
 
@@ -77,6 +102,9 @@ function openCampMenu() {
     <button type="button" class="camp-action camp-action-level-up" data-camp-action="level-up" aria-label="Level Up">
       <span>⬆️</span><strong>Level Up</strong>
     </button>
+    <button type="button" class="camp-action camp-action-undo" data-camp-action="undo" aria-label="Крок назад">
+      <span>↩️</span><strong>Крок назад</strong>
+    </button>
   `;
 
   document.body.appendChild(menu);
@@ -94,6 +122,8 @@ function openCampMenu() {
         showLongRest(currentCharacter);
       } else if (action === 'level-up') {
         startLevelUp(currentCharacter);
+      } else if (action === 'undo') {
+        confirmUndoLastAction(currentCharacter);
       }
     });
   });
@@ -138,6 +168,40 @@ function showCampDialog({ title, body, confirmLabel = "OK", onConfirm }) {
   backdrop.addEventListener("click", event => {
     if (event.target === backdrop) closeCampDialog();
     if (event.target.closest('[data-camp-dialog="cancel"]')) closeCampDialog();
+  });
+}
+
+function confirmUndoLastAction(character) {
+  const label = getUndoLabel(character);
+
+  if (!label) {
+    showCampDialog({
+      title: "Крок назад",
+      body: "<p>Немає завершеної дії, яку можна скасувати.</p>",
+      confirmLabel: "Закрити"
+    });
+    return;
+  }
+
+  showCampDialog({
+    title: "Скасувати останню дію?",
+    body: `<p>Ви впевнені, що хочете скасувати <strong>${escapeHtml(label)}</strong>?</p>
+      <p>Персонажа буде повністю повернуто до стану до цієї дії.</p>`,
+    confirmLabel: "Скасувати дію",
+    onConfirm: () => {
+      if (!undoLastAction(character)) return false;
+
+      persistCharacters();
+      render();
+
+      setTimeout(() => {
+        showCampDialog({
+          title: "Дію скасовано",
+          body: `<p>Скасовано: <strong>${escapeHtml(label)}</strong>.</p>`,
+          confirmLabel: "Готово"
+        });
+      }, 0);
+    }
   });
 }
 
@@ -277,6 +341,7 @@ function restoreLongRestSpellSlots(character) {
 }
 
 function performLongRest(character) {
+  const beforeAction = cloneCharacterState(character);
   ensureCombatState(character);
 
   restoreShortRestResources(character);
@@ -289,6 +354,12 @@ function performLongRest(character) {
   character.combat.currentHitDice = totalHitDice;
   character.combat.deathSaves = { success: 0, fail: 0 };
   character.combat.inspiration = false;
+
+  undoState = {
+    characterId: character.id,
+    label: "Long Rest",
+    snapshot: beforeAction
+  };
 
   return {
     type: REST_TYPES.LONG,
@@ -482,6 +553,7 @@ function getResourceValue(table, level) {
 }
 
 function finishShortRest(character, mode, hitDiceSpent, manualAmount) {
+  const beforeAction = cloneCharacterState(character);
   const result = performShortRest(
     character,
     ACTION_PREFERENCE_VALUES.AVERAGE,
@@ -490,6 +562,11 @@ function finishShortRest(character, mode, hitDiceSpent, manualAmount) {
   );
 
   restoreShortRestResources(character);
+  undoState = {
+    characterId: character.id,
+    label: "Short Rest",
+    snapshot: beforeAction
+  };
   persistCharacters();
   render();
 
@@ -1081,6 +1158,7 @@ function startLevelUp(character) {
 }
 
 function finishLevelUp(character, classId, hpIncrease, draft) {
+  const beforeAction = cloneCharacterState(character);
   const beforeTotalLevel = getNextCharacterLevel(character) - 1;
 
   const preview = applyLevelUp(
@@ -1147,6 +1225,12 @@ function finishLevelUp(character, classId, hpIncrease, draft) {
       );
     }
   }
+
+  undoState = {
+    characterId: character.id,
+    label: `Підвищення рівня ${CLASSES[classId].ukr} ${beforeTotalLevel} → ${preview.totalLevelAfter}`,
+    snapshot: beforeAction
+  };
 
   persistCharacters();
   render();
