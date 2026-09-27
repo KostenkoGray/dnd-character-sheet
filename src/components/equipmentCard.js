@@ -2,7 +2,6 @@ import {
   ITEM_TYPES,
   getEquippedArmor,
   getEquippedShield,
-  getEquippedWeapons,
   getEquippedArtifacts
 } from "../services/inventoryService.js";
 
@@ -34,25 +33,6 @@ function renderSlot({ label, item, types, emptyText = "Не екіпірован
       <span class="equipment-slot-label">${escapeHtml(label)}</span>
       <strong>${escapeHtml(item ? itemLabel(item) : emptyText)}</strong>
       ${item ? `<small>Натисніть, щоб змінити</small>` : "<small>Натисніть, щоб екіпірувати</small>"}
-    </button>
-  `;
-}
-
-function renderWeaponSlot(item, index) {
-  return `
-    <button
-      type="button"
-      class="equipment-slot equipment-weapon-slot ${item ? "filled" : "empty"}"
-      data-equipment-picker="weapon"
-      data-equipment-types="${ITEM_TYPES.WEAPON}"
-      data-equipment-current-id="${escapeHtml(item?.instanceId ?? "")}"
-      aria-label="Зброя ${index + 1}"
-    >
-      <span class="equipment-slot-label">Зброя ${index + 1}</span>
-      <strong>${escapeHtml(item ? itemLabel(item) : "Порожньо")}</strong>
-      ${item
-        ? `<small>${escapeHtml(item.damage ?? "Без шкоди")} · натисніть, щоб змінити</small>`
-        : "<small>Натисніть, щоб екіпірувати</small>"}
     </button>
   `;
 }
@@ -93,7 +73,6 @@ function renderArtifactSlots(artifacts) {
 export function equipmentCard(character) {
   const armor = getEquippedArmor(character);
   const shield = getEquippedShield(character);
-  const weapons = getEquippedWeapons(character);
   const artifacts = getEquippedArtifacts(character);
 
   return `
@@ -117,9 +96,6 @@ export function equipmentCard(character) {
           item: shield,
           types: [ITEM_TYPES.SHIELD]
         })}
-
-        ${renderWeaponSlot(weapons[0], 0)}
-        ${renderWeaponSlot(weapons[1], 1)}
 
         <div class="equipment-artifacts">
           <div class="equipment-subheading">Артефакти</div>
