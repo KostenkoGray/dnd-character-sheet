@@ -17,7 +17,7 @@ import { FEATURES } from "../data/featuresData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
 import { renderDeathSaves } from "../components/deathSaves.js";
 import { equipmentCard } from "../components/equipmentCard.js";
-import { getInventoryFeatureEntries, getEffectiveAbilityScore } from "../services/inventoryService.js";
+import { getInventoryFeatureEntries, getEffectiveAbilityScore, getEquippedWeapons } from "../services/inventoryService.js";
 
 // ==================================================
 // CHARACTER SHEET
@@ -458,6 +458,11 @@ export function characterSheetScreen(character) {
   const speedFeet = baseSpeedFeet + Number(getEquipmentBonuses(character).speedBonus ?? 0);
   const speedSquares = Math.floor(speedFeet / 5);
 
+  const equippedWeapons = getEquippedWeapons(character);
+  const weaponsBlock = equippedWeapons.length
+    ? equippedWeapons.map(weapon => renderWeapon(weapon, character)).join("")
+    : "<p>Немає спорядженої зброї.</p>";
+
 
 
   return `
@@ -570,6 +575,11 @@ export function characterSheetScreen(character) {
         ${renderClassResources(character)}
 
         ${equipmentCard(character)}
+
+        <section class="combat-section">
+          <h2>Weapons</h2>
+          <div class="combat-weapons-list">${weaponsBlock}</div>
+        </section>
 
         <section class="combat-section">
           <h2>Prepared Spells</h2>
