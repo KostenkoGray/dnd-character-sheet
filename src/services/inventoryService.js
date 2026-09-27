@@ -209,21 +209,42 @@ export function getInventoryFeatureEntries(character) {
   const entries = [];
 
   for (const item of getEquippedItems(character)) {
-    for (const feature of item.effects?.features ?? []) {
+    const effects = item.effects ?? {};
+
+    for (const feature of effects.features ?? []) {
       if (typeof feature === "string") {
         entries.push({
           id: `item:${item.instanceId}:${feature}`,
           ukr: feature,
-          short: ""
+          short: "",
+          sourceItem: item.ukr ?? item.name
         });
         continue;
       }
 
       entries.push({
-        id: feature.id ?? `item:${item.instanceId}`,
+        id: feature.id ?? `item:${item.instanceId}:${entries.length}`,
         name: feature.name ?? "",
         ukr: feature.ukr ?? feature.name ?? "Властивість предмета",
         short: feature.short ?? "",
+        sourceItem: item.ukr ?? item.name
+      });
+    }
+
+    for (const [skillKey, proficiency] of Object.entries(effects.skillProficiencies ?? {})) {
+      entries.push({
+        id: `item:${item.instanceId}:skill-proficiency:${skillKey}`,
+        ukr: `Володіння навичкою: ${skillKey}`,
+        short: `Рівень володіння: ${proficiency}.`,
+        sourceItem: item.ukr ?? item.name
+      });
+    }
+
+    for (const [skillKey, bonus] of Object.entries(effects.skillBonuses ?? {})) {
+      entries.push({
+        id: `item:${item.instanceId}:skill-bonus:${skillKey}`,
+        ukr: `Бонус до навички: ${skillKey}`,
+        short: `${Number(bonus) >= 0 ? "+" : ""}${bonus} до перевірок навички.`,
         sourceItem: item.ukr ?? item.name
       });
     }
