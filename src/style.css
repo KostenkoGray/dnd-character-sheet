@@ -1038,6 +1038,11 @@ p {
 .combat-stat-group h3{margin:0 0 6px;font-size:.78rem;opacity:.7;}
 .combat-skills-list{display:grid;gap:4px;margin-top:4px;}
 .combat-weapon{border:1px solid var(--border);border-radius:10px;padding:10px;display:flex;justify-content:space-between;gap:12px;background:var(--surface);}
+.combat-weapon[data-weapon-picker]{cursor:pointer;transition:background .15s ease,border-color .15s ease,transform .15s ease;}
+.combat-weapon[data-weapon-picker]:hover{border-color:var(--accent);background:var(--surface-light);}
+.combat-weapon[data-weapon-picker]:active{transform:scale(.99);}
+.combat-weapon-empty{opacity:.72;border-style:dashed;}
+
 .combat-weapons-list{display:grid;gap:8px;}
 .combat-weapon-main,.combat-weapon-damage{display:flex;flex-direction:column;gap:3px;}
 .combat-weapon-main span{font-size:.75rem;opacity:.75;}
