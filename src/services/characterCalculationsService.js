@@ -50,12 +50,6 @@ export function getProficiencyBonus(character) {
 }
 
 // ==================================================
-// EQUIPMENT-AFFECTED ABILITY SCORES
-// ==================================================
-
-export { getEffectiveAbilityScore };
-
-// ==================================================
 // SAVES & SKILLS
 // ==================================================
 
@@ -120,35 +114,46 @@ export function getInitiative(character) {
 }
 
 export function getArmorClass(character) {
-  const dexMod = getStatModifier(character.stats.dexterity);
+  const armor = getEquippedArmor(character);
+  const shield = getEquippedShield(character);
 
-  // Без броні
-  if (!character.armor) {
+  const dexMod = getStatModifier(
+    getEffectiveAbilityScore(character, "dexterity")
+  );
+
+  let ac;
+
+  if (!armor) {
+    const effectiveWisdom = getEffectiveAbilityScore(character, "wisdom");
+    const effectiveConstitution = getEffectiveAbilityScore(character, "constitution");
+
     if (character.classes.some(c => c.classId === CLASSES.monk.id)) {
-      return 10 + dexMod + getStatModifier(character.stats.wisdom);
+      ac = 10 + dexMod + getStatModifier(effectiveWisdom);
+    } else if (character.classes.some(c => c.classId === CLASSES.barbarian.id)) {
+      ac = 10 + dexMod + getStatModifier(effectiveConstitution);
+    } else {
+      ac = 10 + dexMod;
     }
+  } else {
+    ac = Number(armor.baseAC ?? 10);
 
-    if (character.classes.some(c => c.classId === CLASSES.barbarian.id)) {
-      return 10 + dexMod + getStatModifier(character.stats.constitution);
+    switch (armor.dexModifier) {
+      case "full":
+        ac += dexMod;
+        break;
+
+      case "max2":
+        ac += Math.min(dexMod, 2);
+        break;
+
+      case "none":
+      default:
+        break;
     }
-
-    return 10 + dexMod;
   }
 
-  let ac = character.armor.baseAC;
-
-  switch (character.armor.dexModifier) {
-    case "full":
-      ac += dexMod;
-      break;
-
-    case "max2":
-      ac += Math.min(dexMod, 2);
-      break;
-
-    case "none":
-      break;
-  }
+  ac += Number(shield?.acBonus ?? 0);
+  ac += Number(getEquipmentBonuses(character).acBonus ?? 0);
 
   return ac;
 }
