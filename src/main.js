@@ -1496,6 +1496,18 @@ app.addEventListener("click", (event) => {
     }
   }
 
+  if ((currentScreen === "sheet" || currentScreen === "combat") && currentCharacter) {
+    const weaponPicker = event.target.closest("[data-weapon-picker]");
+    if (weaponPicker) {
+      openEquipmentPicker(
+        currentCharacter,
+        [ITEM_TYPES.WEAPON],
+        weaponPicker.dataset.weaponCurrentId ?? ""
+      );
+      return;
+    }
+  }
+
   const equipmentPicker = event.target.closest("[data-equipment-picker]");
   if ((currentScreen === "sheet" || currentScreen === "combat") && currentCharacter && equipmentPicker) {
     const allowedTypes = String(equipmentPicker.dataset.equipmentTypes ?? "").split(",").map(value => value.trim()).filter(Boolean);
@@ -1525,6 +1537,13 @@ app.addEventListener("click", (event) => {
 
   if (document.querySelector(".camp-fab-menu.open") && !openCampButton && !fabMenu) {
     closeCampMenu();
+  }
+
+  if (event.target.closest("#close-inventory")) {
+    persistCharacters();
+    currentScreen = "sheet";
+    render();
+    return;
   }
 
   if (event.target.closest("#close-character-sheet")) {
