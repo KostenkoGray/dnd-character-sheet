@@ -42,7 +42,7 @@ function getWeaponAbility(character, weapon) {
     : getEffectiveAbilityScoreLocal(character, "strength");
 }
 
-function renderWeapon(weapon, character) {
+function renderWeapon(weapon, character, index = 0) {
   const attackBonus = getWeaponAttackBonus(character, weapon);
   const damageBonus = getWeaponDamageBonus(character, weapon);
   const damage = weapon.damage
@@ -54,7 +54,12 @@ function renderWeapon(weapon, character) {
     : "";
 
   return `
-    <article class="combat-weapon">
+    <article
+      class="combat-weapon"
+      data-weapon-picker
+      data-weapon-current-id="${weapon.instanceId}"
+      aria-label="Змінити зброю ${index + 1}"
+    >
       <div class="combat-weapon-main">
         <strong>${weapon.ukr}</strong>
         <span>${formatModifier(attackBonus)} атака</span>
@@ -219,9 +224,30 @@ export function combatScreen(character) {
   const speedSquares = Math.floor(speedFeet / 5);
 
   const equippedWeapons = getEquippedWeapons(character);
-  const weaponsBlock = equippedWeapons.length
-    ? equippedWeapons.map(weapon => renderWeapon(weapon, character)).join("")
-    : "<p>Немає спорядженої зброї.</p>";
+  const weaponsBlock = [0, 1].map(index => {
+    const weapon = equippedWeapons[index];
+
+    if (weapon) {
+      return renderWeapon(weapon, character, index);
+    }
+
+    return `
+      <article
+        class="combat-weapon combat-weapon-empty"
+        data-weapon-picker
+        data-weapon-current-id=""
+        aria-label="Екіпірувати зброю ${index + 1}"
+      >
+        <div class="combat-weapon-main">
+          <strong>Зброя ${index + 1}</strong>
+          <span>Натисніть, щоб екіпірувати</span>
+        </div>
+        <div class="combat-weapon-damage">
+          <span>Порожньо</span>
+        </div>
+      </article>
+    `;
+  }).join("");
 
   const maxHp = character.maxHp ?? 0;
   const currentHp = character.combat?.currentHp ?? maxHp;
@@ -300,12 +326,12 @@ export function combatScreen(character) {
 
         ${renderClassResources(character)}
 
-        ${equipmentCard(character)}
-
         <section class="combat-section">
           <h2>Weapons</h2>
           <div class="combat-weapons-list">${weaponsBlock}</div>
         </section>
+
+        ${equipmentCard(character)}
 
         <section class="combat-section">
           <h2>Prepared Spells</h2>
