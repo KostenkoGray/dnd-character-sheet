@@ -84,10 +84,12 @@ export function getSkillBonus(character, skillKey, skillData) {
   );
   const proficiencyBonus = getProficiencyBonus(character);
   const equipment = getEquipmentBonuses(character);
+  const characterProficiency = character.skills?.[skillKey];
+  const itemProficiency = equipment.skillProficiencies?.[skillKey];
   const prof =
-    character.skills?.[skillKey] ??
-    equipment.skillProficiencies?.[skillKey] ??
-    PROFICIENCY.NONE;
+    characterProficiency && characterProficiency !== PROFICIENCY.NONE
+      ? characterProficiency
+      : itemProficiency ?? characterProficiency ?? PROFICIENCY.NONE;
   const flatBonus = Number(equipment.skillBonuses?.[skillKey] ?? 0);
 
   let bonus = modifier;
