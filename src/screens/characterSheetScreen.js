@@ -2,6 +2,7 @@ import { STATS, SKILLS, PROFICIENCY } from "../data/rulesData.js";
 import {
   getStatModifier,
   getSkillBonus,
+  getSaveBonus,
   getCharacterLevel,
   getArmorClass,
   getInitiative,
@@ -59,9 +60,7 @@ function getHitDiceTotal(character) {
 
 function renderCompactSavesAndSkills(character) {
   return Object.entries(STATS).map(([statKey, stat]) => {
-    const saveBonus = getStatModifier(character.stats[statKey]) +
-      (character.classes?.some(cls => CLASSES[cls.classId]?.savingThrows?.includes(statKey))
-        ? getProficiencyBonus(character) : 0);
+    const saveBonus = getSaveBonus(character, statKey);
 
     const saveProficient = character.classes?.some(cls =>
       CLASSES[cls.classId]?.savingThrows?.includes(statKey)
@@ -70,7 +69,8 @@ function renderCompactSavesAndSkills(character) {
     const skills = Object.entries(SKILLS)
       .filter(([, skill]) => skill.stat === statKey && skill.type === "skill")
       .map(([skillKey, skill]) => {
-        const proficiency = character.skills?.[skillKey] ?? PROFICIENCY.NONE;
+        const equipmentProficiencies = getEquipmentBonuses(character).skillProficiencies ?? {};
+        const proficiency = character.skills?.[skillKey] ?? equipmentProficiencies[skillKey] ?? PROFICIENCY.NONE;
         const bonus = getSkillBonus(character, skillKey, skill);
         const marker = proficiency === PROFICIENCY.EXPERTISE
           ? "◆"
