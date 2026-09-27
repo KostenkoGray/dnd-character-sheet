@@ -481,19 +481,21 @@ export function ensureInventory(character) {
 }
 
 function syncLegacyEquipment(character) {
-  const armor = getEquippedArmor(character);
-  const shield = getEquippedShield(character);
-  const weapons = getEquippedWeapons(character);
+  const equipped = character.inventory
+    .filter(instance => instance.equipped === true)
+    .map(instance => ({
+      instance,
+      item: getCatalogItem(instance.source, instance.itemId)
+    }))
+    .filter(entry => entry.item);
 
-  character.armor = armor
-    ? getCatalogItem(armor.source, armor.itemId)
-    : null;
+  const armor = equipped.find(entry => entry.item.type === ITEM_TYPES.ARMOR)?.item ?? null;
+  const shield = equipped.find(entry => entry.item.type === ITEM_TYPES.SHIELD)?.item ?? null;
+  const weapons = equipped
+    .filter(entry => entry.item.type === ITEM_TYPES.WEAPON)
+    .map(entry => entry.item);
 
-  character.shield = shield
-    ? getCatalogItem(shield.source, shield.itemId)
-    : null;
-
-  character.weapons = weapons.map(item =>
-    getCatalogItem(item.source, item.itemId)
-  );
+  character.armor = armor;
+  character.shield = shield;
+  character.weapons = weapons;
 }
