@@ -1,7 +1,7 @@
-import { ARMOR, SHIELDS } from "../data/armorData.js";
+import { ARMOR } from "../data/armorData.js";
 import { WEAPONS } from "../data/weaponsData.js";
 import { ARTIFACTS } from "../data/artifactsData.js";
-import { OTHER_ITEMS, TOOLS_DATA } from "../data/otherItemsData.js";
+import { OTHER_ITEMS } from "../data/otherItemsData.js";
 
 export const ITEM_TYPES = {
   ARMOR: "armor",
@@ -23,14 +23,12 @@ export const ITEM_TYPE_LABELS = {
 
 export const ITEM_SOURCES = {
   ARMOR: "armor",
-  SHIELD: "shield",
   WEAPON: "weapon",
   ARTIFACT: "artifact",
-  TOOL: "tool",
   OTHER: "other"
 };
 
-const INVENTORY_SCHEMA_VERSION = 1;
+const INVENTORY_SCHEMA_VERSION = 2;
 let fallbackInstanceCounter = 0;
 
 function createInstanceId() {
@@ -66,10 +64,13 @@ function normalizeCatalogItem(source, item, type) {
 export function getItemCatalog() {
   return [
     ...Object.values(ARMOR).map(item =>
-      normalizeCatalogItem(ITEM_SOURCES.ARMOR, item, ITEM_TYPES.ARMOR)
-    ),
-    ...Object.values(SHIELDS).map(item =>
-      normalizeCatalogItem(ITEM_SOURCES.SHIELD, item, ITEM_TYPES.SHIELD)
+      normalizeCatalogItem(
+        ITEM_SOURCES.ARMOR,
+        item,
+        item.category === ITEM_TYPES.SHIELD
+          ? ITEM_TYPES.SHIELD
+          : ITEM_TYPES.ARMOR
+      )
     ),
     ...Object.values(WEAPONS).map(item =>
       normalizeCatalogItem(ITEM_SOURCES.WEAPON, item, ITEM_TYPES.WEAPON)
@@ -77,11 +78,14 @@ export function getItemCatalog() {
     ...Object.values(ARTIFACTS).map(item =>
       normalizeCatalogItem(ITEM_SOURCES.ARTIFACT, item, ITEM_TYPES.ARTIFACT)
     ),
-    ...Object.values(TOOLS_DATA).map(item =>
-      normalizeCatalogItem(ITEM_SOURCES.TOOL, item, ITEM_TYPES.TOOL)
-    ),
     ...Object.values(OTHER_ITEMS).map(item =>
-      normalizeCatalogItem(ITEM_SOURCES.OTHER, item, ITEM_TYPES.OTHER)
+      normalizeCatalogItem(
+        ITEM_SOURCES.OTHER,
+        item,
+        item.type === ITEM_TYPES.TOOL
+          ? ITEM_TYPES.TOOL
+          : ITEM_TYPES.OTHER
+      )
     )
   ].filter(Boolean);
 }
@@ -393,16 +397,6 @@ export function removeItemFromInventory(character, instanceId) {
   };
 }
 
-function createMigratedInstance(characterId, source, item, index) {
-  return {
-    instanceId: `legacy-${characterId}-${source}-${item.id}-${index}`,
-    source,
-    itemId: item.id,
-    equipped: true,
-    quantity: 1
-  };
-}
-
 export function ensureInventory(character) {
   if (!character || typeof character !== "object") {
     return character;
@@ -412,90 +406,31 @@ export function ensureInventory(character) {
     character.inventory = [];
   }
 
-  const hasLegacyEquipment =
-    character.armor ||
-    character.shield ||
-    (Array.isArray(character.weapons) && character.weapons.length);
-
-  if (
-    character.inventory.length === 0 &&
-    hasLegacyEquipment
-  ) {
-    let index = 0;
-
-    if (character.armor?.id) {
-      character.inventory.push(
-        createMigratedInstance(
-          character.id,
-          ITEM_SOURCES.ARMOR,
-          character.armor,
-          index++
-        )
-      );
-    }
-
-    if (character.shield?.id) {
-      character.inventory.push(
-        createMigratedInstance(
-          character.id,
-          ITEM_SOURCES.SHIELD,
-          character.shield,
-          index++
-        )
-      );
-    }
-
-    for (const weapon of character.weapons ?? []) {
-      if (!weapon?.id) continue;
-
-      character.inventory.push(
-        createMigratedInstance(
-          character.id,
-          ITEM_SOURCES.WEAPON,
-          weapon,
-          index++
-        )
-      );
-    }
-  }
-
   for (const instance of character.inventory) {
     instance.instanceId ??= createInstanceId();
     instance.quantity = Math.max(1, Number(instance.quantity ?? 1));
     instance.equipped = instance.equipped === true;
 
-    const catalogItem = getCatalogItem(instance.source, instance.itemId);
-    if (!catalogItem) {
+    if (
+      typeof instance.source !== "string" ||
+      typeof instance.itemId !== "string"
+    ) {
+      instance.equipped = false;
       continue;
     }
 
-    instance.source ??= catalogItem.source;
-    instance.itemId ??= catalogItem.itemId;
+    const catalogItem = getCatalogItem(instance.source, instance.itemId);
+
+    if (!catalogItem) {
+      instance.equipped = false;
+      continue;
+    }
+
+    instance.source = catalogItem.source;
+    instance.itemId = catalogItem.itemId;
   }
 
   character.inventorySchemaVersion = INVENTORY_SCHEMA_VERSION;
 
-  syncLegacyEquipment(character);
-
   return character;
-}
-
-function syncLegacyEquipment(character) {
-  const equipped = character.inventory
-    .filter(instance => instance.equipped === true)
-    .map(instance => ({
-      instance,
-      item: getCatalogItem(instance.source, instance.itemId)
-    }))
-    .filter(entry => entry.item);
-
-  const armor = equipped.find(entry => entry.item.type === ITEM_TYPES.ARMOR)?.item ?? null;
-  const shield = equipped.find(entry => entry.item.type === ITEM_TYPES.SHIELD)?.item ?? null;
-  const weapons = equipped
-    .filter(entry => entry.item.type === ITEM_TYPES.WEAPON)
-    .map(entry => entry.item);
-
-  character.armor = armor;
-  character.shield = shield;
-  character.weapons = weapons;
 }
