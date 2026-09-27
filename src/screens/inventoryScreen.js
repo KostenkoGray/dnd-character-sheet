@@ -3,6 +3,7 @@ import {
   ITEM_TYPE_LABELS,
   getInventoryItems
 } from "../services/inventoryService.js";
+import { bottomNavigation } from "../components/bottomNavigation.js";
 
 const TYPE_ORDER = [
   ITEM_TYPES.ARMOR,
@@ -236,24 +237,7 @@ export function inventoryScreen(character, filter = {}) {
         </div>
       </main>
 
-      <nav class="bottom-navigation">
-        ${[
-          { id: "sheet", icon: "📋", label: "Sheet" },
-          { id: "combat", icon: "⚔️", label: "Combat" },
-          { id: "inventory", icon: "🎒", label: "Inventory" },
-          { id: "magic", icon: "✨", label: "Magic" },
-          { id: "dice", icon: "🎲", label: "Dice" },
-          { id: "notes", icon: "📝", label: "Notes" }
-        ].map(screen => `
-          <button
-            class="nav-item ${screen.id === "inventory" ? "active" : ""}"
-            data-screen="${screen.id}"
-          >
-            <span class="nav-icon">${screen.icon}</span>
-            <span class="nav-label">${screen.label}</span>
-          </button>
-        `).join("")}
-      </nav>
+      ${bottomNavigation("inventory")} </nav>
     </div>
   `;
 }
