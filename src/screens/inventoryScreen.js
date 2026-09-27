@@ -192,10 +192,18 @@ export function inventoryScreen(character, filter = {}) {
       <main class="inventory-main">
         <div class="inventory-header">
           <div>
-            <span class="inventory-kicker">Персонаж</span>
             <h1>Інвентар</h1>
             <p>${escapeHtml(character.name)} · ${inventory.length} предметів</p>
           </div>
+
+          <button
+            type="button"
+            id="close-inventory"
+            class="close-character-sheet"
+            aria-label="Повернутися до Character Sheet"
+          >
+            ×
+          </button>
 
           <button
             type="button"
@@ -237,7 +245,7 @@ export function inventoryScreen(character, filter = {}) {
         </div>
       </main>
 
-      ${bottomNavigation("inventory")} </nav>
+      ${bottomNavigation("inventory")}
     </div>
   `;
 }
