@@ -1,4 +1,4 @@
-const STORAGE_KEY = "dnd-character-sheet.characters.v1";
+const STORAGE_KEY = "dnd-character-sheet.characters.v2";
 
 export function loadCharacters(fallbackCharacters = []) {
   try {
