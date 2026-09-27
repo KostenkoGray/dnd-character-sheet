@@ -2,7 +2,7 @@
 // ІНШІ ПРЕДМЕТИ PHB 2014
 // ==================================================
 
-export const TOOLS_DATA = {
+export const OTHER_ITEMS = {
   smithsTools: {
     id: "smithsTools",
     name: "Smith's Tools",
@@ -33,10 +33,9 @@ export const TOOLS_DATA = {
     ukr: "Інструменти майстра",
     type: "tool",
     description: "Набір інструментів для ремонту та дрібних механічних робіт."
-  }
-};
+  },
 
-export const OTHER_ITEMS = {
+
   backpack: {
     id: "backpack",
     name: "Backpack",
