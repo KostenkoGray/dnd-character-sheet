@@ -9,15 +9,19 @@ import {
   getPassivePerception,
   getProficiencyBonus,
   getWeaponAttackBonus,
-  getWeaponDamageBonus,
-  getEquipmentBonuses
+  getWeaponDamageBonus
 } from "../services/characterCalculationsService.js";
 import { CLASSES } from "../data/classesData.js";
 import { FEATURES } from "../data/featuresData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
 import { renderDeathSaves } from "../components/deathSaves.js";
 import { equipmentCard } from "../components/equipmentCard.js";
-import { getInventoryFeatureEntries, getEffectiveAbilityScore, getEquippedWeapons } from "../services/inventoryService.js";
+import {
+  getInventoryFeatureEntries,
+  getEffectiveAbilityScore,
+  getEquippedWeapons,
+  getEquipmentBonuses
+} from "../services/inventoryService.js";
 
 // ==================================================
 // CHARACTER SHEET
