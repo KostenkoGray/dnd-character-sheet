@@ -165,7 +165,12 @@ export function calculateRecommendedHpIncrease(character, classId) {
 
   if (!classData?.hitDie) return 0;
 
-  return Math.floor(classData.hitDie / 2) + 1;
+  const hitDieAverage = Math.floor(classData.hitDie / 2) + 1;
+  const constitutionModifier = Math.floor(
+    (Number(character.stats?.constitution ?? 10) - 10) / 2
+  );
+
+  return Math.max(1, hitDieAverage + constitutionModifier);
 }
 
 function validateAbilityScoreImprovement(character, asi) {
