@@ -475,10 +475,25 @@ export function ensureInventory(character) {
 
   character.inventorySchemaVersion = INVENTORY_SCHEMA_VERSION;
 
-  // Legacy fields are no longer sources of truth after migration.
-  delete character.armor;
-  delete character.shield;
-  delete character.weapons;
+  syncLegacyEquipment(character);
 
   return character;
+}
+
+function syncLegacyEquipment(character) {
+  const armor = getEquippedArmor(character);
+  const shield = getEquippedShield(character);
+  const weapons = getEquippedWeapons(character);
+
+  character.armor = armor
+    ? getCatalogItem(armor.source, armor.itemId)
+    : null;
+
+  character.shield = shield
+    ? getCatalogItem(shield.source, shield.itemId)
+    : null;
+
+  character.weapons = weapons.map(item =>
+    getCatalogItem(item.source, item.itemId)
+  );
 }
