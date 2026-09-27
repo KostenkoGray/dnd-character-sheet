@@ -2324,6 +2324,7 @@ p {
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;
+  padding-right: 54px;
 }
 
 .inventory-kicker {
