@@ -8,7 +8,6 @@ import {
   getInitiative,
   getPassivePerception,
   getProficiencyBonus,
-  getEffectiveAbilityScore,
   getWeaponAttackBonus,
   getWeaponDamageBonus,
   getEquipmentBonuses
@@ -18,7 +17,7 @@ import { FEATURES } from "../data/featuresData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
 import { renderDeathSaves } from "../components/deathSaves.js";
 import { equipmentCard } from "../components/equipmentCard.js";
-import { getInventoryFeatureEntries } from "../services/inventoryService.js";
+import { getInventoryFeatureEntries, getEffectiveAbilityScore } from "../services/inventoryService.js";
 
 // ==================================================
 // CHARACTER SHEET
