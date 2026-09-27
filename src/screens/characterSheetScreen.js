@@ -13,13 +13,25 @@ import {
   getEquipmentBonuses
 } from "../services/characterCalculationsService.js";
 import { CLASSES } from "../data/classesData.js";
+import { FEATURES } from "../data/featuresData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
 import { renderDeathSaves } from "../components/deathSaves.js";
 import { equipmentCard } from "../components/equipmentCard.js";
+import { getInventoryFeatureEntries } from "../services/inventoryService.js";
 
 // ==================================================
 // CHARACTER SHEET
 // ==================================================
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/\u0027/g, "&#039;");
+}
+
 
 
 // ==================================================
@@ -209,6 +221,71 @@ function renderClassResources(character) {
     <section class="combat-section combat-class-resources">
       <h2>Class Resources</h2>
       <div class="combat-resources">${blocks.join("")}</div>
+    </section>
+  `;
+}
+
+function renderCharacterFeatures(character) {
+  const groups = [];
+
+  for (const cls of character.classes ?? []) {
+    const classData = CLASSES[cls.classId];
+    if (!classData) continue;
+
+    const entries = [];
+    for (const [levelKey, featureIds] of Object.entries(classData.featuresByLevel ?? {})) {
+      if (Number(levelKey) > Number(cls.level ?? 0)) continue;
+      for (const featureId of featureIds ?? []) {
+        const feature = FEATURES[featureId];
+        if (feature) entries.push({ feature, level: Number(levelKey) });
+      }
+    }
+
+    const subclass = cls.subclassId ? classData.subclasses?.[cls.subclassId] : null;
+    for (const [levelKey, featureIds] of Object.entries(subclass?.featuresByLevel ?? {})) {
+      if (Number(levelKey) > Number(cls.level ?? 0)) continue;
+      for (const featureId of featureIds ?? []) {
+        const feature = FEATURES[featureId];
+        if (feature) entries.push({ feature, level: Number(levelKey), subclass: true });
+      }
+    }
+
+    const unique = [];
+    const seen = new Set();
+    for (const entry of entries) {
+      const key = entry.feature.id + (entry.subclass ? ":subclass" : ":class");
+      if (seen.has(key)) continue;
+      seen.add(key);
+      unique.push(entry);
+    }
+
+    if (unique.length) groups.push({ title: classData.ukr, entries: unique });
+  }
+
+  const itemFeatures = getInventoryFeatureEntries(character);
+  if (itemFeatures.length) {
+    groups.push({ title: "Від спорядження", entries: itemFeatures.map(feature => ({ feature, item: true })) });
+  }
+
+  const groupHtml = groups.map(group => `
+    <section class="character-features-group">
+      <div class="character-features-group-heading">${escapeHtml(group.title)}</div>
+      ${group.entries.map(entry => {
+        const feature = entry.feature;
+        const source = entry.item ? "Предмет" : entry.subclass ? "Підклас" : "Клас";
+        const levelText = entry.level ? `Рівень ${entry.level}` : "";
+        return `<article class="character-feature-row">
+          <div class="character-feature-main"><strong>${escapeHtml(feature.ukr ?? feature.name ?? feature.id)}</strong><span>${escapeHtml(source)}${levelText ? ` · ${levelText}` : ""}</span></div>
+          <p>${escapeHtml(feature.short ?? "")}</p>
+        </article>`;
+      }).join("")}
+    </section>
+  `).join("");
+
+  return `
+    <section class="combat-section character-features-section">
+      <h2>Здібності та властивості</h2>
+      ${groupHtml || "<p class=\"inventory-empty\">Немає записаних здібностей.</p>"}
     </section>
   `;
 }
@@ -436,6 +513,8 @@ export function characterSheetScreen(character) {
         </section>
 
 
+
+        ${renderCharacterFeatures(character)}
 
         <section class="combat-section">
           <h2>Saving Throws &amp; Skills</h2>
