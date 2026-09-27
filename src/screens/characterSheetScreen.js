@@ -358,41 +358,6 @@ function renderCharacterFeatures(character) {
   `;
 }
 
-function renderEquippedItems(character) {
-  const items = [];
-
-  if (character.armor) {
-    items.push(`
-      <div class="equipped-item">
-        <strong>${character.armor.ukr}</strong>
-        <span>AC ${character.armor.baseAC}</span>
-      </div>
-    `);
-  }
-
-  if (character.shield) {
-    items.push(`
-      <div class="equipped-item">
-        <strong>${character.shield.ukr}</strong>
-        <span>+${character.shield.acBonus} AC</span>
-      </div>
-    `);
-  }
-
-  for (const item of character.equippedItems ?? []) {
-    items.push(`
-      <div class="equipped-item">
-        <strong>${item.ukr ?? item.name}</strong>
-        <span>Equipped</span>
-      </div>
-    `);
-  }
-
-  return items.length
-    ? items.join("")
-    : "<p>Немає екіпірованих елементів.</p>";
-}
-
 export function characterSheetScreen(character) {
 
   const statsBlock = Object.entries(character.stats)
