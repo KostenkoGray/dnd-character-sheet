@@ -1,11 +1,5 @@
-import { clamp } from "./characterCalculationsService.js";
+import { clamp, getHitDiceTotal } from "./characterCalculationsService.js";
 
-function getHitDiceTotal(character) {
-  return (character.classes ?? []).reduce(
-    (sum, cls) => sum + Number(cls.level ?? 0),
-    0
-  );
-}
 
 export function ensureCombatState(character) {
   character.combat ??= {
