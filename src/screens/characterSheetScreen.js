@@ -6,11 +6,16 @@ import {
   getArmorClass,
   getInitiative,
   getPassivePerception,
-  getProficiencyBonus
+  getProficiencyBonus,
+  getEffectiveAbilityScore,
+  getWeaponAttackBonus,
+  getWeaponDamageBonus,
+  getEquipmentBonuses
 } from "../services/characterCalculationsService.js";
 import { CLASSES } from "../data/classesData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
 import { renderDeathSaves } from "../components/deathSaves.js";
+import { equipmentCard } from "../components/equipmentCard.js";
 
 // ==================================================
 // CHARACTER SHEET
@@ -89,17 +94,10 @@ function renderCompactSavesAndSkills(character) {
 }
 
 function renderWeapon(weapon, character) {
-  const abilityModifier = getStatModifier(
-    weapon.properties?.includes("finesse")
-      ? Math.max(character.stats.strength, character.stats.dexterity)
-      : weapon.type === "ranged"
-        ? character.stats.dexterity
-        : character.stats.strength
-  );
-
-  const attackBonus = abilityModifier + getProficiencyBonus(character);
+  const attackBonus = getWeaponAttackBonus(character, weapon);
+  const damageBonus = getWeaponDamageBonus(character, weapon);
   const damage = weapon.damage
-    ? `${weapon.damage} ${formatModifier(abilityModifier)}`
+    ? `${weapon.damage} ${formatModifier(damageBonus)}`
     : "Без шкоди";
 
   const properties = weapon.properties?.length
@@ -254,14 +252,17 @@ export function characterSheetScreen(character) {
 
   const statsBlock = Object.entries(character.stats)
     .map(([key, value]) => {
-      const modifier = getStatModifier(value);
+      const effectiveValue = getEffectiveAbilityScore(character, key);
+      const modifier = getStatModifier(effectiveValue);
       const sign = modifier >= 0 ? "+" : "";
+      const itemBonus = effectiveValue - Number(value);
 
       return `
         <div class="stat-card">
           <div class="stat-name">${STATS[key].short}</div>
-          <div class="stat-value">${value}</div>
+          <div class="stat-value">${effectiveValue}</div>
           <div class="stat-modifier">${sign}${modifier}</div>
+          ${itemBonus ? `<small class="stat-equipment-bonus">${itemBonus > 0 ? "+" : ""}${itemBonus} від спорядження</small>` : ""}
         </div>
       `;
     })
@@ -312,12 +313,11 @@ export function characterSheetScreen(character) {
   const initiative = getInitiative(character);
   const passivePerception = getPassivePerception(character);
   const proficiency = getProficiencyBonus(character);
-  const speedFeet = character.race.subrace?.speed ?? character.race.race.speed;
+  const baseSpeedFeet = character.race.subrace?.speed ?? character.race.race.speed;
+  const speedFeet = baseSpeedFeet + Number(getEquipmentBonuses(character).speedBonus ?? 0);
   const speedSquares = Math.floor(speedFeet / 5);
 
-  const weaponsBlock = (character.weapons ?? []).length
-    ? character.weapons.map(weapon => renderWeapon(weapon, character)).join("")
-    : "<p>Немає спорядженої зброї.</p>";
+
 
   return `
     <div class="app">
@@ -428,20 +428,14 @@ export function characterSheetScreen(character) {
 
         ${renderClassResources(character)}
 
-        <section class="combat-section">
-          <h2>Weapons</h2>
-          <div class="combat-weapons-list">${weaponsBlock}</div>
-        </section>
+        ${equipmentCard(character)}
 
         <section class="combat-section">
           <h2>Prepared Spells</h2>
           <p>Поки немає підготовлених заклинань.</p>
         </section>
 
-        <section class="combat-section">
-          <h2>Armor & Equipped Items</h2>
-          <div class="combat-equipped-items">${renderEquippedItems(character)}</div>
-        </section>
+
 
         <section class="combat-section">
           <h2>Saving Throws &amp; Skills</h2>
