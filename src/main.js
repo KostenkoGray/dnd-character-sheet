@@ -16,6 +16,7 @@ import {
 import { charactersScreen } from "./screens/characterListScreen.js";
 import { characterSheetScreen } from "./screens/characterSheetScreen.js";
 import { combatScreen } from "./screens/combatScreen.js";
+import { inventoryScreen, renderInventoryList } from "./screens/inventoryScreen.js";
 import { getStatModifier, getHitDiceTotal, clamp } from "./services/characterCalculationsService.js";
 import { CLASSES } from "./data/classesData.js";
 import { saveCharacters, loadSettings, saveSettings } from "./services/storageService.js";
@@ -24,6 +25,19 @@ import { bottomNavigation } from "./components/bottomNavigation.js";
 import { FEATS } from "./data/featsData.js";
 import { handleDeathSaveClick } from "./components/deathSaves.js";
 import { ensureCombatState } from "./services/combatStateService.js";
+import {
+  ITEM_TYPES,
+  ITEM_TYPE_LABELS,
+  addItemToInventory,
+  equipInventoryItem,
+  unequipInventoryItem,
+  removeItemFromInventory,
+  getItemCatalog,
+  getInventoryItems,
+  getCatalogItem,
+  getInventoryItem,
+  ensureInventory
+} from "./services/inventoryService.js";
 import {
   REST_TYPES,
   HP_LEVEL_UP_METHODS,
@@ -42,6 +56,7 @@ const app = document.querySelector("#app");
 let currentCharacter = null;
 let currentScreen = "list";
 let undoState = null;
+let inventoryFilter = { search: "", type: "all" };
 
 function cloneCharacterState(character) {
   return typeof structuredClone === "function"
@@ -205,6 +220,164 @@ function confirmUndoLastAction(character) {
   });
 }
 
+function renderEquipmentPickerBody(character, allowedTypes, currentItemId = "") {
+  const typeSet = new Set(allowedTypes);
+  const items = getInventoryItems(character).filter(item => typeSet.has(item.type)).sort((a, b) => {
+    if (a.equipped !== b.equipped) return a.equipped ? -1 : 1;
+    return String(a.ukr ?? a.name).localeCompare(String(b.ukr ?? b.name), "uk");
+  });
+
+  const grouped = allowedTypes.map(type => {
+    const groupItems = items.filter(item => item.type === type);
+    if (!groupItems.length) {
+      return `<section class="equipment-picker-group"><h3>${escapeHtml(ITEM_TYPE_LABELS[type])}</h3><p class="inventory-empty">Немає таких предметів в інвентарі.</p></section>`;
+    }
+    return `<section class="equipment-picker-group"><h3>${escapeHtml(ITEM_TYPE_LABELS[type])}</h3><div class="equipment-picker-list">${groupItems.map(item => {
+      const isCurrent = item.instanceId === currentItemId;
+      const action = item.equipped ? "Зняти" : "Екіпірувати";
+      return `<article class="equipment-picker-item ${isCurrent ? "current" : ""}"><div class="equipment-picker-item-info"><strong>${escapeHtml(item.ukr ?? item.name)}</strong>${item.equipped ? `<span class="inventory-equipped-badge">Екіпіровано</span>` : ""}<small>${escapeHtml(item.description || "Опис відсутній.")}</small></div><button type="button" class="inventory-action-button ${item.equipped ? "secondary" : "primary"}" data-equipment-choice="${escapeHtml(item.instanceId)}">${action}</button></article>`;
+    }).join("")}</div></section>`;
+  }).join("");
+  return `<div class="equipment-picker-hint">Оберіть предмет із вашого інвентаря.</div>${grouped}`;
+}
+
+function openEquipmentPicker(character, allowedTypes, currentItemId = "") {
+  const uniqueTypes = [...new Set(allowedTypes)];
+  showCampDialog({
+    title: uniqueTypes.length === 1 ? `Екіпірування — ${ITEM_TYPE_LABELS[uniqueTypes[0]]}` : "Екіпірування",
+    body: renderEquipmentPickerBody(character, uniqueTypes, currentItemId),
+    confirmLabel: "Готово"
+  });
+
+  const backdrop = document.querySelector(".camp-dialog-backdrop");
+  if (!backdrop) return;
+
+  backdrop.addEventListener("click", event => {
+    const button = event.target.closest("[data-equipment-choice]");
+    if (!button) return;
+    const instanceId = button.dataset.equipmentChoice;
+    const item = getInventoryItem(character, instanceId);
+    if (!item) return;
+
+    if (item.equipped) {
+      const result = unequipInventoryItem(character, instanceId);
+      if (!result.ok) {
+        showCampDialog({ title: "Не вдалося зняти предмет", body: `<p>${escapeHtml(result.message)}</p>`, confirmLabel: "Закрити" });
+        return;
+      }
+    } else {
+      if (currentItemId && currentItemId !== instanceId) {
+        const current = getInventoryItem(character, currentItemId);
+        if (current?.equipped) {
+          const currentCatalog = getCatalogItem(current.source, current.itemId);
+          if (currentCatalog?.type === ITEM_TYPES.WEAPON && item.type === ITEM_TYPES.WEAPON) {
+            unequipInventoryItem(character, currentItemId);
+          }
+        }
+      }
+      const result = equipInventoryItem(character, instanceId);
+      if (!result.ok) {
+        showCampDialog({ title: "Не вдалося екіпірувати", body: `<p>${escapeHtml(result.message)}</p>`, confirmLabel: "Закрити" });
+        return;
+      }
+    }
+
+    persistCharacters();
+    render();
+    setTimeout(() => openEquipmentPicker(character, uniqueTypes, ""), 0);
+  });
+}
+
+function renderAddItemBody(state) {
+  const search = String(state.search ?? "").trim().toLowerCase();
+  const typeFilter = state.type ?? "all";
+  const catalog = getItemCatalog().filter(item => typeFilter === "all" || item.type === typeFilter).filter(item => {
+    if (!search) return true;
+    return [item.ukr, item.name, item.description].join(" ").toLowerCase().includes(search);
+  }).sort((a, b) => String(a.ukr ?? a.name).localeCompare(String(b.ukr ?? b.name), "uk"));
+
+  const results = catalog.length ? catalog.map(item => `<article class="inventory-add-result"><div class="inventory-add-result-info"><strong>${escapeHtml(item.ukr ?? item.name)}</strong><span>${escapeHtml(ITEM_TYPE_LABELS[item.type])}</span><small>${escapeHtml(item.description || "Опис відсутній.")}</small></div><button type="button" class="inventory-action-button primary" data-add-item-source="${escapeHtml(item.source)}" data-add-item-id="${escapeHtml(item.itemId)}">Додати</button></article>`).join("") : `<p class="inventory-empty">Нічого не знайдено.</p>`;
+
+  return `<section class="inventory-add-filters"><label class="inventory-search"><span>Пошук</span><input id="inventory-add-search" type="search" value="${escapeHtml(state.search ?? "")}" placeholder="Назва предмета..." autocomplete="off"></label><label class="inventory-type-filter"><span>Тип</span><select id="inventory-add-type"><option value="all" ${typeFilter === "all" ? "selected" : ""}>Усі типи</option>${Object.values(ITEM_TYPES).map(type => `<option value="${type}" ${typeFilter === type ? "selected" : ""}>${escapeHtml(ITEM_TYPE_LABELS[type])}</option>`).join("")}</select></label></section><div class="inventory-add-results">${results}</div>`;
+}
+
+function openAddItemDialog(character) {
+  const state = { search: "", type: "all" };
+  showCampDialog({ title: "Додати предмет", body: renderAddItemBody(state), confirmLabel: "Готово" });
+
+  const backdrop = document.querySelector(".camp-dialog-backdrop");
+  if (!backdrop) return;
+
+  const rerenderBody = focusSearch => {
+    const body = backdrop.querySelector(".camp-dialog-body");
+    if (!body) return;
+    body.innerHTML = renderAddItemBody(state);
+    if (focusSearch) {
+      const input = body.querySelector("#inventory-add-search");
+      input?.focus();
+      input?.setSelectionRange(state.search.length, state.search.length);
+    }
+  };
+
+  backdrop.addEventListener("input", event => {
+    if (event.target.id !== "inventory-add-search") return;
+    state.search = event.target.value;
+    rerenderBody(true);
+  });
+
+  backdrop.addEventListener("change", event => {
+    if (event.target.id !== "inventory-add-type") return;
+    state.type = event.target.value;
+    rerenderBody(false);
+  });
+
+  backdrop.addEventListener("click", event => {
+    const button = event.target.closest("[data-add-item-source]");
+    if (!button) return;
+    const result = addItemToInventory(character, button.dataset.addItemSource, button.dataset.addItemId);
+    if (!result.ok) {
+      showCampDialog({ title: "Не вдалося додати", body: `<p>${escapeHtml(result.message)}</p>`, confirmLabel: "Закрити" });
+      return;
+    }
+    persistCharacters();
+    render();
+  });
+}
+
+function confirmDeleteInventoryItem(character, instanceId) {
+  const item = getInventoryItems(character).find(entry => entry.instanceId === instanceId);
+  if (!item) return;
+
+  showCampDialog({
+    title: "Видалити предмет?",
+    body: `<p>Ви впевнені, що хочете видалити <strong>${escapeHtml(item.ukr ?? item.name)}</strong> з інвентаря?</p>`,
+    confirmLabel: "Видалити",
+    onConfirm: () => {
+      const result = removeItemFromInventory(character, instanceId);
+      if (!result.ok) {
+        showCampDialog({ title: "Не вдалося видалити", body: `<p>${escapeHtml(result.message)}</p>`, confirmLabel: "Закрити" });
+        return false;
+      }
+      persistCharacters();
+      render();
+    }
+  });
+}
+
+function handleInventoryAction(character, action, instanceId) {
+  if (action === "delete") {
+    confirmDeleteInventoryItem(character, instanceId);
+    return;
+  }
+
+  const result = action === "equip" ? equipInventoryItem(character, instanceId) : unequipInventoryItem(character, instanceId);
+  if (!result.ok) {
+    showCampDialog({ title: action === "equip" ? "Не вдалося екіпірувати" : "Не вдалося зняти предмет", body: `<p>${escapeHtml(result.message)}</p>`, confirmLabel: "Закрити" });
+    return;
+  }
+  persistCharacters();
+  render();
+}
 function getPrimaryHitDie(character) {
   const primaryClass = (character.classes ?? [])
     .slice()
@@ -1259,6 +1432,7 @@ function persistCharacters() {
 }
 
 function render() {
+  if (currentCharacter) ensureInventory(currentCharacter);
   persistCharacters();
   switch (currentScreen) {
     case "list":
@@ -1274,6 +1448,9 @@ function render() {
       break;
 
     case "inventory":
+      app.innerHTML = inventoryScreen(currentCharacter, inventoryFilter);
+      break;
+
     case "magic":
     case "dice":
     case "notes":
@@ -1290,7 +1467,43 @@ function render() {
   }
 }
 
+app.addEventListener("input", event => {
+  if (currentScreen !== "inventory" || event.target.id !== "inventory-search") return;
+  inventoryFilter.search = event.target.value;
+  const sections = document.querySelector(".inventory-sections");
+  if (sections) sections.innerHTML = renderInventoryList(currentCharacter, inventoryFilter);
+});
+
+app.addEventListener("change", event => {
+  if (currentScreen !== "inventory" || event.target.id !== "inventory-type") return;
+  inventoryFilter.type = event.target.value;
+  const sections = document.querySelector(".inventory-sections");
+  if (sections) sections.innerHTML = renderInventoryList(currentCharacter, inventoryFilter);
+});
+
 app.addEventListener("click", (event) => {
+  if (currentScreen === "inventory" && currentCharacter) {
+    const addButton = event.target.closest("#inventory-add-item");
+    if (addButton) {
+      openAddItemDialog(currentCharacter);
+      return;
+    }
+
+    const inventoryAction = event.target.closest("[data-inventory-action]");
+    if (inventoryAction) {
+      handleInventoryAction(currentCharacter, inventoryAction.dataset.inventoryAction, inventoryAction.dataset.inventoryId);
+      return;
+    }
+  }
+
+  const equipmentPicker = event.target.closest("[data-equipment-picker]");
+  if ((currentScreen === "sheet" || currentScreen === "combat") && currentCharacter && equipmentPicker) {
+    const allowedTypes = String(equipmentPicker.dataset.equipmentTypes ?? "").split(",").map(value => value.trim()).filter(Boolean);
+    openEquipmentPicker(currentCharacter, allowedTypes, equipmentPicker.dataset.equipmentCurrentId ?? "");
+    return;
+  }
+
+  
   const card = event.target.closest(".character-card");
 
   if (card && currentScreen === "list") {
@@ -1562,6 +1775,7 @@ app.addEventListener("click", (event) => {
   if (!nav) return;
 
   currentScreen = nav.dataset.screen;
+  if (currentScreen !== "inventory") inventoryFilter = { search: "", type: "all" };
   render();
 });
 
