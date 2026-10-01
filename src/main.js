@@ -261,7 +261,7 @@ function showNumericInputDialog({ title, label, value, onConfirm }) {
       const input = document.querySelector("#camp-numeric-input");
       const raw = input?.value ?? "";
 
-      if (!/^\\d+$/.test(raw)) return false;
+      if (!/^\d+$/.test(raw)) return false;
 
       const parsed = Number(raw);
       if (!Number.isFinite(parsed)) return false;
