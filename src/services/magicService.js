@@ -128,10 +128,9 @@ function getPreparedLimitForSource(character, source) {
   const modifier = getStatModifier(
     getEffectiveAbilityScore(character, ability)
   );
-  const divisor = Number(source.spellcasting.preparationLevelDivisor ?? 1);
   const classLevel = Number(source.classEntry.level ?? 0);
 
-  return Math.max(1, Math.floor(classLevel / divisor) + modifier);
+  return Math.max(1, classLevel + modifier);
 }
 
 function getAvailableSourcesForSpell(character, spell) {
@@ -309,13 +308,24 @@ export function getKnownSpellEntries(character) {
         sourceClassIds.includes(source.classEntry.classId)
       );
 
+      const source = sources.find(item =>
+        item.classEntry.classId === (entry.sourceClassId ?? sourceClassIds[0] ?? "")
+      );
+
+      const automaticPrepared =
+        source?.spellcasting?.preparation === MAGIC_PREPARATION.KNOWN;
+
       return {
         ...spell,
         sourceClassIds,
         preparedSourceClassIds,
         sourceClassId: entry.sourceClassId ?? sourceClassIds[0] ?? "",
         sources,
-        prepared: preparedSourceClassIds.length > 0
+        autoKnown: Boolean(entry.autoKnown),
+        preparation: source?.spellcasting?.preparation ?? null,
+        prepared:
+          automaticPrepared ||
+          preparedSourceClassIds.length > 0
       };
     })
     .filter(Boolean);
@@ -334,9 +344,7 @@ export function getKnownSpellsForSource(character, sourceClassId) {
 }
 
 export function getPreparedSpells(character) {
-  return getKnownSpellEntries(character).filter(spell =>
-    spell.level > 0 && spell.prepared
-  );
+  return getKnownSpellEntries(character).filter(spell => spell.prepared);
 }
 
 function countKnownForSource(character, sourceClassId, level = null) {
@@ -432,7 +440,8 @@ export function addSpellToCharacter(character, spellId, sourceClassId = "") {
     spellId,
     sourceClassId: source.classEntry.classId,
     sourceClassIds: [source.classEntry.classId],
-    preparedSourceClassIds: []
+    preparedSourceClassIds: [],
+    autoKnown: false
   };
 
   character.magic.spells.push(entry);
@@ -466,6 +475,21 @@ export function toggleSpellPrepared(character, spellId, sourceClassId = "") {
   const preparedSources = availableSources.filter(source =>
     source.spellcasting?.preparation === MAGIC_PREPARATION.PREPARED
   );
+
+  if (sourceClassId) {
+    const requestedSource = getSpellcastingSources(character).find(item =>
+      item.classEntry.classId === sourceClassId
+    );
+
+    if (
+      requestedSource?.spellcasting?.preparation === MAGIC_PREPARATION.KNOWN
+    ) {
+      return {
+        ok: false,
+        message: "Цьому класу не потрібна підготовка заклять."
+      };
+    }
+  }
 
   const source = preparedSources.find(item =>
     item.classEntry.classId === (sourceClassId || entry.sourceClassId)
@@ -559,6 +583,15 @@ export function removeSpellFromCharacter(character, spellId) {
   const index = character.magic.spells.findIndex(entry => entry.spellId === spellId);
   if (index === -1) {
     return { ok: false, message: "Заклинання не знайдено." };
+  }
+
+  const entry = character.magic.spells[index];
+
+  if (entry.autoKnown) {
+    return {
+      ok: false,
+      message: "Це заклинання автоматично відоме класу й не може бути видалене."
+    };
   }
 
   character.magic.spells.splice(index, 1);
