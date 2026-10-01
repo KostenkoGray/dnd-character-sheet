@@ -672,72 +672,122 @@ function handleInventoryAction(character, action, instanceId) {
   persistCharacters();
   render();
 }
-function getPrimaryHitDie(character) {
-  const primaryClass = (character.classes ?? [])
-    .slice()
-    .sort((a, b) => Number(b.level ?? 0) - Number(a.level ?? 0))[0];
-
-  return Number(primaryClass ? (CLASSES[primaryClass.classId]?.hitDie ?? 0) : 0);
+function normalizeSpentHitDice(spentByClass = {}) {
+  return Object.fromEntries(
+    Object.entries(spentByClass ?? {})
+      .map(([classId, value]) => [
+        classId,
+        Math.max(0, Math.floor(Number(value ?? 0)))
+      ])
+      .filter(([, value]) => value > 0)
+  );
 }
 
-function getShortRestHealingPerDie(character, mode, manualAmount) {
+function getShortRestHealingPerDie(character, hitDie, mode, manualAmount) {
   if (mode === ACTION_PREFERENCE_VALUES.MANUAL) {
     return Math.max(0, Math.floor(Number(manualAmount ?? 0)));
   }
 
-  const hitDie = getPrimaryHitDie(character);
   if (!hitDie) return 0;
 
-  return Math.max(0, Math.floor(hitDie / 2) + 1 + getStatModifier(character.stats?.constitution ?? 10));
+  return Math.max(
+    0,
+    Math.floor(Number(hitDie) / 2) + 1 +
+      getStatModifier(character.stats?.constitution ?? 10)
+  );
 }
 
-function getShortRestPreview(character, mode, hitDiceSpent, manualAmount) {
+function getShortRestPreview(character, mode, spentByClass = {}, manualAmount) {
   ensureCombatState(character);
 
   const currentHp = Number(character.combat.currentHp ?? 0);
   const maxHp = Number(character.maxHp ?? 0);
-  const availableHitDice = Number(character.combat.currentHitDice ?? 0);
-  const spent = clamp(Number(hitDiceSpent ?? 0), 0, availableHitDice);
-  const healingPerDie = getShortRestHealingPerDie(character, mode, manualAmount);
+  const pools = getHitDicePools(character);
+  const requested = normalizeSpentHitDice(spentByClass);
+
+  const actualSpent = {};
+  let totalHealing = 0;
+  let totalSpent = 0;
+
+  for (const pool of pools) {
+    const spent = Math.min(
+      Number(requested[pool.classId] ?? 0),
+      Number(pool.current ?? 0)
+    );
+
+    if (spent <= 0) continue;
+
+    const healingPerDie = getShortRestHealingPerDie(
+      character,
+      pool.hitDie,
+      mode,
+      manualAmount
+    );
+
+    actualSpent[pool.classId] = spent;
+    totalSpent += spent;
+    totalHealing += spent * healingPerDie;
+  }
+
   const healing = Math.min(
     Math.max(0, maxHp - currentHp),
-    mode === ACTION_PREFERENCE_VALUES.MANUAL
-      ? (spent > 0 ? healingPerDie : 0)
-      : spent * healingPerDie
+    totalHealing
   );
 
   return {
     currentHp,
     maxHp,
-    availableHitDice,
-    hitDiceSpent: spent,
-    healingPerDie,
+    availableHitDice: getAvailableHitDiceTotal(character),
+    hitDiceSpent: totalSpent,
+    spentHitDiceByClass: actualSpent,
     healing,
     resultingHp: Math.min(maxHp, currentHp + healing)
   };
 }
 
-function applyShortRestHealing(character, mode, hitDiceSpent, manualAmount) {
-  const preview = getShortRestPreview(character, mode, hitDiceSpent, manualAmount);
+function applyShortRestHealing(
+  character,
+  mode,
+  spentByClass = {},
+  manualAmount
+) {
+  const preview = getShortRestPreview(
+    character,
+    mode,
+    spentByClass,
+    manualAmount
+  );
 
   if (preview.hitDiceSpent <= 0) {
     return { ...preview, healing: 0, resultingHp: preview.currentHp };
   }
 
-  character.combat.currentHp = preview.resultingHp;
-  character.combat.currentHitDice = Math.max(
-    0,
-    preview.availableHitDice - preview.hitDiceSpent
+  const actualSpent = spendHitDicePools(
+    character,
+    preview.spentHitDiceByClass
   );
+
+  character.combat.currentHp = preview.resultingHp;
+
+  const actualSpentTotal = Object.values(actualSpent)
+    .reduce((sum, value) => sum + Number(value ?? 0), 0);
 
   return {
     ...preview,
-    currentHp: character.combat.currentHp
+    hitDiceSpent: actualSpentTotal,
+    spentHitDiceByClass: actualSpent,
+    currentHp: character.combat.currentHp,
+    availableHitDice: getAvailableHitDiceTotal(character)
   };
 }
 
-function performShortRest(character, mode, hitDiceSpent, manualAmount) {
-  return applyShortRestHealing(character, mode, hitDiceSpent, manualAmount);
+function performShortRest(character, mode, spentByClass, manualAmount) {
+  return applyShortRestHealing(
+    character,
+    mode,
+    spentByClass,
+    manualAmount
+  );
 }
 
 function restoreLongRestResources(character) {
@@ -783,7 +833,7 @@ function performLongRest(character) {
 
   character.combat.currentHp = Number(character.maxHp ?? 0);
   character.combat.tempHp = 0;
-  character.combat.currentHitDice = totalHitDice;
+  restoreAllHitDice(character);
   character.combat.deathSaves = { success: 0, fail: 0 };
   character.combat.inspiration = false;
 
