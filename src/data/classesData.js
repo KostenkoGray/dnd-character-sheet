@@ -17,6 +17,7 @@ export const CLASSES = {
     id: "barbarian",
     name: "Barbarian",
     ukr: "Варвар",
+    recommendedBackgroundId: "outlander",
 
     hitDie: 12,
 
@@ -134,6 +135,7 @@ bard: {
   id: "bard",
   name: "Bard",
   ukr: "Бард",
+  recommendedBackgroundId: "entertainer",
 
   hitDie: 8,
 
@@ -256,6 +258,7 @@ cleric: {
   id: "cleric",
   name: "Cleric",
   ukr: "Жрець",
+  recommendedBackgroundId: "acolyte",
 
   hitDie: 8,
 
@@ -454,6 +457,7 @@ druid: {
   id: "druid",
   name: "Druid",
   ukr: "Друїд",
+  recommendedBackgroundId: "hermit",
 
   hitDie: 8,
 
@@ -579,6 +583,7 @@ fighter: {
   id: "fighter",
   name: "Fighter",
   ukr: "Боєць",
+  recommendedBackgroundId: "soldier",
 
   hitDie: 10,
 
@@ -733,6 +738,7 @@ monk: {
   id: "monk",
   name: "Monk",
   ukr: "Монах",
+  recommendedBackgroundId: "hermit",
 
   hitDie: 8,
 
@@ -880,6 +886,7 @@ paladin: {
   id: "paladin",
   name: "Paladin",
   ukr: "Паладин",
+  recommendedBackgroundId: "noble",
 
   hitDie: 10,
 
@@ -1012,6 +1019,7 @@ ranger: {
   id: "ranger",
   name: "Ranger",
   ukr: "Следопит",
+  recommendedBackgroundId: "outlander",
 
   hitDie: 10,
 
@@ -1130,6 +1138,7 @@ rogue: {
   id: "rogue",
   name: "Rogue",
   ukr: "Розбійник",
+  recommendedBackgroundId: "criminal",
 
   hitDie: 8,
 
@@ -1265,6 +1274,7 @@ sorcerer: {
   id: "sorcerer",
   name: "Sorcerer",
   ukr: "Чаклун",
+  recommendedBackgroundId: "hermit",
 
   hitDie: 6,
 
@@ -1395,6 +1405,7 @@ warlock: {
   id: "warlock",
   name: "Warlock",
   ukr: "Варлок",
+  recommendedBackgroundId: "charlatan",
 
   hitDie: 8,
 
@@ -1538,6 +1549,7 @@ wizard: {
   id: "wizard",
   name: "Wizard",
   ukr: "Маг",
+  recommendedBackgroundId: "sage",
 
   hitDie: 6,
 
