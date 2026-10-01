@@ -60,10 +60,6 @@ function getHitDieLabel(character) {
     : "—";
 }
 
-function getHitDiceTotal(character) {
-  return getCharacterLevel(character);
-}
-
 function renderCompactSavesAndSkills(character) {
   return Object.entries(STATS).map(([statKey, stat]) => {
     const saveBonus = getSaveBonus(character, statKey);
