@@ -552,6 +552,132 @@ sorcerousRestoration: {
 },
 
 // ==================================================
+// CLERIC — DOMAIN FEATURES
+// ==================================================
+
+blessingsOfKnowledge: {
+  id: "blessingsOfKnowledge",
+  name: "Blessings of Knowledge",
+  ukr: "Благословення знання",
+  type: FEATURE_TYPES.CHOICE,
+  short: "Експертність у двох навичках із Arcana, History, Nature або Religion та дві додаткові мови."
+},
+
+discipleOfLife: {
+  id: "discipleOfLife",
+  name: "Disciple of Life",
+  ukr: "Учень життя",
+  type: FEATURE_TYPES.MODIFIER,
+  short: "Закляття відновлення HP лікують додатково на 2 + рівень закляття."
+},
+
+wardingFlare: {
+  id: "wardingFlare",
+  name: "Warding Flare",
+  ukr: "Відблиск захисту",
+  type: FEATURE_TYPES.REACTION,
+  short: "Реакцією накладаєш невигідність на атаку, спрямовану проти тебе."
+},
+
+acolyteOfNature: {
+  id: "acolyteOfNature",
+  name: "Acolyte of Nature",
+  ukr: "Послушник природи",
+  type: FEATURE_TYPES.CHOICE,
+  short: "Вивчаєш один заговор друїда та отримуєш володіння Nature."
+},
+
+wrathOfTheStorm: {
+  id: "wrathOfTheStorm",
+  name: "Wrath of the Storm",
+  ukr: "Гнів бурі",
+  type: FEATURE_TYPES.REACTION,
+  short: "Реакцією караєш нападника блискавкою або громом, якщо він провалює ряткидок."
+},
+
+blessingOfTheTrickster: {
+  id: "blessingOfTheTrickster",
+  name: "Blessing of the Trickster",
+  ukr: "Благословення хитруна",
+  type: FEATURE_TYPES.ACTIVE,
+  short: "Торканням даєш союзнику перевагу на Stealth на 1 годину."
+},
+
+warPriest: {
+  id: "warPriest",
+  name: "War Priest",
+  ukr: "Бойовий священник",
+  type: FEATURE_TYPES.RESOURCE,
+  resource: "warPriest",
+  short: "Обмежену кількість разів бонусною дією робиш атаку зброєю після Attack action."
+},
+
+// ==================================================
+// SORCERER — ORIGIN FEATURES
+// ==================================================
+
+dragonAncestor: {
+  id: "dragonAncestor",
+  name: "Dragon Ancestor",
+  ukr: "Драконячий предок",
+  type: FEATURE_TYPES.CHOICE,
+  short: "Обери драконяче походження та отримай пов'язані з ним знання й мовні переваги."
+},
+
+draconicResilience: {
+  id: "draconicResilience",
+  name: "Draconic Resilience",
+  ukr: "Драконяча стійкість",
+  type: FEATURE_TYPES.MODIFIER,
+  short: "Збільшує максимум HP і дає базовий AC 13 + DEX без обладунку."
+},
+
+wildMagicSurge: {
+  id: "wildMagicSurge",
+  name: "Wild Magic Surge",
+  ukr: "Викид дикої магії",
+  type: FEATURE_TYPES.ACTIVE,
+  short: "Після деяких заклять DM може попросити кинути d20; на 1 виникає дикий магічний ефект."
+},
+
+tidesOfChaos: {
+  id: "tidesOfChaos",
+  name: "Tides of Chaos",
+  ukr: "Приплив хаосу",
+  type: FEATURE_TYPES.ACTIVE,
+  short: "Отримуєш перевагу на один важливий кидок, а DM може повернути здатність через Wild Magic Surge."
+},
+
+// ==================================================
+// WARLOCK — PATRON FEATURES
+// ==================================================
+
+darkOnesBlessing: {
+  id: "darkOnesBlessing",
+  name: "Dark One's Blessing",
+  ukr: "Благословення Темного",
+  type: FEATURE_TYPES.RESOURCE,
+  resource: "darkOnesBlessing",
+  short: "Після знищення ворожої істоти отримуєш тимчасові HP."
+},
+
+feyPresence: {
+  id: "feyPresence",
+  name: "Fey Presence",
+  ukr: "Фейська присутність",
+  type: FEATURE_TYPES.ACTIVE,
+  short: "Дією змушуєш істот поруч пройти WIS-ряткидок або отримати charmed чи frightened."
+},
+
+awakenedMind: {
+  id: "awakenedMind",
+  name: "Awakened Mind",
+  ukr: "Пробуджений розум",
+  type: FEATURE_TYPES.ACTIVE,
+  short: "Телепатично спілкуєшся з істотою в межах 30 ft, якщо вона знає мову."
+},
+
+// ==================================================
 // WARLOCK
 // ==================================================
 
