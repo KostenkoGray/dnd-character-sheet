@@ -430,6 +430,7 @@ function openSpellDetailsDialog(character, spellId) {
     ["Час накладання", spell.castingTime],
     ["Дистанція", spell.range],
     ["Компоненти", formatSpellComponents(spell.components)],
+    ["Доступні класи", (spell.classes ?? []).map(id => CLASSES[id]?.ukr ?? id).join(", ") || "—"],
     ["Тривалість", spell.duration],
     ["Концентрація", spell.concentration ? "Так" : "Ні"],
     ["Ритуал", spell.ritual ? "Так" : "Ні"],
@@ -443,7 +444,7 @@ function openSpellDetailsDialog(character, spellId) {
     body: `
       <p class="magic-detail-original">${escapeHtml(spell.name)}</p>
       <div class="magic-detail-grid">${details}</div>
-      <p class="magic-detail-description">${escapeHtml(spell.description)}</p>
+      <p class="magic-detail-description">${escapeHtml(spell.description || "Опис цього закляття ще не внесено до локального каталогу.")}</p>
       ${spell.higherLevel ? `<p class="magic-detail-description"><strong>На вищому рівні:</strong> ${escapeHtml(spell.higherLevel)}</p>` : ""}
       ${spell.savingThrow ? `<p class="magic-detail-description"><strong>Ряткидок:</strong> ${escapeHtml(spell.savingThrow)}</p>` : ""}
       ${spell.damageType ? `<p class="magic-detail-description"><strong>Тип шкоди:</strong> ${escapeHtml(spell.damageType)}</p>` : ""}
