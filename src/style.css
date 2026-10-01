@@ -362,7 +362,7 @@ p {
   grid-template-columns:
     repeat(3, 1fr);
 
-  gap: 10px;
+  gap: 6px;
 
   margin: 0;
 }
@@ -372,9 +372,9 @@ p {
 
 .stat-card {
 
-  min-height: 88px;
+  min-height: 68px;
 
-  padding: 10px 8px;
+  padding: 6px 5px;
 
   display: flex;
 
@@ -400,7 +400,7 @@ p {
 
 .stat-name {
 
-  font-size: 12px;
+  font-size: 10px;
 
   font-weight: 700;
 
@@ -414,9 +414,9 @@ p {
 
 .stat-value {
 
-  margin-top: 4px;
+  margin-top: 2px;
 
-  font-size: 24px;
+  font-size: 20px;
 
   font-weight: 700;
 
@@ -428,11 +428,11 @@ p {
 
 .stat-modifier {
 
-  margin-top: 2px;
+  margin-top: 1px;
 
-  min-width: 42px;
+  min-width: 34px;
 
-  padding: 2px 6px;
+  padding: 1px 5px;
 
   border-radius: 20px;
 
@@ -440,7 +440,7 @@ p {
 
   color: var(--accent-light);
 
-  font-size: 14px;
+  font-size: 12px;
 
   font-weight: 600;
 }
