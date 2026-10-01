@@ -237,6 +237,7 @@ export const CREATOR_RACE_DETAILS = {
       },
       rockGnome: {
         abilityScoreIncrease: { constitution: 1 },
+        toolProficiencies: ["tinkersTools"],
         traits: [
           ["Artificer's Lore", "Знання майстра", "Подвійний бонус майстерності для історичних перевірок щодо магічних, алхімічних і технологічних об'єктів."],
           ["Tinker", "Майстрування", "Можна створювати прості механічні пристрої."]
@@ -249,6 +250,7 @@ export const CREATOR_RACE_DETAILS = {
     abilityScoreIncrease: { charisma: 2 },
     variableAbilityScoreChoice: { count: 2, value: 1 },
     skillChoice: { count: 2 },
+    languageChoice: { count: 1 },
     traits: [
       ["Darkvision", "Темнобачення", "Темнобачення 60 ft."],
       ["Fey Ancestry", "Фейське походження", "Перевага на ряткидки проти зачарування; магією сном заснути не можна."],
