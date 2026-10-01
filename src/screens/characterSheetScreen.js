@@ -495,12 +495,14 @@ export function characterSheetScreen(character) {
                 ? character.race.subrace.ukr
                 : character.race.race.ukr}
               •
-              ${character.classes
-                .map(c => CLASSES[c.classId].ukr)
-                .join(" / ")}
+              Lvl ${getCharacterLevel(character)}
             </p>
 
-            <span>Рівень ${getCharacterLevel(character)}</span>
+            <span>
+              ${character.classes
+                .map(c => `${CLASSES[c.classId].ukr} ${c.level}`)
+                .join(" / ")}
+            </span>
           </div>
         </div>
 
@@ -583,12 +585,13 @@ export function characterSheetScreen(character) {
 
 
 
-        ${renderCharacterFeatures(character)}
 
         <section class="combat-section">
           <h2>Saving Throws &amp; Skills</h2>
           <div class="combat-stats-skills-grid">${renderCompactSavesAndSkills(character)}</div>
         </section>
+
+        ${renderCharacterFeatures(character)}
 
       </main>
 
