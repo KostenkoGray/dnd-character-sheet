@@ -14,6 +14,7 @@ import {
 import { CLASSES } from "../data/classesData.js";
 import { FEATURES } from "../data/featuresData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
+import { collapsibleSection } from "../components/collapsibleSection.js";
 import { renderDeathSaves } from "../components/deathSaves.js";
 import { equipmentCard } from "../components/equipmentCard.js";
 import {
@@ -233,7 +234,7 @@ function renderClassResources(character) {
   `;
 }
 
-function renderCharacterFeatures(character) {
+function renderCharacterFeatures(character, collapsed = false) {
   const groups = [];
 
   const race = character.race?.race;
@@ -355,15 +356,16 @@ function renderCharacterFeatures(character) {
     </section>
   `).join("");
 
-  return `
-    <section class="combat-section character-features-section">
-      <h2>Здібності та властивості</h2>
-      ${groupHtml || "<p class=\"inventory-empty\">Немає записаних здібностей.</p>"}
-    </section>
-  `;
+  return collapsibleSection({
+    id: "features",
+    title: "Здібності та властивості",
+    collapsed,
+    className: "combat-section character-features-section",
+    content: groupHtml || "<p class=\"inventory-empty\">Немає записаних здібностей.</p>"
+  });
 }
 
-export function characterSheetScreen(character) {
+export function characterSheetScreen(character, collapseState = {}) {
 
   const statsBlock = Object.entries(character.stats)
     .map(([key, value]) => {
@@ -506,9 +508,13 @@ export function characterSheetScreen(character) {
           </div>
         </div>
 
-        <section class="stats-grid">
-          ${statsBlock}
-        </section>
+        ${collapsibleSection({
+          id: "stats",
+          title: "Характеристики",
+          collapsed: Boolean(collapseState.stats),
+          className: "stats-section",
+          content: `<div class="stats-grid">${statsBlock}</div>`
+        })}
 
         <section class="combat-top-panel">
           <div class="combat-main-stat combat-accent-blue">
@@ -591,7 +597,7 @@ export function characterSheetScreen(character) {
           <div class="combat-stats-skills-grid">${renderCompactSavesAndSkills(character)}</div>
         </section>
 
-        ${renderCharacterFeatures(character)}
+        ${renderCharacterFeatures(character, Boolean(collapseState.features))}
 
       </main>
 
