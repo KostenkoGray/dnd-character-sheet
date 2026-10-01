@@ -409,7 +409,10 @@ export function removeItemFromInventory(character, instanceId) {
 
   return {
     ok: true,
-    item: getCatalogItem(removed.source, removed.itemId)
+    item:
+      getCatalogItem(removed.source, removed.itemId) ??
+      removed.customItem ??
+      null
   };
 }
 
@@ -438,6 +441,16 @@ export function ensureInventory(character) {
     const catalogItem = getCatalogItem(instance.source, instance.itemId);
 
     if (!catalogItem) {
+      if (instance.customItem && typeof instance.customItem === "object") {
+        instance.customItem.id ??= instance.itemId;
+        instance.customItem.name ??= instance.itemId;
+        instance.customItem.ukr ??= instance.customItem.name;
+        instance.customItem.type ??= ITEM_TYPES.OTHER;
+        instance.customItem.equipmentSlot ??= instance.customItem.type;
+        instance.customItem.equipable ??= false;
+        continue;
+      }
+
       instance.equipped = false;
       continue;
     }
