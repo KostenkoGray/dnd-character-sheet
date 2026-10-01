@@ -35,7 +35,53 @@ function formatSpellLevel(level) {
   return Number(level) === 0 ? "Замова" : `Рівень ${level}`;
 }
 
-function renderSpellActions(spell) {\n  const deleteButton = spell.autoKnown\n    ? ""\n    : `\n      <button\n        type="button"\n        class="inventory-action-button danger"\n        data-magic-action="delete"\n        data-spell-id="${escapeHtml(spell.id)}"\n      >\n        Видалити\n      </button>\n    `;\n\n  if (spell.level === 0) {\n    return `\n      <span class="inventory-equipped-badge magic-cantrip-badge">\n        Замова · завжди доступна\n      </span>\n      ${deleteButton}\n    `;\n  }\n\n  if (spell.preparation === "known") {\n    return `\n      <span class="inventory-equipped-badge magic-cantrip-badge">\n        Завжди підготовлено\n      </span>\n      ${deleteButton}\n    `;\n  }\n\n  return `\n    <button\n      type="button"\n      class="inventory-action-button ${spell.prepared ? "secondary" : "primary"}"\n      data-magic-action="${spell.prepared ? "unprepare" : "prepare"}"\n      data-spell-id="${escapeHtml(spell.id)}"\n      data-magic-source-class-id="${escapeHtml(spell.sourceClassId ?? "")}"\n    >\n      ${spell.prepared ? "Зняти підготовку" : "Підготувати"}\n    </button>\n    ${deleteButton}\n  `;\n}\n\nfunction renderSpellCard(spell) {
+function renderSpellActions(spell) {
+  const deleteButton = spell.autoKnown
+    ? ""
+    : `
+      <button
+        type="button"
+        class="inventory-action-button danger"
+        data-magic-action="delete"
+        data-spell-id="${escapeHtml(spell.id)}"
+      >
+        Видалити
+      </button>
+    `;
+
+  if (spell.level === 0) {
+    return `
+      <span class="inventory-equipped-badge magic-cantrip-badge">
+        Замова · завжди доступна
+      </span>
+      ${deleteButton}
+    `;
+  }
+
+  if (spell.preparation === "known") {
+    return `
+      <span class="inventory-equipped-badge magic-cantrip-badge">
+        Завжди підготовлено
+      </span>
+      ${deleteButton}
+    `;
+  }
+
+  return `
+    <button
+      type="button"
+      class="inventory-action-button ${spell.prepared ? "secondary" : "primary"}"
+      data-magic-action="${spell.prepared ? "unprepare" : "prepare"}"
+      data-spell-id="${escapeHtml(spell.id)}"
+      data-magic-source-class-id="${escapeHtml(spell.sourceClassId ?? "")}"
+    >
+      ${spell.prepared ? "Зняти підготовку" : "Підготувати"}
+    </button>
+    ${deleteButton}
+  `;
+}
+
+function renderSpellCard(spell) {
   const school = SPELL_SCHOOL_LABELS[spell.school] ?? spell.school;
   const effectType = SPELL_EFFECT_TYPE_LABELS[spell.effectType] ?? spell.effectType;
 
@@ -66,7 +112,9 @@ function renderSpellActions(spell) {\n  const deleteButton = spell.autoKnown\n  
         ${spell.ritual ? "<span>Ритуал</span>" : ""}
       </div>
 
-      <div class="magic-spell-actions">\n        ${renderSpellActions(spell)}\n      </div>
+      <div class="magic-spell-actions">
+        ${renderSpellActions(spell)}
+      </div>
     </article>
   `;
 }
