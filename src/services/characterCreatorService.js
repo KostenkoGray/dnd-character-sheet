@@ -509,17 +509,23 @@ export function getMagicRequirements(state) {
 
   const cantrips = Number(getAtLevel(spellcasting.cantripsKnown, 1) ?? 0);
   let spells = 0;
+  let spellsLabel = "Закляття 1 рівня";
 
   if (spellcasting.spellsKnown) {
     spells = Number(getAtLevel(spellcasting.spellsKnown, 1) ?? 0);
+    spellsLabel = "Відомі закляття 1 рівня";
   } else if (CREATOR_STARTING_SPELLS[state.classId] != null) {
     spells = Number(CREATOR_STARTING_SPELLS[state.classId]);
+    spellsLabel = state.classId === "wizard"
+      ? "Закляття 1 рівня в книзі"
+      : "Початкові закляття";
   }
 
   return {
     required: cantrips > 0 || spells > 0,
     cantrips,
     spells,
+    spellsLabel,
     spellListClassId: spellcasting.spellListClassId ?? state.classId
   };
 }
@@ -610,10 +616,49 @@ export function getRaceTraitSummary(state) {
   const subrace = getSubraceData(state);
   const subDetail = detail.subraces?.[state.subraceId] ?? {};
 
+  const variantTraits =
+    state.raceId === "human"
+      ? (detail.variants?.[state.raceVariant]?.traits ?? [])
+      : [];
+
   const traits = [
     ...(detail.traits ?? []),
+    ...variantTraits,
     ...(subDetail.traits ?? [])
   ];
+
+  const skillProficiencies = [
+    ...(race?.skillProficiencies ?? []),
+    ...(state.raceChoices.skills ?? [])
+  ].filter((id, index, list) => list.indexOf(id) === index);
+
+  const toolProficiencies = [
+    ...(Array.isArray(race?.toolProficiencies) ? race.toolProficiencies : []),
+    ...(state.raceChoices.tool ? [state.raceChoices.tool] : [])
+  ].filter((id, index, list) => list.indexOf(id) === index);
+
+  const weaponProficiencies = [
+    ...(race?.weaponProficiencies ?? [])
+  ];
+
+  if (state.raceId === "elf") {
+    if (["highElf", "woodElf"].includes(state.subraceId)) {
+      weaponProficiencies.push(
+        WEAPONS.longsword,
+        WEAPONS.shortsword,
+        WEAPONS.shortbow,
+        WEAPONS.longbow
+      );
+    }
+
+    if (state.subraceId === "drow") {
+      weaponProficiencies.push(
+        WEAPONS.rapier,
+        WEAPONS.shortsword,
+        WEAPONS.handCrossbow
+      );
+    }
+  }
 
   return {
     size: subrace?.size ?? race?.size ?? null,
@@ -622,10 +667,10 @@ export function getRaceTraitSummary(state) {
     traits,
     abilityScoreIncrease: getFinalRaceAbilityBonuses(state),
     languages: race?.languages ?? [],
-    skillProficiencies: race?.skillProficiencies ?? [],
-    weaponProficiencies: race?.weaponProficiencies ?? [],
+    skillProficiencies,
+    weaponProficiencies,
     armorProficiencies: subrace?.armorProficiencies ?? [],
-    toolProficiencies: race?.toolProficiencies ?? []
+    toolProficiencies
   };
 }
 
@@ -768,6 +813,15 @@ export function validateCreatorStep(state, stepKey) {
     return String(state.name ?? "").trim()
       ? ""
       : "Введіть ім'я персонажа.";
+  }
+
+  return "";
+}
+
+export function validateCreatorState(state) {
+  for (const step of getCreatorSteps(state)) {
+    const error = validateCreatorStep(state, step.key);
+    if (error) return error;
   }
 
   return "";
