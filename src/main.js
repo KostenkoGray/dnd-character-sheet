@@ -2301,6 +2301,23 @@ app.addEventListener("click", (event) => {
     }
   }
 
+  if (
+    currentCharacter &&
+    ["sheet", "combat"].includes(currentScreen)
+  ) {
+    const hitDieCycleButton = event.target.closest("[data-hit-die-cycle]");
+    if (hitDieCycleButton) {
+      ensureCombatState(currentCharacter);
+      cycleSelectedHitDie(
+        currentCharacter,
+        Number(hitDieCycleButton.dataset.hitDieCycle)
+      );
+      persistCharacters();
+      render();
+      return;
+    }
+  }
+
   if (currentCharacter && event.target.closest("[data-death-save-dot]")) {
     const handled = handleDeathSaveClick(
       currentCharacter,
