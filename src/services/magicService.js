@@ -33,7 +33,7 @@ function normalizeLookupId(value) {
   return String(value ?? "")
     .trim()
     .toLowerCase()
-    .replace(/[\\s_-]+/g, "");
+    .replace(/[\s_-]+/g, "");
 }
 
 function getSubclassData(classData, subclassId) {
