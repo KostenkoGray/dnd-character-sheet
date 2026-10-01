@@ -6,7 +6,8 @@ import {
   PACT_MAGIC_SLOTS
 } from "../data/spellSlotsData.js";
 import { getSpellById, getAllSpells } from "../data/spellsData.js";
-import { getEffectiveAbilityScore, getStatModifier } from "./characterCalculationsService.js";
+import { getStatModifier } from "./characterCalculationsService.js";
+import { getEffectiveAbilityScore } from "./inventoryService.js";
 import { ensureCombatState } from "./combatStateService.js";
 
 export const MAGIC_PREPARATION = {
