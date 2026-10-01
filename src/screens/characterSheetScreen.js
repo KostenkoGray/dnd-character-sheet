@@ -582,7 +582,7 @@ export function characterSheetScreen(character, collapseState = {}) {
           <div class="combat-weapons-list">${weaponsBlock}</div>
         </section>
 
-        ${equipmentCard(character)}
+        ${equipmentCard(character, Boolean(collapseState.equipment))}
 
         <section class="combat-section">
           <h2>Prepared Spells</h2>
