@@ -211,7 +211,7 @@ export function ensureMagicState(character) {
     })
     .filter(entry => Boolean(getSpellById(entry.spellId)));
 
-  // Один spell = одна картка. Класи-джерела об'єднуються без дублювання.
+  // Один spell = одна картка і один клас-джерело.
   const unique = new Map();
 
   for (const entry of normalized) {
