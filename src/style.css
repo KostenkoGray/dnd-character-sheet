@@ -364,7 +364,7 @@ p {
 
   gap: 10px;
 
-  margin-bottom: 28px;
+  margin: 0;
 }
 
 
@@ -372,9 +372,9 @@ p {
 
 .stat-card {
 
-  min-height: 105px;
+  min-height: 88px;
 
-  padding: 12px 8px;
+  padding: 10px 8px;
 
   display: flex;
 
@@ -2327,14 +2327,6 @@ p {
   padding-right: 54px;
 }
 
-.inventory-kicker {
-  display: block;
-  color: var(--text-muted);
-  font-size: .68rem;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  margin-bottom: 2px;
-}
 
 .inventory-header h1 {
   margin: 0;
@@ -2595,11 +2587,6 @@ p {
    EQUIPMENT CARD
    ================================================== */
 
-.equipment-section-heading p {
-  margin: 4px 0 0;
-  color: var(--text-muted);
-  font-size: .66rem;
-}
 
 .equipment-grid {
   display: grid;
@@ -2768,6 +2755,84 @@ p {
   font-size: .63rem;
   line-height: 1.25;
 }
+
+/* ==================================================
+   COLLAPSIBLE BLOCKS
+   ================================================== */
+
+.collapsible-section {
+  margin-bottom: 14px;
+}
+
+.collapsible-section-header {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.collapsible-section-header:hover {
+  border-color: var(--accent);
+  background: var(--surface-light);
+}
+
+.collapsible-section-header:active {
+  transform: scale(.995);
+}
+
+.collapsible-section-header:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.collapsible-section-header strong {
+  font-size: .82rem;
+}
+
+.collapsible-section-toggle {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.collapsible-section-content {
+  margin-top: 8px;
+}
+
+.collapsible-section.is-collapsed .collapsible-section-content {
+  display: none;
+}
+
+.stats-section .collapsible-section-content {
+  margin-top: 8px;
+}
+
+.stats-section .stats-grid {
+  margin: 0;
+}
+
+.equipment-section .collapsible-section-content,
+.character-features-section .collapsible-section-content {
+  margin-top: 8px;
+}
+
 
 @media (max-width: 420px) {
   .inventory-filters,
