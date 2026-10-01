@@ -110,13 +110,20 @@ export function getInventoryItems(character) {
   return character.inventory
     .map(instance => {
       const catalogItem = getCatalogItem(instance.source, instance.itemId);
+      const customItem = instance.customItem;
 
-      if (!catalogItem) {
+      if (!catalogItem && !customItem) {
         return null;
       }
 
       return {
-        ...catalogItem,
+        ...(catalogItem ?? {
+          ...customItem,
+          source: instance.source,
+          itemId: instance.itemId,
+          equipable: customItem.equipable ?? false,
+          equipmentSlot: customItem.equipmentSlot ?? customItem.type
+        }),
         instanceId: instance.instanceId,
         equipped: instance.equipped === true,
         quantity: Math.max(1, Number(instance.quantity ?? 1))
@@ -299,7 +306,10 @@ export function equipInventoryItem(character, instanceId) {
     };
   }
 
-  const catalogItem = getCatalogItem(instance.source, instance.itemId);
+  const catalogItem =
+    getCatalogItem(instance.source, instance.itemId) ??
+    instance.customItem ??
+    null;
 
   if (!catalogItem?.equipable) {
     return {
@@ -334,7 +344,10 @@ export function equipInventoryItem(character, instanceId) {
   ) {
     for (const other of character.inventory) {
       if (other.instanceId === instanceId) continue;
-      const otherCatalog = getCatalogItem(other.source, other.itemId);
+      const otherCatalog =
+        getCatalogItem(other.source, other.itemId) ??
+        other.customItem ??
+        null;
 
       if (otherCatalog?.type === type) {
         other.equipped = false;
@@ -364,7 +377,10 @@ export function unequipInventoryItem(character, instanceId) {
 
   return {
     ok: true,
-    item: getCatalogItem(instance.source, instance.itemId)
+    item:
+      getCatalogItem(instance.source, instance.itemId) ??
+      instance.customItem ??
+      null
   };
 }
 
