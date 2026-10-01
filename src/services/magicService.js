@@ -469,6 +469,63 @@ export function ensureSpellSlotState(character) {
   character.combat.pactMagicSlotLevel = pact.level;
 }
 
+export function setSpellSlotCount(character, level, count, pactMagic = false) {
+  ensureSpellSlotState(character);
+
+  const groups = getSpellSlotGroups(character);
+  const numericLevel = Number(level);
+  const target = Math.max(0, Math.floor(Number(count ?? 0)));
+
+  if (pactMagic) {
+    const pact = groups.pact[0];
+    if (!pact || pact.level !== numericLevel) {
+      return { ok: false, message: "Комірка Pact Magic не знайдена." };
+    }
+
+    character.combat.currentPactMagicSlots = Math.min(pact.max, target);
+    return { ok: true, current: character.combat.currentPactMagicSlots };
+  }
+
+  const slot = groups.normal.find(item => item.level === numericLevel);
+  if (!slot) {
+    return { ok: false, message: "Комірка цього рівня не знайдена." };
+  }
+
+  const key = String(numericLevel);
+  character.combat.currentSpellSlots[key] = Math.min(slot.max, target);
+
+  return { ok: true, current: character.combat.currentSpellSlots[key] };
+}
+
+export function toggleSpellSlotDot(character, level, index, pactMagic = false) {
+  ensureSpellSlotState(character);
+
+  const numericLevel = Number(level);
+  const numericIndex = Number(index);
+  if (!Number.isInteger(numericIndex) || numericIndex < 0) {
+    return { ok: false, message: "Некоректна комірка." };
+  }
+
+  const groups = getSpellSlotGroups(character);
+  const slot = pactMagic
+    ? groups.pact.find(item => item.level === numericLevel)
+    : groups.normal.find(item => item.level === numericLevel);
+
+  if (!slot || numericIndex >= slot.max) {
+    return { ok: false, message: "Комірка не знайдена." };
+  }
+
+  const current = pactMagic
+    ? Number(character.combat.currentPactMagicSlots ?? slot.max)
+    : Number(character.combat.currentSpellSlots?.[String(numericLevel)] ?? slot.max);
+
+  const next = current === numericIndex + 1
+    ? numericIndex
+    : numericIndex + 1;
+
+  return setSpellSlotCount(character, numericLevel, next, pactMagic);
+}
+
 export function spendSpellSlot(character, level, pactMagic = false) {
   ensureSpellSlotState(character);
 
