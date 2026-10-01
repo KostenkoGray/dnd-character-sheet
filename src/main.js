@@ -877,19 +877,66 @@ function showShortRest(character) {
     return;
   }
 
-  renderShortRestAction(character, savedMode, 0);
+  renderShortRestAction(character, savedMode, {});
 }
 
-function renderShortRestAction(character, mode, spentHitDice = 0) {
+function renderShortRestAction(
+  character,
+  mode,
+  spentHitDiceByClass = {}
+) {
   ensureCombatState(character);
 
+  const normalizedSpent = normalizeSpentHitDice(spentHitDiceByClass);
   const preview = getShortRestPreview(
     character,
-    ACTION_PREFERENCE_VALUES.AVERAGE,
-    spentHitDice,
+    mode,
+    normalizedSpent,
     null
   );
-  const canSpend = preview.availableHitDice > 0 && preview.currentHp < preview.maxHp;
+
+  const canSpend =
+    preview.availableHitDice > 0 &&
+    preview.currentHp < preview.maxHp;
+
+  const diceRows = getHitDicePools(character)
+    .map(pool => {
+      const spent = Number(normalizedSpent[pool.classId] ?? 0);
+      const maxSpend = Math.min(pool.current, spent);
+      const healingPerDie = getShortRestHealingPerDie(
+        character,
+        pool.hitDie,
+        ACTION_PREFERENCE_VALUES.AVERAGE,
+        null
+      );
+
+      return `
+        <div class="short-rest-die-row">
+          <div class="short-rest-die-info">
+            <strong>${escapeHtml(pool.className)} · d${pool.hitDie}</strong>
+            <span>${pool.current} доступно · +${healingPerDie} HP/кіст</span>
+          </div>
+          <div class="short-rest-die-counter">
+            <button
+              type="button"
+              class="camp-dialog-button"
+              data-short-rest-die-class-id="${escapeHtml(pool.classId)}"
+              data-short-rest-die-delta="-1"
+              ${maxSpend <= 0 ? "disabled" : ""}
+            >−</button>
+            <strong>${maxSpend}</strong>
+            <button
+              type="button"
+              class="camp-dialog-button"
+              data-short-rest-die-class-id="${escapeHtml(pool.classId)}"
+              data-short-rest-die-delta="1"
+              ${!canSpend || maxSpend >= pool.current || preview.hitDiceSpent >= preview.availableHitDice ? "disabled" : ""}
+            >+</button>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
 
   showCampDialog({
     title: "Short Rest",
@@ -903,13 +950,7 @@ function renderShortRestAction(character, mode, spentHitDice = 0) {
           <div class="short-rest-panel dice">
             <span>Hit Dice</span>
             <strong>${preview.availableHitDice}</strong>
-            <small>d${getPrimaryHitDie(character)}</small>
-            <div class="short-rest-counter">
-              <button type="button" class="camp-dialog-button" data-short-rest-delta="-1" ${spentHitDice <= 0 ? "disabled" : ""}>−</button>
-              <strong>${spentHitDice}</strong>
-              <button type="button" class="camp-dialog-button" data-short-rest-delta="1" ${!canSpend || spentHitDice >= preview.availableHitDice ? "disabled" : ""}>+</button>
-            </div>
-            <small>використати</small>
+            <small>обрано: ${preview.hitDiceSpent}</small>
           </div>
           <div class="short-rest-panel after">
             <span>HP після</span>
@@ -917,6 +958,11 @@ function renderShortRestAction(character, mode, spentHitDice = 0) {
           </div>
         </div>
       </div>
+
+      <div class="short-rest-dice-list">
+        ${diceRows || "<p>Немає доступних Hit Dice.</p>"}
+      </div>
+
       <div class="short-rest-change-wrap">
         <button type="button" class="camp-dialog-button" id="short-rest-change-method">Змінити спосіб</button>
       </div>
@@ -925,15 +971,15 @@ function renderShortRestAction(character, mode, spentHitDice = 0) {
     onConfirm: () => {
       finishShortRest(
         character,
-        ACTION_PREFERENCE_VALUES.AVERAGE,
-        spentHitDice,
+        mode,
+        normalizedSpent,
         null
       );
     }
   });
 
   bindShortRestChangeMethod(character);
-  bindShortRestHitDiceCounter(character, spentHitDice);
+  bindShortRestHitDiceCounter(character, normalizedSpent);
 }
 
 function bindShortRestChangeMethod(character) {
@@ -945,17 +991,27 @@ function bindShortRestChangeMethod(character) {
   });
 }
 
-function bindShortRestHitDiceCounter(character, spentHitDice) {
+function bindShortRestHitDiceCounter(character, spentByClass) {
   const backdrop = document.querySelector(".camp-dialog-backdrop");
   backdrop?.addEventListener("click", event => {
-    const button = event.target.closest("[data-short-rest-delta]");
+    const button = event.target.closest("[data-short-rest-die-class-id]");
     if (!button) return;
 
-    const delta = Number(button.dataset.shortRestDelta);
-    const maxDice = Number(character.combat.currentHitDice ?? 0);
-    const nextSpent = clamp(spentHitDice + delta, 0, maxDice);
+    const classId = button.dataset.shortRestDieClassId;
+    const delta = Number(button.dataset.shortRestDieDelta);
+    const nextSpent = {
+      ...spentByClass,
+      [classId]: Math.max(
+        0,
+        Math.floor(Number(spentByClass[classId] ?? 0) + delta)
+      )
+    };
 
-    renderShortRestAction(character, ACTION_PREFERENCE_VALUES.AVERAGE, nextSpent);
+    renderShortRestAction(
+      character,
+      ACTION_PREFERENCE_VALUES.AVERAGE,
+      nextSpent
+    );
   });
 }
 
@@ -1034,13 +1090,18 @@ function getResourceValue(table, level) {
   return value;
 }
 
-function finishShortRest(character, mode, hitDiceSpent, manualAmount) {
+function finishShortRest(
+  character,
+  mode,
+  spentByClass,
+  manualAmount
+) {
   const beforeAction = cloneCharacterState(character);
   const result = performShortRest(
     character,
-    ACTION_PREFERENCE_VALUES.AVERAGE,
-    hitDiceSpent,
-    null
+    mode,
+    spentByClass,
+    manualAmount
   );
 
   restoreShortRestResources(character);
@@ -1059,12 +1120,13 @@ function finishShortRest(character, mode, hitDiceSpent, manualAmount) {
         <div class="rest-row"><span>Використано Hit Dice</span><strong>${result.hitDiceSpent}</strong></div>
         <div class="rest-row"><span>Відновлено HP</span><strong>+${result.healing}</strong></div>
         <div class="rest-row"><span>HP</span><strong>${result.currentHp}/${result.maxHp}</strong></div>
-        <div class="rest-row"><span>Hit Dice залишилось</span><strong>${result.availableHitDice - result.hitDiceSpent}</strong></div>
+        <div class="rest-row"><span>Hit Dice залишилось</span><strong>${result.availableHitDice}</strong></div>
       </div>
     `,
     confirmLabel: "Готово"
   });
 }
+
 
 function showShortRestChoice(character) {
   showCampDialog({
