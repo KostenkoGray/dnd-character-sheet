@@ -103,7 +103,6 @@ let creatorOpening = false;
 let undoState = null;
 let inventoryFilter = { search: "", type: "all" };
 let magicFilter = { search: "" };
-let creatorState = null;
 
 const DEFAULT_COLLAPSE_STATE = {
   stats: false,
