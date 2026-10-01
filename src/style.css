@@ -4619,3 +4619,51 @@ p {
     font-size: 1rem;
   }
 }
+
+
+/* HP / Hit Dice visual correction */
+.combat-vitals{
+  grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+}
+
+.hp-value span{
+  right: 7px;
+  bottom: 6px;
+  font-size: .9rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.hit-die-select-button{
+  width: 20px;
+  height: 48px;
+  flex: 0 0 20px;
+  border-radius: 5px;
+}
+
+.combat-hit-dice{
+  grid-template-columns: 20px minmax(0, 1fr) 20px;
+}
+
+@media (max-width: 380px){
+  .combat-vitals{
+    grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+  }
+
+  .hit-die-select-button{
+    width: 18px;
+    height: 46px;
+    flex-basis: 18px;
+    border-radius: 4px;
+  }
+
+  .combat-hit-dice{
+    grid-template-columns: 18px minmax(0, 1fr) 18px;
+  }
+
+  .hp-value span{
+    right: 6px;
+    bottom: 5px;
+    font-size: .86rem;
+  }
+}
