@@ -2,8 +2,10 @@ import { STATS, ABILITY_KEYS } from "../data/rulesData.js";
 import { RACES } from "../data/racesData.js";
 import { CLASSES } from "../data/classesData.js";
 import { CREATOR_ABILITY_SCORE_ARRAY, CREATOR_CLASS_EQUIPMENT, CREATOR_TOOL_OPTIONS, CREATOR_RACE_DETAILS } from "../data/characterCreatorData.js";
+import { WEAPONS } from "../data/weaponsData.js";
+import { ARMOR } from "../data/armorData.js";
+import { OTHER_ITEMS } from "../data/otherItemsData.js";
 import { BACKGROUNDS } from "../data/backgroundsData.js";
-import { getItemCatalog } from "../services/inventoryService.js";
 import {
   getRaceChoices,
   getRaceTraitSummary,
@@ -21,6 +23,27 @@ import {
   getCreatorSteps,
   getCurrentStep
 } from "../services/characterCreatorService.js";
+
+const OTHER_LABELS = Object.fromEntries(
+  Object.values(OTHER_ITEMS).map(item => [item.id, {
+    id: item.id,
+    label: item.ukr ?? item.name
+  }])
+);
+
+const ARMOR_LABELS = Object.fromEntries(
+  Object.values(ARMOR).map(item => [item.id, {
+    id: item.id,
+    label: item.ukr ?? item.name
+  }])
+);
+
+const WEAPON_LABELS = Object.fromEntries(
+  Object.values(WEAPONS).map(item => [item.id, {
+    id: item.id,
+    label: item.ukr ?? item.name
+  }])
+);
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -472,8 +495,14 @@ function renderEquipmentGroup(state, group) {
 
 function getEntryLabel(source, itemId, customItem) {
   if (customItem?.ukr) return customItem.ukr;
-  const item = getItemCatalog().find(entry => entry.source === source && entry.itemId === itemId);
-  return item?.ukr ?? item?.name ?? itemId;
+
+  const sourceCatalog = source === "weapon"
+    ? Object.values(WEAPON_LABELS)
+    : source === "armor"
+      ? Object.values(ARMOR_LABELS)
+      : Object.values(OTHER_LABELS);
+
+  return sourceCatalog.find(entry => entry.id === itemId)?.label ?? itemId;
 }
 
 function renderMagicStep(state) {
