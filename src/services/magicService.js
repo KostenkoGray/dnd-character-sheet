@@ -227,7 +227,8 @@ export function ensureMagicState(character) {
         sourceClassId,
         sourceClassIds: sourceClassId ? [sourceClassId] : [],
         preparedSourceClassIds:
-          prepared && sourceClassId ? [sourceClassId] : []
+          prepared && sourceClassId ? [sourceClassId] : [],
+        autoKnown: Boolean(raw.autoKnown)
       };
     })
     .filter(entry => Boolean(getSpellById(entry.spellId)));
@@ -291,7 +292,71 @@ export function ensureMagicState(character) {
     });
   }
 
+  // Prepared casters automatically know every leveled class spell
+  // available at their own class level.
+  syncPreparedClassSpells(character);
+
   return character.magic.spells;
+}
+
+function syncPreparedClassSpells(character) {
+  const sources = getSpellcastingSources(character)
+    .filter(source =>
+      source.spellcasting?.preparation === MAGIC_PREPARATION.PREPARED
+    );
+
+  if (!sources.length) return;
+
+  const existingBySpellId = new Map(
+    character.magic.spells.map(entry => [entry.spellId, entry])
+  );
+
+  for (const source of sources) {
+    const classId = source.classEntry.classId;
+    const maxSpellLevel = getOwnSpellLevelForSource(source);
+
+    if (maxSpellLevel <= 0) continue;
+
+    const spellListClassId =
+      source.spellcasting?.spellListClassId ?? classId;
+
+    const candidates = getAllSpells().filter(spell => {
+      if (spell.level <= 0 || spell.level > maxSpellLevel) return false;
+
+      if (
+        !Array.isArray(spell.classes) ||
+        !spell.classes.includes(spellListClassId)
+      ) {
+        return false;
+      }
+
+      return getAvailableSourcesForSpell(character, spell).some(item =>
+        item.classEntry.classId === classId
+      );
+    });
+
+    for (const spell of candidates) {
+      const existing = existingBySpellId.get(spell.id);
+
+      if (existing) {
+        if (existing.sourceClassId === classId) {
+          existing.autoKnown = true;
+        }
+        continue;
+      }
+
+      const entry = {
+        spellId: spell.id,
+        sourceClassId: classId,
+        sourceClassIds: [classId],
+        preparedSourceClassIds: [],
+        autoKnown: true
+      };
+
+      character.magic.spells.push(entry);
+      existingBySpellId.set(spell.id, entry);
+    }
+  }
 }
 
 export function getKnownSpellEntries(character) {
@@ -491,6 +556,21 @@ export function toggleSpellPrepared(character, spellId, sourceClassId = "") {
     }
   }
 
+  if (sourceClassId) {
+    const requestedSource = getSpellcastingSources(character).find(item =>
+      item.classEntry.classId === sourceClassId
+    );
+
+    if (
+      requestedSource?.spellcasting?.preparation === MAGIC_PREPARATION.KNOWN
+    ) {
+      return {
+        ok: false,
+        message: "Цьому класу не потрібна підготовка заклять."
+      };
+    }
+  }
+
   const source = preparedSources.find(item =>
     item.classEntry.classId === (sourceClassId || entry.sourceClassId)
   ) ?? preparedSources.find(item =>
@@ -583,6 +663,15 @@ export function removeSpellFromCharacter(character, spellId) {
   const index = character.magic.spells.findIndex(entry => entry.spellId === spellId);
   if (index === -1) {
     return { ok: false, message: "Заклинання не знайдено." };
+  }
+
+  const entry = character.magic.spells[index];
+
+  if (entry.autoKnown) {
+    return {
+      ok: false,
+      message: "Це заклинання автоматично відоме класу й не може бути видалене."
+    };
   }
 
   const entry = character.magic.spells[index];
