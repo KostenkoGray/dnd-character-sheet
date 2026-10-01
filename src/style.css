@@ -3002,6 +3002,21 @@ p {
   text-align: right;
 }
 
+.magic-known-source-section {
+  margin: 12px 12px 0;
+}
+
+.magic-add-source-note {
+  margin: -4px 0 10px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.magic-add-result button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
 .magic-search {
   margin-top: 12px;
 }
