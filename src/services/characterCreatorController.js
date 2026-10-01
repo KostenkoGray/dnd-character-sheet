@@ -86,7 +86,11 @@ function setCreatorChoiceValue(state, groupId, values, group) {
     return;
   }
 
-  if (groupId === "humanLanguage" || groupId === "highElfLanguage") {
+  if (
+    groupId === "humanLanguage" ||
+    groupId === "highElfLanguage" ||
+    groupId === "halfElfLanguage"
+  ) {
     state.raceChoices.languages = list;
     return;
   }
