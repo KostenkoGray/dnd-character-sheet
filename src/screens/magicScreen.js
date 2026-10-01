@@ -1,9 +1,7 @@
 import { bottomNavigation } from "../components/bottomNavigation.js";
 import {
   getSpellcastingSources,
-  getKnownSpells,
   getKnownSpellsForSource,
-  getPreparedSpells,
   getSpellLimits
 } from "../services/magicService.js";
 import {
@@ -227,9 +225,6 @@ export function magicScreen(character, filter = {}, collapsedLevels = {}) {
     `;
   }
 
-  const known = getKnownSpells(character);
-  const prepared = getPreparedSpells(character);
-
   return `
     <div class="app">
       <main class="magic-main">
@@ -242,20 +237,6 @@ export function magicScreen(character, filter = {}, collapsedLevels = {}) {
         </div>
 
         ${spellSlotsCounter(character, { className: "magic-slots-section" })}
-
-        <section class="combat-section magic-source-section">
-          <h2>Spellcasting</h2>
-          <div class="magic-source-list">
-            <div class="magic-source-row">
-              <strong>Підготовлені закляття</strong>
-              <span>${prepared.length} · один спільний список</span>
-            </div>
-            <div class="magic-source-row">
-              <strong>Відомі закляття</strong>
-              <span>${known.length} · окремий список для кожного класу-джерела</span>
-            </div>
-          </div>
-        </section>
 
         <label class="inventory-search magic-search">
           <span>Пошук</span>
