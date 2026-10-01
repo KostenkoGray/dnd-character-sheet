@@ -54,6 +54,7 @@ export function ensureCombatState(character) {
   );
 
   character.combat.inspiration = Boolean(character.combat.inspiration);
+  character.combat.concentration = Boolean(character.combat.concentration);
 
   character.combat.currentSpellSlots ??= {};
   if (!character.combat.currentSpellSlots || typeof character.combat.currentSpellSlots !== "object") {
