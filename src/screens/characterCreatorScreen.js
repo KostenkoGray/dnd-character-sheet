@@ -332,7 +332,12 @@ function renderClassSummary(summary) {
   const weapons = summary.weaponProficiencies.map(id => typeof id === "string" ? id : id?.ukr ?? id?.name ?? id).map(id => CLASS_WEAPON_NAMES[id] ?? id).join(", ");
   const armor = summary.armorProficiencies.map(id => CLASS_ARMOR_NAMES[id] ?? id).join(", ");
   const tools = summary.toolProficiencies.map(id => formatToolName(id)).join(", ");
-
+  const toolChoice = summary.toolChoices
+    ? "обрати " +
+      Number(summary.toolChoices.count ?? 1) +
+      ": " +
+      (summary.toolChoices.options ?? []).map(formatToolCategoryName).join(", ")
+    : "";
 
   return (
     '<section class="creator-summary-card">' +
@@ -346,7 +351,7 @@ function renderClassSummary(summary) {
           : "") +
         '<p><span>Зброя:</span> ' + escapeHtml(weapons || "—") + '</p>' +
         '<p><span>Броня:</span> ' + escapeHtml(armor || "—") + '</p>' +
-        '<p><span>Інструменти:</span> ' + escapeHtml(tools || "—") + '</p>' +
+        '<p><span>Інструменти:</span> ' + escapeHtml(tools || toolChoice || "—") + '</p>' +
         '<div class="creator-feature-list">' +
           summary.features.map(feature =>
             '<div><strong>' + escapeHtml(feature.ukr ?? feature.name) + '</strong><span>' + escapeHtml(feature.short ?? "") + '</span></div>'
@@ -376,6 +381,17 @@ function formatToolName(id) {
   return Object.values(CREATOR_TOOL_OPTIONS)
     .flat()
     .find(entry => entry[0] === id)?.[1] ?? id;
+}
+
+function formatToolCategoryName(id) {
+  const names = {
+    musicalInstrument: "музичні інструменти",
+    artisanTools: "ремісничі інструменти",
+    gamingSet: "ігровий набір",
+    vehicle: "транспортні засоби"
+  };
+
+  return names[id] ?? id;
 }
 
 function renderClassChoicesStep(state) {
