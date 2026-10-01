@@ -105,8 +105,10 @@ function getPreparedLimitForSource(character, source) {
   const modifier = getStatModifier(
     getEffectiveAbilityScore(character, ability)
   );
+  const divisor = Number(source.spellcasting.preparationLevelDivisor ?? 1);
+  const classLevel = Number(source.classEntry.level ?? 0);
 
-  return Math.max(1, Number(source.classEntry.level ?? 0) + modifier);
+  return Math.max(1, Math.floor(classLevel / divisor) + modifier);
 }
 
 function getAvailableSourcesForSpell(character, spell) {
@@ -272,6 +274,14 @@ export function toggleSpellPrepared(character, spellId) {
   const entry = character.magic.spells.find(item => item.spellId === spellId);
   if (!entry) {
     return { ok: false, message: "Заклинання не знайдено серед відомих." };
+  }
+
+  const spell = getSpellById(spellId);
+  if (spell?.level === 0) {
+    return {
+      ok: false,
+      message: "Замови не потребують підготовки."
+    };
   }
 
   if (entry.prepared) {
