@@ -332,8 +332,16 @@ export async function startCharacterCreator({ app, onCancel, onCreate, onError }
 
     const subraceButton = event.target.closest("[data-creator-subrace]");
     if (subraceButton) {
-      state.subraceId = subraceButton.dataset.creatorSubrace ?? "";
+      const nextSubrace = subraceButton.dataset.creatorSubrace ?? "";
+      const previousSubrace = state.subraceId;
+
+      state.subraceId = nextSubrace;
       state.raceChoices.cantrip = "";
+
+      if (previousSubrace === "highElf" || nextSubrace !== "highElf") {
+        state.raceChoices.languages = [];
+      }
+
       state.error = "";
       safeRender();
       return;
