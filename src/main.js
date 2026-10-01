@@ -1740,7 +1740,7 @@ app.addEventListener("click", (event) => {
       return;
     }
 
-    const magicLevelCollapse = event.target.closest("[data-collapse-section^="magic-level-"]");
+    const magicLevelCollapse = event.target.closest('[data-collapse-section^="magic-level-"]');
     if (magicLevelCollapse) {
       const collapseId = magicLevelCollapse.dataset.collapseSection;
       collapseState.magicLevels ??= {};
