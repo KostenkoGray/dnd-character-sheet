@@ -3398,3 +3398,9 @@ p {
     padding:9px 10px;
   }
 }
+
+
+/* Magic add source buttons */
+.magic-add-source-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:5px;flex:0 0 auto;}
+.magic-add-source-actions .inventory-action-button{flex:0 0 auto;}
+@media (max-width:420px){.magic-add-source-actions{width:100%;justify-content:stretch}.magic-add-source-actions .inventory-action-button{flex:1;}}
