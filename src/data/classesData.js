@@ -916,7 +916,6 @@ paladin: {
   spellcasting: {
   ability: "charisma",
   preparation: "prepared",
-  preparationLevelDivisor: 2,
   ritualCasting: false,
 
   slotsTable: HALF_CASTER_SLOTS
