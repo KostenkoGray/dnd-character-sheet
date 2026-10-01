@@ -299,7 +299,7 @@ function renderAddSpellBody(character, state, sourceClassId) {
   const search = String(state.search ?? "").trim().toLowerCase();
   const levelFilter = state.level ?? "all";
   const normalizedSourceId = String(sourceClassId ?? "");
-  const knownIds = new Set(getKnownSpells(character).map(entry => entry.spellId));
+  const knownIds = new Set(getKnownSpells(character).map(entry => entry.id));
 
   const limit = getSpellLimits(character).find(item =>
     String(item.classId) === normalizedSourceId
@@ -313,6 +313,7 @@ function renderAddSpellBody(character, state, sourceClassId) {
       levelFilter === "all" ||
       Number(entry.spell.level) === Number(levelFilter)
     )
+    .filter(entry => !knownIds.has(entry.spell.id))
     .filter(entry => {
       if (!search) return true;
       const spell = entry.spell;
@@ -337,8 +338,6 @@ function renderAddSpellBody(character, state, sourceClassId) {
   const results = available.length
     ? available.map(entry => {
         const spell = entry.spell;
-        const alreadyKnown = knownIds.has(spell.id);
-
         const atCantripLimit =
           spell.level === 0 &&
           limit?.cantripsLimit != null &&
@@ -349,12 +348,10 @@ function renderAddSpellBody(character, state, sourceClassId) {
           limit?.knownLimit != null &&
           limit.known >= limit.knownLimit;
 
-        const disabled = alreadyKnown || atCantripLimit || atKnownLimit;
+        const disabled = atCantripLimit || atKnownLimit;
 
         let buttonLabel = "Додати";
-        if (alreadyKnown) {
-          buttonLabel = "Вже відоме";
-        } else if (atCantripLimit || atKnownLimit) {
+        if (atCantripLimit || atKnownLimit) {
           buttonLabel = "Ліміт";
         }
 
@@ -459,6 +456,7 @@ function openAddSpellDialog(character, sourceClassId) {
     }
 
     persistCharacters();
+    render();
     rerenderBody(false);
   });
 }
@@ -1836,9 +1834,10 @@ app.addEventListener("click", (event) => {
     if (magicAction) {
       const spellId = magicAction.dataset.spellId;
       const action = magicAction.dataset.magicAction;
+      const sourceClassId = magicAction.dataset.magicSourceClassId ?? "";
       const result = action === "delete"
         ? removeSpellFromCharacter(currentCharacter, spellId)
-        : toggleSpellPrepared(currentCharacter, spellId);
+        : toggleSpellPrepared(currentCharacter, spellId, sourceClassId);
 
       if (!result.ok) {
         showCampDialog({
