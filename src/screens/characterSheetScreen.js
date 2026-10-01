@@ -559,10 +559,14 @@ export function characterSheetScreen(character, collapseState = {}) {
 
           <section class="combat-hit-dice">
             <button type="button" class="hit-die-select-button" data-hit-die-cycle="-1" aria-label="Попередня кістка">‹</button>
-            <div class="hit-die-display">
-              <h2>Hit Dice</h2>
-              <span class="hit-die-label">${getHitDieLabel(character)}</span>
-              <strong class="hit-dice-value">${getSelectedHitDieTypePool(character)?.current ?? 0}/${getSelectedHitDieTypePool(character)?.max ?? 0}</strong>
+            <div class="hit-dice-main">
+              <button id="sheet-hit-dice-plus" class="hit-dice-plus" type="button" aria-label="Витратити ще одну кістку">+</button>
+              <div class="hit-die-display">
+                <h2>Hit Dice</h2>
+                <span class="hit-die-label">${getHitDieLabel(character)}</span>
+                <strong class="hit-dice-value">${getSelectedHitDieTypePool(character)?.current ?? 0}/${getSelectedHitDieTypePool(character)?.max ?? 0}</strong>
+              </div>
+              <button id="sheet-hit-dice-minus" class="hit-dice-minus" type="button" aria-label="Повернути одну кістку">−</button>
             </div>
             <button type="button" class="hit-die-select-button" data-hit-die-cycle="1" aria-label="Наступна кістка">›</button>
           </section>
