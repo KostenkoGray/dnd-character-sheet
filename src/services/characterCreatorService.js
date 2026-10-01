@@ -129,7 +129,7 @@ export function getRaceChoices(state) {
     groups.push({
       id: "raceTool",
       title: "Вибір інструменту",
-      kind: "single",
+      kind: "categoryTools",
       count: Number(race.toolProficienciesChoice.count),
       options: resolveGenericChoiceOptions(race.toolProficienciesChoice.options)
     });
@@ -141,6 +141,7 @@ export function getRaceChoices(state) {
       title: "Бонуси характеристик",
       kind: "stats",
       count: 2,
+      unique: true,
       value: 1,
       options: ABILITY_KEYS.map(id => ({
         id,
@@ -1159,7 +1160,9 @@ export function buildCharacterFromCreator(state, id) {
     for (const id of state.classChoices.tools.tools ?? []) addTool(id);
   }
 
-  for (const id of state.backgroundChoices.tools.all ?? []) addTool(id);
+  for (const ids of Object.values(state.backgroundChoices.tools ?? {})) {
+    for (const id of (Array.isArray(ids) ? ids : [ids])) addTool(id);
+  }
   if (state.raceChoices.tool) addTool(state.raceChoices.tool);
   if (state.classChoices.expertise?.includes("thievesTools")) addTool("thievesTools");
 
