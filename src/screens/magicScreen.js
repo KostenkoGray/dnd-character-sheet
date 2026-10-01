@@ -140,7 +140,10 @@ export function renderMagicSpellsList(
     collapsibleSection({
       id: `magic-level-${sourceKey}-${level}`,
       title: `${formatSpellLevel(level)} · ${spells.length}`,
-      collapsed: Boolean(collapsedLevels[`${sourceKey}-${level}`]),
+      collapsed: Boolean(
+        collapsedLevels[`${sourceKey}-${level}`] ??
+        collapsedLevels[String(level)]
+      ),
       className: "magic-level-section",
       content: `<div class="magic-spells-list">${spells.map(renderSpellCard).join("")}</div>`
     })
