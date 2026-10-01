@@ -371,13 +371,7 @@ function formatCurrency(currency = {}) {
     .join(", ") || "—";
 }
 
-function formatCurrency(currency = {}) {
-  const names = [["pp", "PP"], ["gp", "GP"], ["ep", "EP"], ["sp", "SP"], ["cp", "CP"]];
-  return names
-    .filter(([id]) => Number(currency?.[id] ?? 0) > 0)
-    .map(([id, label]) => Number(currency[id]) + " " + label)
-    .join(", ") || "—";
-}
+
 
 function renderBackgroundStep(state) {
   const backgrounds = getBackgroundOptions();
@@ -403,12 +397,6 @@ function renderBackgroundStep(state) {
         ? '<section class="creator-background-detail">' +
             '<h3>' + escapeHtml(BACKGROUNDS[state.backgroundId]?.feature?.ukr ?? "Особливість") + '</h3>' +
             '<p>' + escapeHtml(BACKGROUNDS[state.backgroundId]?.feature?.description ?? "") + '</p>' +
-            '<div class="creator-summary-lines">' +
-              '<p><span>Навички:</span> ' + escapeHtml((BACKGROUNDS[state.backgroundId]?.skillProficiencies?.granted ?? []).join(", ") || "—") + '</p>' +
-              '<p><span>Інструменти:</span> ' + escapeHtml((BACKGROUNDS[state.backgroundId]?.toolProficiencies?.granted ?? []).join(", ") || "—") + '</p>' +
-              '<p><span>Мови:</span> ' + escapeHtml((BACKGROUNDS[state.backgroundId]?.languages?.granted ?? []).join(", ") || "—") + '</p>' +
-              '<p><span>Стартова валюта:</span> ' + escapeHtml(formatCurrency(BACKGROUNDS[state.backgroundId]?.startingCurrency)) + '</p>' +
-            '</div>' +
             '<div class="creator-summary-lines">' +
               '<p><span>Навички:</span> ' + escapeHtml((BACKGROUNDS[state.backgroundId]?.skillProficiencies?.granted ?? []).join(", ") || "—") + '</p>' +
               '<p><span>Інструменти:</span> ' + escapeHtml((BACKGROUNDS[state.backgroundId]?.toolProficiencies?.granted ?? []).join(", ") || "—") + '</p>' +
@@ -510,8 +498,8 @@ function renderMagicStep(state) {
           '</select></label>'
         : "") +
       (requirements.spells
-        ? '<label class="creator-field"><span>Закляття 1 рівня <small>(оберіть ' + requirements.spells + ')</small></span>' +
-          '<select multiple size="8" data-creator-magic="spells">' +
+        ? '<label class="creator-field"><span>' + escapeHtml(requirements.spellsLabel ?? "Закляття 1 рівня") + ' <small>(оберіть ' + requirements.spells + ')</small></span>' +
+          '<select multiple size="8" data-creator-magic="spells">'
             spells.map(option =>
               '<option value="' + escapeHtml(option.id) + '"' + (selectedSpells.includes(option.id) ? " selected" : "") + '>' + escapeHtml(option.label) + '</option>'
             ).join("") +
