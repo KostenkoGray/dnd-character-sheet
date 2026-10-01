@@ -4748,3 +4748,14 @@ p {
     min-height: 30px;
   }
 }
+
+
+.numeric-input-dialog{
+  padding-bottom: 24vh;
+}
+
+@media (max-width: 420px){
+  .numeric-input-dialog{
+    padding-bottom: 28vh;
+  }
+}
