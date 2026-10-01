@@ -161,14 +161,20 @@ export async function startCharacterCreator({ app, onCancel, onCreate, onError }
   let creatorService;
 
   try {
-    [({ characterCreatorScreen: creatorScreen }), creatorService] = await Promise.all([
+    const [screenModule, serviceModule] = await Promise.all([
       import("../screens/characterCreatorScreen.js"),
       import("./characterCreatorService.js")
     ]);
+
+    creatorScreen = screenModule.characterCreatorScreen;
+    creatorService = serviceModule;
   } catch (error) {
     console.error("Character Creator import failed:", error);
-    onError?.(error);
-    renderError(app, error);
+    if (onError) {
+      onError(error);
+    } else {
+      renderError(app, error);
+    }
     return null;
   }
 
@@ -176,7 +182,6 @@ export async function startCharacterCreator({ app, onCancel, onCreate, onError }
     createCreatorState,
     validateCreatorStep,
     getCreatorSteps,
-    getChoiceValue,
     buildCharacterFromCreator
   } = creatorService;
 
@@ -210,8 +215,11 @@ export async function startCharacterCreator({ app, onCancel, onCreate, onError }
     } catch (error) {
       console.error("Character Creator render failed:", error);
       cleanup();
-      onError?.(error);
-      renderError(app, error);
+      if (onError) {
+        onError(error);
+      } else {
+        renderError(app, error);
+      }
     }
   };
 
