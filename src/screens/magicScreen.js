@@ -3,15 +3,14 @@ import {
   getSpellcastingSources,
   getKnownSpells,
   getPreparedSpells,
-  getSpellLimits,
-  getSpellSlotGroups,
-  getTotalSpellSlots,
-  getAvailableSpellSlots
+  getSpellLimits
 } from "../services/magicService.js";
 import {
   SPELL_SCHOOL_LABELS,
   SPELL_EFFECT_TYPE_LABELS
 } from "../data/spellsData.js";
+import { collapsibleSection } from "../components/collapsibleSection.js";
+import { spellSlotsCounter } from "../components/spellSlotsCounter.js";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -35,38 +34,6 @@ function formatComponents(components) {
 
 function formatSpellLevel(level) {
   return Number(level) === 0 ? "Замова" : `Рівень ${level}`;
-}
-
-function renderSlotCard(slot, pact = false) {
-  return `
-    <article class="magic-slot-card ${pact ? "pact-slot-card" : ""}">
-      <div class="magic-slot-heading">
-        <div>
-          <strong>${pact ? "Pact Magic" : formatSpellLevel(slot.level)}</strong>
-          <span>${pact ? `Комірка ${slot.level} рівня` : "Комірки заклять"}</span>
-        </div>
-        <strong class="magic-slot-current">${slot.current}/${slot.max}</strong>
-      </div>
-
-      <div class="magic-slot-controls">
-        <button
-          type="button"
-          class="inventory-action-button secondary"
-          data-spell-slot-action="spend"
-          data-spell-slot-level="${slot.level}"
-          data-spell-slot-pact="${pact ? "true" : "false"}"
-        >−</button>
-        <span>доступно</span>
-        <button
-          type="button"
-          class="inventory-action-button primary"
-          data-spell-slot-action="restore"
-          data-spell-slot-level="${slot.level}"
-          data-spell-slot-pact="${pact ? "true" : "false"}"
-        >+</button>
-      </div>
-    </article>
-  `;
 }
 
 function renderSpellCard(spell) {
@@ -140,7 +107,7 @@ function groupSpells(spells) {
   return [...grouped.entries()].sort((a, b) => a[0] - b[0]);
 }
 
-export function renderMagicSpellsList(character, filter = {}) {
+export function renderMagicSpellsList(character, filter = {}, collapsedLevels = {}) {
   const search = String(filter.search ?? "").trim().toLowerCase();
 
   const known = getKnownSpells(character).filter(spell => {
@@ -161,18 +128,18 @@ export function renderMagicSpellsList(character, filter = {}) {
     return '<p class="inventory-empty">Немає відомих заклинань.</p>';
   }
 
-  return groupSpells(known).map(([level, spells]) => `
-    <section class="magic-level-section">
-      <div class="magic-section-heading">
-        <h3>${escapeHtml(formatSpellLevel(level))}</h3>
-        <span>${spells.length}</span>
-      </div>
-      <div class="magic-spells-list">${spells.map(renderSpellCard).join("")}</div>
-    </section>
-  `).join("");
+  return groupSpells(known).map(([level, spells]) =>
+    collapsibleSection({
+      id: `magic-level-${level}`,
+      title: `${formatSpellLevel(level)} · ${spells.length}`,
+      collapsed: Boolean(collapsedLevels[String(level)]),
+      className: "magic-level-section",
+      content: `<div class="magic-spells-list">${spells.map(renderSpellCard).join("")}</div>`
+    })
+  ).join("");
 }
 
-export function magicScreen(character, filter = {}) {
+export function magicScreen(character, filter = {}, collapsedLevels = {}) {
   const sources = getSpellcastingSources(character);
 
   if (!sources.length) {
@@ -196,17 +163,9 @@ export function magicScreen(character, filter = {}) {
     `;
   }
 
-  const groups = getSpellSlotGroups(character);
-  const totalSlots = getTotalSpellSlots(character);
-  const availableSlots = getAvailableSpellSlots(character);
   const known = getKnownSpells(character);
   const prepared = getPreparedSpells(character);
   const limits = getSpellLimits(character);
-
-  const slotCards = [
-    ...groups.normal.map(slot => renderSlotCard(slot)),
-    ...groups.pact.map(slot => renderSlotCard(slot, true))
-  ].join("");
 
   const sourceSummary = limits.map(limit => {
     const knownText = limit.knownLimit === null ? `${limit.known}` : `${limit.known}/${limit.knownLimit}`;
@@ -232,18 +191,7 @@ export function magicScreen(character, filter = {}) {
           <button type="button" id="close-magic" class="close-character-sheet" aria-label="Повернутися до Character Sheet">×</button>
         </div>
 
-        <section class="magic-slots-section">
-          <div class="magic-title-row">
-            <div>
-              <h2>Магічні комірки</h2>
-              <span>Доступно ${availableSlots} / ${totalSlots}</span>
-            </div>
-          </div>
-
-          <div class="magic-slots-grid">
-            ${slotCards || '<p class="inventory-empty">На поточному рівні немає доступних комірок.</p>'}
-          </div>
-        </section>
+        ${spellSlotsCounter(character, { className: "magic-slots-section" })}
 
         <section class="combat-section magic-source-section">
           <h2>Spellcasting</h2>
@@ -268,7 +216,7 @@ export function magicScreen(character, filter = {}) {
           </label>
 
           <div id="magic-spells-list" class="magic-spells-sections">
-            ${renderMagicSpellsList(character, filter)}
+            ${renderMagicSpellsList(character, filter, collapsedLevels)}
           </div>
         </section>
       </main>
