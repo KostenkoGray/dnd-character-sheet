@@ -576,6 +576,13 @@ function renderNameStep(state) {
       '<section class="creator-final-summary">' +
         '<div><span>Раса</span><strong>' + escapeHtml(RACES[state.raceId]?.ukr ?? state.raceId ?? "—") + '</strong></div>' +
         '<div><span>Клас</span><strong>' + escapeHtml(CLASSES[state.classId]?.ukr ?? state.classId ?? "—") + '</strong></div>' +
+        (state.subclassId && CLASSES[state.classId]?.subclasses?.[state.subclassId]
+          ? '<div><span>Підклас</span><strong>' + escapeHtml(
+              CLASSES[state.classId].subclasses[state.subclassId].ukr ??
+              CLASSES[state.classId].subclasses[state.subclassId].name ??
+              state.subclassId
+            ) + '</strong></div>'
+          : "") +
         '<div><span>Походження</span><strong>' + escapeHtml(BACKGROUNDS[state.backgroundId]?.ukr ?? state.backgroundId ?? "—") + '</strong></div>' +
         '<div><span>Рівень</span><strong>1</strong></div>' +
       '</section>' +
