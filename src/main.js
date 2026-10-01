@@ -2248,11 +2248,11 @@ app.addEventListener("click", (event) => {
     }
 
     if (event.target.closest("#sheet-temp-hp-value-input")) {
-      const input = prompt("Введіть Temporary HP",String(currentCharacter.combat.tempHp));
-      if (input !== null && input.trim() !== "") {
-        const value = Number(input);
-        if (Number.isFinite(value)) {
-          currentCharacter.combat.tempHp = Math.max(0,Math.floor(value));
+      const input = prompt("Введіть Temporary HP (лише цифри)",String(currentCharacter.combat.tempHp));
+      if (input !== null) {
+        const digits = input.replace(/\D/g, "");
+        if (digits !== "") {
+          currentCharacter.combat.tempHp = Number(digits);
           render();
         }
       }
@@ -2260,13 +2260,15 @@ app.addEventListener("click", (event) => {
     }
 
     if (event.target.closest("#sheet-hp-value-input")) {
-      const input = prompt(`Введіть поточне HP (0–${currentCharacter.maxHp})`,String(currentCharacter.combat.currentHp));
-      if (input !== null && input.trim() !== "") {
-        const value = Number(input);
-        if (Number.isFinite(value)) {
-          currentCharacter.combat.currentHp = clamp(
-            Math.floor(value),0,Number(currentCharacter.maxHp ?? 0)
-          );
+      const input = prompt(`Введіть поточне HP (лише цифри, 0–${currentCharacter.maxHp})`,String(currentCharacter.combat.currentHp));
+      if (input !== null) {
+        const digits = input.replace(/\D/g, "");
+        if (digits !== "") {
+          const value = Number(digits);
+          if (Number.isFinite(value)) {
+            currentCharacter.combat.currentHp = clamp(
+              value,0,Number(currentCharacter.maxHp ?? 0)
+            );
           resetDeathSavesWhenAlive(currentCharacter);
           render();
         }
@@ -2387,19 +2389,22 @@ app.addEventListener("click", (event) => {
 
     if (event.target.closest("#hp-value-input")) {
       const input = prompt(
-        `Введіть поточне HP (0–${currentCharacter.maxHp})`,
+        `Введіть поточне HP (лише цифри, 0–${currentCharacter.maxHp})`,
         String(currentCharacter.combat.currentHp)
       );
 
-      if (input !== null && input.trim() !== "") {
-        const value = Number(input);
+      if (input !== null) {
+        const digits = input.replace(/\D/g, "");
 
-        if (Number.isFinite(value)) {
-          currentCharacter.combat.currentHp = clamp(
-            Math.floor(value),
-            0,
-            Number(currentCharacter.maxHp ?? 0)
-          );
+        if (digits !== "") {
+          const value = Number(digits);
+
+          if (Number.isFinite(value)) {
+            currentCharacter.combat.currentHp = clamp(
+              value,
+              0,
+              Number(currentCharacter.maxHp ?? 0)
+            );
           render();
         }
       }
