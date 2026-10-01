@@ -3084,9 +3084,19 @@ p {
 
 .magic-spell-heading-right {
   display: flex;
+  flex-direction: row !important;
   align-items: center;
+  justify-content: flex-end;
   gap: 7px;
-  flex-shrink: 0;
+  width: 92px;
+  min-width: 92px;
+  flex: 0 0 92px;
+}
+
+.magic-spell-heading-right > span {
+  width: 55px;
+  min-width: 55px;
+  text-align: right;
 }
 
 .magic-favorite-button {
