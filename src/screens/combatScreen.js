@@ -330,7 +330,7 @@ export function combatScreen(character, collapseState = {}) {
 
         ${spellSlotsCounter(character)}
 
-        ${preparedSpellsBlock(character, Boolean(collapseState.preparedSpells))}
+        ${preparedSpellsBlock(character, Boolean(collapseState.preparedSpells), collapseState.preparedSpellLevels)}
 
         <section class="combat-section">
           <h2>Weapons</h2>
