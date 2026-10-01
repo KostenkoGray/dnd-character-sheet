@@ -29,8 +29,7 @@ export function wallet(character) {
       <div class="wallet-coin-row">
         <div class="wallet-coin-name">
           <strong>${escapeHtml(coin.short)}</strong>
-          <span>${escapeHtml(coin.ukr)}</span>
-        </div>
+                  </div>
 
         <div class="wallet-coin-counter">
           <button
