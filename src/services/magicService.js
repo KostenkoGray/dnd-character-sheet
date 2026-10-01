@@ -391,6 +391,18 @@ export function addSpellToCharacter(character, spellId, sourceClassId = "") {
         };
       }
 
+      const freshExisting = character.magic.spells.find(
+        item => item.spellId === spellId
+      );
+
+      if (!freshExisting) {
+        return {
+          ok: false,
+          message: "Не вдалося оновити джерело заклинання."
+        };
+      }
+
+      existing = freshExisting;
       existing.sourceClassIds.push(sourceId);
     }
 
@@ -480,6 +492,18 @@ export function toggleSpellPrepared(character, spellId, sourceClassId = "") {
       };
     }
 
+    const freshEntry = character.magic.spells.find(
+      item => item.spellId === spellId
+    );
+
+    if (!freshEntry) {
+      return {
+        ok: false,
+        message: "Не вдалося оновити джерело заклинання."
+      };
+    }
+
+    entry = freshEntry;
     entry.sourceClassIds.push(classId);
   }
 
@@ -500,6 +524,19 @@ export function toggleSpellPrepared(character, spellId, sourceClassId = "") {
     const currentPrepared = getKnownSpellEntries(character).filter(item =>
       item.preparedSourceClassIds.includes(classId)
     ).length;
+
+    const freshPreparedEntry = character.magic.spells.find(
+      item => item.spellId === spellId
+    );
+
+    if (!freshPreparedEntry) {
+      return {
+        ok: false,
+        message: "Не вдалося оновити стан підготовки заклинання."
+      };
+    }
+
+    entry = freshPreparedEntry;
 
     if (currentPrepared >= limit) {
       return {
