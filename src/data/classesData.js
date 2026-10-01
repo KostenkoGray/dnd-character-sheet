@@ -695,10 +695,21 @@ fighter: {
       ukr: "Містичний лицар",
 
       spellcasting: {
-    ability: "intelligence",
-    preparation: "known",
-    ritualCasting: false,
-    slotsTable: THIRD_CASTER_SLOTS
+        ability: "intelligence",
+        preparation: "known",
+        ritualCasting: false,
+        slotsTable: THIRD_CASTER_SLOTS,
+        spellListClassId: "wizard",
+        allowedSpellSchools: ["abjuration", "evocation"],
+        unrestrictedSpellLevels: [8, 14, 20],
+        spellsKnown: {
+          3: 3, 4: 4, 7: 5, 8: 6, 10: 7, 11: 8,
+          13: 9, 14: 10, 16: 11, 19: 12, 20: 13
+        },
+        cantripsKnown: {
+          3: 2,
+          10: 3
+        }
       },
       
       featuresByLevel: {
@@ -1038,11 +1049,24 @@ ranger: {
   // =========================================
 
   spellcasting: {
-  ability: "wisdom",
-  preparation: "known",
-  ritualCasting: false,
+    ability: "wisdom",
+    preparation: "known",
+    ritualCasting: false,
 
-  slotsTable: HALF_CASTER_SLOTS
+    slotsTable: HALF_CASTER_SLOTS,
+
+    spellsKnown: {
+      2: 2,
+      3: 3,
+      5: 4,
+      7: 5,
+      9: 6,
+      11: 7,
+      13: 8,
+      15: 9,
+      17: 10,
+      19: 11
+    }
   },
 
   // =========================================
@@ -1202,12 +1226,23 @@ rogue: {
       name: "Arcane Trickster",
       ukr: "Містичний шахрай",
 
-spellcasting: {
-    ability: "intelligence",
-    preparation: "known",
-    ritualCasting: false,
-    slotsTable: THIRD_CASTER_SLOTS
-},
+      spellcasting: {
+        ability: "intelligence",
+        preparation: "known",
+        ritualCasting: false,
+        slotsTable: THIRD_CASTER_SLOTS,
+        spellListClassId: "wizard",
+        allowedSpellSchools: ["enchantment", "illusion"],
+        unrestrictedSpellLevels: [8, 14, 20],
+        spellsKnown: {
+          3: 3, 4: 4, 7: 5, 8: 6, 10: 7, 11: 8,
+          13: 9, 14: 10, 16: 11, 19: 12, 20: 13
+        },
+        cantripsKnown: {
+          3: 3,
+          10: 4
+        }
+      },
 
       featuresByLevel: {
         3: ["arcaneTricksterSpellcasting", "mageHandLegerdemain"],
