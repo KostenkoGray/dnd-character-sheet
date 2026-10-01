@@ -4143,3 +4143,63 @@ p {
     font-size: .66rem;
   }
 }
+
+
+/* ==================================================
+   NARROWER EQUIPMENT / MORE ROOM FOR NEIGHBOR
+   ================================================== */
+
+.sheet-equipment-wallet-row,
+.combat-equipment-weapons-row {
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, .95fr);
+}
+
+@media (max-width: 380px) {
+  .sheet-equipment-wallet-row {
+    grid-template-columns: minmax(0, 1.25fr) minmax(112px, .95fr);
+  }
+
+  .combat-equipment-weapons-row {
+    grid-template-columns: minmax(0, 1.25fr) minmax(108px, .95fr);
+  }
+}
+
+/* Equipment: show actual AC/stat contribution without making slots tall. */
+.equipment-slot-bonus {
+  color: var(--accent-light);
+  font-size: .58rem !important;
+  font-weight: 700;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.equipment-bonus-summary {
+  display: grid;
+  gap: 2px;
+  margin-top: 7px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+
+.equipment-bonus-summary span {
+  color: var(--text-muted);
+  font-size: .58rem;
+  line-height: 1.1;
+}
+
+.equipment-bonus-summary strong {
+  color: var(--accent-light);
+  font-size: .64rem;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 380px) {
+  .equipment-bonus-summary strong {
+    font-size: .59rem;
+  }
+
+  .equipment-slot-bonus {
+    font-size: .54rem !important;
+  }
+}
