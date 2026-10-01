@@ -3219,3 +3219,182 @@ p {
     flex-direction: column;
   }
 }
+
+
+/* ==================================================
+   COMPACT SPELL SLOT COUNTER
+   ================================================== */
+
+.spell-slots-counter{
+  width:100%;
+  margin:0 0 14px;
+  padding:10px 12px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+
+.spell-slots-counter-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:7px;
+}
+
+.spell-slots-counter-heading strong{
+  font-size:.78rem;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+.spell-slots-counter-heading span{
+  color:var(--text-muted);
+  font-size:.68rem;
+  font-variant-numeric:tabular-nums;
+}
+
+.spell-slots-counter-list{
+  display:grid;
+  gap:5px;
+}
+
+.spell-slot-row{
+  display:grid;
+  grid-template-columns:72px minmax(0,1fr);
+  align-items:center;
+  gap:7px;
+  min-width:0;
+}
+
+.spell-slot-level{
+  color:var(--text-muted);
+  font-size:.67rem;
+  white-space:nowrap;
+}
+
+.spell-slot-dots{
+  display:flex;
+  flex-wrap:nowrap;
+  gap:3px;
+  min-width:0;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+
+.spell-slot-dots::-webkit-scrollbar{
+  display:none;
+}
+
+.spell-slot-dot{
+  width:29px;
+  height:29px;
+  flex:0 0 29px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  border:1px solid var(--border);
+  border-radius:50%;
+  background:var(--surface-light);
+  color:var(--text-muted);
+  cursor:pointer;
+  font-size:.9rem;
+  line-height:1;
+}
+
+.spell-slot-dot.filled{
+  border-color:var(--accent);
+  background:var(--accent-bg);
+  color:var(--accent-light);
+}
+
+.spell-slot-dot:active{
+  transform:scale(.95);
+}
+
+.spell-slot-dot:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:1px;
+}
+
+.spell-slots-counter.magic-slots-section{
+  margin:8px 12px 12px;
+  width:auto;
+}
+
+
+/* ==================================================
+   MAGIC UI REFINEMENTS
+   ================================================== */
+
+.magic-source-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:2px;
+  align-items:start;
+}
+
+.magic-source-row strong{
+  display:block;
+  min-width:0;
+  font-size:.77rem;
+  line-height:1.15;
+}
+
+.magic-source-row span{
+  display:block;
+  min-width:0;
+  color:var(--text-muted);
+  font-size:.68rem;
+  line-height:1.25;
+  text-align:left;
+  overflow-wrap:anywhere;
+}
+
+.magic-level-section{
+  margin:0 0 8px;
+}
+
+.magic-level-section .collapsible-section-header{
+  min-height:40px;
+  padding:8px 10px;
+  border-radius:10px;
+}
+
+.magic-level-section .collapsible-section-header strong{
+  font-size:.76rem;
+}
+
+.magic-level-section .collapsible-section-content{
+  margin-top:6px;
+}
+
+.magic-level-section.is-collapsed{
+  margin-bottom:6px;
+}
+
+.magic-add-results{
+  max-height:50svh;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding-right:2px;
+}
+
+@media (max-width:420px){
+  .spell-slot-row{
+    grid-template-columns:66px minmax(0,1fr);
+    gap:6px;
+  }
+
+  .spell-slot-dot{
+    width:27px;
+    height:27px;
+    flex-basis:27px;
+    font-size:.82rem;
+  }
+
+  .spell-slots-counter{
+    padding:9px 10px;
+  }
+}
