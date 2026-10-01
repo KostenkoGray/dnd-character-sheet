@@ -962,13 +962,27 @@ p {
 
   .stats-grid {
 
-    gap: 7px;
+    gap: 5px;
   }
 
 
   .stat-card {
 
-    min-height: 95px;
+    min-height: 60px;
+    padding: 4px;
+  }
+
+  .stat-name {
+    font-size: 9px;
+  }
+
+  .stat-value {
+    font-size: 18px;
+  }
+
+  .stat-modifier {
+    font-size: 10px;
+    min-width: 30px;
   }
 
 
