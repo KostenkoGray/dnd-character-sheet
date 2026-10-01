@@ -1,4 +1,6 @@
 import { STATS, ABILITY_KEYS } from "../data/rulesData.js";
+import { RACES } from "../data/racesData.js";
+import { CLASSES } from "../data/classesData.js";
 import { CREATOR_ABILITY_SCORE_ARRAY, CREATOR_CLASS_EQUIPMENT, CREATOR_TOOL_OPTIONS } from "../data/characterCreatorData.js";
 import { BACKGROUNDS } from "../data/backgroundsData.js";
 import { getItemCatalog } from "../services/inventoryService.js";
@@ -76,10 +78,10 @@ function renderSelect(title, group, selected) {
 
   return (
     '<label class="creator-field">' +
-      '<span>' + escapeHtml(title) + (group.kind !== "single" ? ' <small>(оберіть ' + max + ')</small>' : "") + '</span>' +
+      '<span>' + escapeHtml(title) + (max > 1 ? ' <small>(оберіть ' + max + ')</small>' : "") + '</span>' +
       '<select ' +
-        (group.kind === "single" ? "" : "multiple") +
-        ' size="' + (group.kind === "single" ? "1" : String(Math.min(Math.max(group.options.length, 4), 7))) + '"' +
+        (max > 1 ? "multiple" : "") +
+        ' size="' + (max > 1 ? String(Math.min(Math.max(group.options.length, 4), 7)) : "1") + '"'
         ' data-creator-choice-select="' + escapeHtml(group.id) + '"' +
         ' data-creator-choice-kind="' + escapeHtml(group.kind) + '"' +
         ' data-creator-choice-count="' + max + '"' +
@@ -129,13 +131,6 @@ function renderRaceStep(state) {
   const race = state.raceId ? state.raceId : "";
   const traitSummary = state.raceId ? getRaceTraitSummary(state) : null;
   const raceChoices = getRaceChoices(state);
-  const raceEntries = Object.values(
-    Object.fromEntries(
-      Object.keys(import.meta.glob("../data/racesData.js", { eager: true, query: "?raw", import: "default" }))
-        .map(key => [key, key])
-    )
-  );
-
   return (
     '<section class="creator-step">' +
       '<div class="creator-section-heading">' +
@@ -143,7 +138,6 @@ function renderRaceStep(state) {
         '<p>Обери расу. Підраса та расові варіанти з виборами з\'являться тут же.</p>' +
       '</div>' +
       '<div class="creator-choice-grid creator-race-grid">' +
-        Object.keys(raceEntries.reduce(() => ({}), {})).map(() => "").join("") +
         renderRaceOptions(state, race) +
       '</div>' +
       (race ? renderSubraceOptions(state) : "") +
@@ -155,9 +149,7 @@ function renderRaceStep(state) {
 }
 
 function renderRaceOptions(state, selectedRace) {
-  const racesModule = import.meta.glob("../data/racesData.js", { eager: true });
-  const data = Object.values(racesModule)[0];
-  const races = Object.values(data.RACES ?? {});
+  const races = Object.values(RACES);
 
   return races.map(race =>
     '<button type="button" class="creator-card-button creator-race-option ' + (selectedRace === race.id ? "selected" : "") + '" data-creator-race="' + escapeHtml(race.id) + '">' +
@@ -169,9 +161,7 @@ function renderRaceOptions(state, selectedRace) {
 }
 
 function renderSubraceOptions(state) {
-  const racesModule = import.meta.glob("../data/racesData.js", { eager: true });
-  const data = Object.values(racesModule)[0];
-  const race = data.RACES?.[state.raceId];
+  const race = RACES[state.raceId];
   const subraces = Object.values(race?.subraces ?? {});
 
   if (!subraces.length) return "";
@@ -192,9 +182,7 @@ function renderSubraceOptions(state) {
 }
 
 function renderHumanVariantOptions(state) {
-  const racesModule = import.meta.glob("../data/racesData.js", { eager: true });
-  const data = Object.values(racesModule)[0];
-  const variants = Object.entries(data.RACES?.human?.variants ?? {});
+  const variants = Object.entries(RACES.human?.variants ?? {});
 
   if (!variants.length) return "";
 
@@ -269,9 +257,7 @@ function renderStatsStep(state) {
 }
 
 function renderClassStep(state) {
-  const classDataModule = import.meta.glob("../data/classesData.js", { eager: true });
-  const data = Object.values(classDataModule)[0];
-  const classes = Object.values(data.CLASSES ?? {});
+  const classes = Object.values(CLASSES);
   const summary = state.classId ? getClassSummary(state) : null;
   const subclassOptions = state.classId ? getSubclassOptions(state) : [];
 
