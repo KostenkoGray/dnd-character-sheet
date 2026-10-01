@@ -38,6 +38,7 @@ import {
   addSpellToCharacter,
   toggleSpellPrepared,
   removeSpellFromCharacter,
+  toggleSpellFavorite,
   getAvailableSpells,
   getKnownSpells,
   getSpellLimits,
@@ -46,6 +47,12 @@ import {
   restoreSpellSlotsOnLongRest,
   toggleSpellSlotDot
 } from "./services/magicService.js";
+import {
+  ensureWallet,
+  adjustCoin,
+  setCoinAmount,
+  getCoinDefinition
+} from "./services/currencyService.js";
 import {
   getSpellById,
   SPELL_SCHOOL_LABELS,
@@ -90,6 +97,7 @@ const DEFAULT_COLLAPSE_STATE = {
   equipment: false,
   features: false,
   preparedSpells: false,
+  preparedSpellLevels: {},
   magicLevels: {}
 };
 
@@ -1677,6 +1685,7 @@ function render() {
     ensureInventory(currentCharacter);
     ensureMagicState(currentCharacter);
     ensureSpellSlotState(currentCharacter);
+    ensureWallet(currentCharacter);
   }
   persistCharacters();
   switch (currentScreen) {
@@ -1743,6 +1752,110 @@ app.addEventListener("input", event => {
 });
 
 app.addEventListener("click", (event) => {
+  if (
+    currentCharacter &&
+    currentScreen === "sheet"
+  ) {
+    const walletButton = event.target.closest("[data-wallet-action]");
+    if (walletButton) {
+      const action = walletButton.dataset.walletAction;
+      const coinId = walletButton.dataset.walletCoin ?? "";
+      const coin = getCoinDefinition(coinId);
+
+      if (action === "help") {
+        showCampDialog({
+          title: "Гаманець",
+          body: `
+            <p>PP — платина, GP — золото, EP — електрум, SP — срібло, CP — мідь.</p>
+            <p>Значення «Загалом» показує еквівалент усіх монет у GP та не є окремим балансом.</p>
+          `,
+          confirmLabel: "Закрити"
+        });
+        return;
+      }
+
+      if (!coin) return;
+
+      if (action === "plus" || action === "minus") {
+        const result = adjustCoin(
+          currentCharacter,
+          coinId,
+          action === "plus" ? 1 : -1
+        );
+
+        if (!result.ok) {
+          showCampDialog({
+            title: "Гаманець",
+            body: `<p>${escapeHtml(result.message)}</p>`,
+            confirmLabel: "Закрити"
+          });
+          return;
+        }
+
+        persistCharacters();
+        render();
+        return;
+      }
+
+      if (action === "set") {
+        ensureWallet(currentCharacter);
+        const current = currentCharacter.currency[coinId] ?? 0;
+        const input = prompt(
+          `Введіть кількість ${coin.ukr} монет`,
+          String(current)
+        );
+
+        if (input === null || input.trim() === "") return;
+
+        const value = Number(input);
+        if (!Number.isFinite(value)) {
+          showCampDialog({
+            title: "Гаманець",
+            body: "<p>Введіть ціле невід'ємне число.</p>",
+            confirmLabel: "Закрити"
+          });
+          return;
+        }
+
+        const result = setCoinAmount(currentCharacter, coinId, value);
+        if (!result.ok) {
+          showCampDialog({
+            title: "Гаманець",
+            body: `<p>${escapeHtml(result.message)}</p>`,
+            confirmLabel: "Закрити"
+          });
+          return;
+        }
+
+        persistCharacters();
+        render();
+        return;
+      }
+    }
+  }
+
+  if (currentCharacter) {
+    const favoriteButton = event.target.closest("[data-magic-favorite]");
+    if (favoriteButton) {
+      const result = toggleSpellFavorite(
+        currentCharacter,
+        favoriteButton.dataset.magicFavorite
+      );
+
+      if (!result.ok) {
+        showCampDialog({
+          title: "Улюблені закляття",
+          body: `<p>${escapeHtml(result.message)}</p>`,
+          confirmLabel: "Закрити"
+        });
+        return;
+      }
+
+      persistCharacters();
+      render();
+      return;
+    }
+  }
   if (
     currentCharacter &&
     ["sheet", "combat", "magic"].includes(currentScreen)
@@ -1878,6 +1991,17 @@ app.addEventListener("click", (event) => {
     const collapseButton = event.target.closest("[data-collapse-section]");
     if (collapseButton) {
       const sectionId = collapseButton.dataset.collapseSection;
+
+      if (sectionId.startsWith("prepared-level-")) {
+        const level = sectionId.replace("prepared-level-", "");
+        collapseState.preparedSpellLevels ??= {};
+        collapseState.preparedSpellLevels[level] =
+          !collapseState.preparedSpellLevels[level];
+        persistCollapseState(currentCharacter.id);
+        render();
+        return;
+      }
+
       if (Object.prototype.hasOwnProperty.call(collapseState, sectionId)) {
         collapseState[sectionId] = !collapseState[sectionId];
         persistCollapseState(currentCharacter.id);
