@@ -4530,3 +4530,29 @@ p {
     min-height: 27px;
   }
 }
+
+/* Hit Points / Hit Dice final layout */
+.combat-vitals{
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.hit-die-select-button{
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 7px;
+}
+
+@media (max-width: 380px){
+  .combat-vitals{
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+
+  .hit-die-select-button{
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+    border-radius: 6px;
+  }
+}
