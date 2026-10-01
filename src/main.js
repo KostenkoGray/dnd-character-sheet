@@ -38,6 +38,7 @@ import {
   addSpellToCharacter,
   toggleSpellPrepared,
   removeSpellFromCharacter,
+  toggleSpellFavorite,
   getAvailableSpells,
   getKnownSpells,
   getSpellLimits,
@@ -90,6 +91,7 @@ const DEFAULT_COLLAPSE_STATE = {
   equipment: false,
   features: false,
   preparedSpells: false,
+  preparedSpellLevels: {},
   magicLevels: {}
 };
 
@@ -1743,6 +1745,28 @@ app.addEventListener("input", event => {
 });
 
 app.addEventListener("click", (event) => {
+  if (currentCharacter) {
+    const favoriteButton = event.target.closest("[data-magic-favorite]");
+    if (favoriteButton) {
+      const result = toggleSpellFavorite(
+        currentCharacter,
+        favoriteButton.dataset.magicFavorite
+      );
+
+      if (!result.ok) {
+        showCampDialog({
+          title: "Улюблені закляття",
+          body: `<p>${escapeHtml(result.message)}</p>`,
+          confirmLabel: "Закрити"
+        });
+        return;
+      }
+
+      persistCharacters();
+      render();
+      return;
+    }
+  }
   if (
     currentCharacter &&
     ["sheet", "combat", "magic"].includes(currentScreen)
@@ -1878,6 +1902,17 @@ app.addEventListener("click", (event) => {
     const collapseButton = event.target.closest("[data-collapse-section]");
     if (collapseButton) {
       const sectionId = collapseButton.dataset.collapseSection;
+
+      if (sectionId.startsWith("prepared-level-")) {
+        const level = sectionId.replace("prepared-level-", "");
+        collapseState.preparedSpellLevels ??= {};
+        collapseState.preparedSpellLevels[level] =
+          !collapseState.preparedSpellLevels[level];
+        persistCollapseState(currentCharacter.id);
+        render();
+        return;
+      }
+
       if (Object.prototype.hasOwnProperty.call(collapseState, sectionId)) {
         collapseState[sectionId] = !collapseState[sectionId];
         persistCollapseState(currentCharacter.id);
