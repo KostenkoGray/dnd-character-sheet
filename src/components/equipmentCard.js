@@ -82,7 +82,7 @@ function renderSlot({ label, item, types, kind = "", emptyText = "Не екіп�
       <span class="equipment-slot-label">${escapeHtml(label)}</span>
       <strong>${escapeHtml(item ? itemLabel(item) : emptyText)}</strong>
       ${item
-        ? `${getItemBonusText(item, kind) ? `<small class="equipment-slot-bonus">${escapeHtml(getItemBonusText(item, kind))}</small>` : ""}<small>Натисніть, щоб змінити</small>`
+        ? `${getItemBonusText(item, kind) ? `<small class="equipment-slot-bonus">${escapeHtml(getItemBonusText(item, kind))}</small>` : ""}`
         : "<small>Натисніть, щоб екіпірувати</small>"}
     </button>
   `;
@@ -100,7 +100,7 @@ function renderArtifactSlots(artifacts) {
     >
       <span class="equipment-slot-label">Артефакт</span>
       <strong>${escapeHtml(itemLabel(item))}</strong>
-      <small>Натисніть, щоб зняти або змінити</small>
+      ${getItemBonusText(item, "artifact") ? `<small class="equipment-slot-bonus">${escapeHtml(getItemBonusText(item, "artifact"))}</small>` : ""}
     </button>
   `).join("");
 
