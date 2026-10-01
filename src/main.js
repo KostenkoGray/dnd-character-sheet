@@ -19,7 +19,13 @@ import { combatScreen } from "./screens/combatScreen.js";
 import { inventoryScreen, renderInventoryList } from "./screens/inventoryScreen.js";
 import { getStatModifier, getHitDiceTotal, clamp } from "./services/characterCalculationsService.js";
 import { CLASSES } from "./data/classesData.js";
-import { saveCharacters, loadSettings, saveSettings } from "./services/storageService.js";
+import {
+  saveCharacters,
+  loadSettings,
+  saveSettings,
+  loadUiState,
+  saveUiState
+} from "./services/storageService.js";
 import { DEFAULT_SETTINGS, ACTION_PREFERENCE_VALUES } from "./data/settingsData.js";
 import { bottomNavigation } from "./components/bottomNavigation.js";
 import { FEATS } from "./data/featsData.js";
@@ -58,11 +64,42 @@ let currentScreen = "list";
 let undoState = null;
 let inventoryFilter = { search: "", type: "all" };
 
-const collapseState = {
+const DEFAULT_COLLAPSE_STATE = {
   stats: false,
   equipment: false,
   features: false
 };
+
+const uiState = loadUiState({
+  collapseByCharacter: {}
+});
+
+let collapseState = { ...DEFAULT_COLLAPSE_STATE };
+
+function getCollapseState(characterId) {
+  const saved = uiState.collapseByCharacter?.[String(characterId)] ?? {};
+
+  return {
+    ...DEFAULT_COLLAPSE_STATE,
+    ...saved
+  };
+}
+
+function persistCollapseState(characterId) {
+  if (!characterId) return;
+
+  uiState.collapseByCharacter ??= {};
+  uiState.collapseByCharacter[String(characterId)] = {
+    ...DEFAULT_COLLAPSE_STATE,
+    ...collapseState
+  };
+
+  saveUiState(uiState);
+}
+
+function loadCollapseState(character) {
+  collapseState = getCollapseState(character?.id);
+}
 
 function cloneCharacterState(character) {
   return typeof structuredClone === "function"
@@ -1508,6 +1545,7 @@ app.addEventListener("click", (event) => {
       const sectionId = collapseButton.dataset.collapseSection;
       if (Object.prototype.hasOwnProperty.call(collapseState, sectionId)) {
         collapseState[sectionId] = !collapseState[sectionId];
+        persistCollapseState(currentCharacter.id);
         render();
       }
       return;
@@ -1538,9 +1576,7 @@ app.addEventListener("click", (event) => {
     const id = Number(card.dataset.characterId);
     currentCharacter = getCharacterById(id);
     currentScreen = "sheet";
-    collapseState.stats = false;
-    collapseState.equipment = false;
-    collapseState.features = false;
+    loadCollapseState(currentCharacter);
     render();
     return;
   }
@@ -1559,13 +1595,16 @@ app.addEventListener("click", (event) => {
   }
 
   if (event.target.closest("#close-inventory")) {
+    persistCollapseState(currentCharacter?.id);
     persistCharacters();
     currentScreen = "sheet";
+    loadCollapseState(currentCharacter);
     render();
     return;
   }
 
   if (event.target.closest("#close-character-sheet")) {
+    persistCollapseState(currentCharacter?.id);
     persistCharacters();
     currentCharacter = null;
     currentScreen = "list";
