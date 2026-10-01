@@ -756,7 +756,7 @@ export function validateCreatorStep(state, stepKey) {
     for (const group of getClassChoiceGroups(state)) {
       if (group.kind === "info") continue;
 
-      const value = state.classChoices[group.id];
+      const value = getChoiceValue(state, group);
       if (!isChoiceComplete(group, value)) {
         return "Завершіть вибір: " + group.title;
       }
