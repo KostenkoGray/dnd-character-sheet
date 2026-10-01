@@ -37,7 +37,7 @@ function formatSpellLevel(level) {
 
 
 function renderFavoriteButton(spell) {
-  return \`
+  return `
     <button
       type="button"
       class="magic-favorite-button ${spell.favorite ? "is-favorite" : ""}"
@@ -46,7 +46,7 @@ function renderFavoriteButton(spell) {
       aria-label="${spell.favorite ? "Прибрати з улюблених" : "Додати до улюблених"}"
       title="${spell.favorite ? "Прибрати з улюблених" : "Додати до улюблених"}"
     >${spell.favorite ? "★" : "☆"}</button>
-  \`;
+  `;
 }
 
 function renderSpellActions(spell) {
@@ -179,7 +179,7 @@ export function renderMagicSpellsList(
   const regularSpells = known.filter(spell => !spell.favorite);
 
   const favoriteBlock = favoriteSpells.length
-    ? \`
+    ? `
       <section class="magic-favorites-section">
         <div class="magic-favorites-heading">
           <strong>★ Улюблені</strong>
@@ -189,7 +189,7 @@ export function renderMagicSpellsList(
           ${favoriteSpells.map(renderSpellCard).join("")}
         </div>
       </section>
-    \`
+    `
     : "";
 
   const levelBlocks = groupSpells(regularSpells).map(([level, spells]) =>
