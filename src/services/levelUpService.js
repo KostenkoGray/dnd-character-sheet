@@ -340,7 +340,6 @@ export function applyLevelUp(character, classId, hpIncrease, choices = {}) {
       Number(character.combat.currentHp ?? character.maxHp),
       character.maxHp
     );
-    character.combat.currentHitDice = preview.hitDiceTotal;
   }
 
   return preview;
