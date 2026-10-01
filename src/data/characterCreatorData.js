@@ -297,7 +297,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
 
   bard: {
     fixed: [
-      custom("leatherArmor", "Шкіряний обладунок", "armor"),
+      item("armor", "leather"),
       custom("lute", "Лютня", "tool"),
       item("weapon", "dagger")
     ],
@@ -316,7 +316,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
 
   cleric: {
     fixed: [
-      custom("shield", "Щит", "shield"),
+      item("armor", "shield"),
       custom("holySymbol", "Святий символ", "other")
     ],
     choices: [
@@ -360,7 +360,8 @@ export const CREATOR_CLASS_EQUIPMENT = {
 
   fighter: {
     fixed: [
-      custom("longbowArrows", "Довгий лук + 20 стріл", "weapon"),
+      item("weapon", "longbow"),
+      custom("arrows20", "20 стріл"),
     ],
     choices: [
       pick("armor", "Броня", [
@@ -373,7 +374,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
           label: "Бойова зброя + щит",
           pickFrom: "martialMeleeWeapon",
           count: 1,
-          extraItems: [custom("shield", "Щит", "shield")]
+          extraItems: [item("armor", "shield")]
         },
         {
           id: "twoMartial",
@@ -444,7 +445,8 @@ export const CREATOR_CLASS_EQUIPMENT = {
 
   ranger: {
     fixed: [
-      custom("longbowArrows", "Довгий лук + 20 стріл", "weapon")
+      item("weapon", "longbow"),
+      custom("arrows20", "20 стріл")
     ],
     choices: [
       pick("armor", "Броня", [
@@ -466,8 +468,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
     fixed: [
       item("armor", "leather"),
       item("weapon", "dagger", 2),
-      custom("thievesTools", "Злодійські інструменти", "tool"),
-      custom("longbowArrows", "Не використовується — обери дальню зброю нижче")
+      custom("thievesTools", "Злодійські інструменти", "tool")
     ],
     choices: [
       pick("weapon", "Зброя", [
