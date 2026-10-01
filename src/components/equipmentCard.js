@@ -4,6 +4,7 @@ import {
   getEquippedShield,
   getEquippedArtifacts
 } from "../services/inventoryService.js";
+import { collapsibleSection } from "./collapsibleSection.js";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -70,40 +71,39 @@ function renderArtifactSlots(artifacts) {
   return filled + empty;
 }
 
-export function equipmentCard(character) {
+export function equipmentCard(character, collapsed = false) {
   const armor = getEquippedArmor(character);
   const shield = getEquippedShield(character);
   const artifacts = getEquippedArtifacts(character);
 
-  return `
-    <section class="combat-section equipment-section">
-      <div class="equipment-section-heading">
-        <div>
-          <h2>Спорядження</h2>
-          <p>Натисніть на комірку, щоб екіпірувати або зняти предмет з інвентаря.</p>
+  const content = `
+    <div class="equipment-grid">
+      ${renderSlot({
+        label: "Броня",
+        item: armor,
+        types: [ITEM_TYPES.ARMOR, ITEM_TYPES.ARTIFACT]
+      })}
+
+      ${renderSlot({
+        label: "Щит",
+        item: shield,
+        types: [ITEM_TYPES.SHIELD]
+      })}
+
+      <div class="equipment-artifacts">
+        <div class="equipment-subheading">Артефакти</div>
+        <div class="equipment-artifact-grid">
+          ${renderArtifactSlots(artifacts)}
         </div>
       </div>
-
-      <div class="equipment-grid">
-        ${renderSlot({
-          label: "Броня",
-          item: armor,
-          types: [ITEM_TYPES.ARMOR, ITEM_TYPES.ARTIFACT]
-        })}
-
-        ${renderSlot({
-          label: "Щит",
-          item: shield,
-          types: [ITEM_TYPES.SHIELD]
-        })}
-
-        <div class="equipment-artifacts">
-          <div class="equipment-subheading">Артефакти</div>
-          <div class="equipment-artifact-grid">
-            ${renderArtifactSlots(artifacts)}
-          </div>
-        </div>
-      </div>
-    </section>
+    </div>
   `;
+
+  return collapsibleSection({
+    id: "equipment",
+    title: "Спорядження",
+    collapsed,
+    className: "combat-section equipment-section",
+    content
+  });
 }
