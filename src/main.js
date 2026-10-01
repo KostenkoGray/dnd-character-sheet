@@ -1724,6 +1724,39 @@ function render() {
   }
 }
 
+app.addEventListener("change", event => {
+  if (currentScreen !== "sheet") return;
+
+  const walletInput = event.target.closest('[data-wallet-action="set"]');
+  if (!walletInput) return;
+
+  const coinId = walletInput.dataset.walletCoin ?? "";
+  const coin = getCoinDefinition(coinId);
+  if (!coin) return;
+
+  const value = Number(walletInput.value);
+  if (!Number.isInteger(value) || value < 0) {
+    ensureWallet(currentCharacter);
+    walletInput.value = String(currentCharacter.currency[coinId] ?? 0);
+    return;
+  }
+
+  const result = setCoinAmount(currentCharacter, coinId, value);
+  if (!result.ok) {
+    ensureWallet(currentCharacter);
+    walletInput.value = String(currentCharacter.currency[coinId] ?? 0);
+    showCampDialog({
+      title: "Гаманець",
+      body: `<p>${escapeHtml(result.message)}</p>`,
+      confirmLabel: "Закрити"
+    });
+    return;
+  }
+
+  persistCharacters();
+  render();
+});
+
 app.addEventListener("input", event => {
   if (currentScreen !== "inventory" || event.target.id !== "inventory-search") return;
   inventoryFilter.search = event.target.value;
@@ -1797,40 +1830,7 @@ app.addEventListener("click", (event) => {
         return;
       }
 
-      if (action === "set") {
-        ensureWallet(currentCharacter);
-        const current = currentCharacter.currency[coinId] ?? 0;
-        const input = prompt(
-          `Введіть кількість ${coin.ukr} монет`,
-          String(current)
-        );
 
-        if (input === null || input.trim() === "") return;
-
-        const value = Number(input);
-        if (!Number.isFinite(value)) {
-          showCampDialog({
-            title: "Гаманець",
-            body: "<p>Введіть ціле невід'ємне число.</p>",
-            confirmLabel: "Закрити"
-          });
-          return;
-        }
-
-        const result = setCoinAmount(currentCharacter, coinId, value);
-        if (!result.ok) {
-          showCampDialog({
-            title: "Гаманець",
-            body: `<p>${escapeHtml(result.message)}</p>`,
-            confirmLabel: "Закрити"
-          });
-          return;
-        }
-
-        persistCharacters();
-        render();
-        return;
-      }
     }
   }
 
