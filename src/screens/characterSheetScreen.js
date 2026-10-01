@@ -21,7 +21,7 @@ import { equipmentCard } from "../components/equipmentCard.js";
 import { preparedSpellsBlock } from "../components/preparedSpells.js";
 import { spellSlotsCounter } from "../components/spellSlotsCounter.js";
 import { wallet } from "../components/wallet.js";
-import { getSelectedHitDicePool } from "../services/hitDiceService.js";
+import { getSelectedHitDieTypePool } from "../services/hitDiceService.js";
 import {
   getInventoryFeatureEntries,
   getEffectiveAbilityScore,
@@ -53,7 +53,7 @@ function formatModifier(value) {
 }
 
 function getHitDieLabel(character) {
-  const pool = getSelectedHitDicePool(character);
+  const pool = getSelectedHitDieTypePool(character);
   return pool ? `d${pool.hitDie}` : "—";
 }
 function renderCompactSavesAndSkills(character) {
