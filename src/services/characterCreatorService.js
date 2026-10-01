@@ -1179,12 +1179,17 @@ export function buildCharacterFromCreator(state, id) {
     if (id && !tools.includes(id)) tools.push(id);
   };
 
-  for (const id of classData.toolProficiencies ?? []) {
-    addTool(id);
-  }
-
-  if (classData.toolProficiencies && !Array.isArray(classData.toolProficiencies)) {
-    for (const id of state.classChoices.tools.tools ?? []) addTool(id);
+  if (Array.isArray(classData.toolProficiencies)) {
+    for (const id of classData.toolProficiencies) {
+      addTool(id);
+    }
+  } else if (
+    classData.toolProficiencies &&
+    typeof classData.toolProficiencies === "object"
+  ) {
+    for (const id of state.classChoices.tools?.tools ?? []) {
+      addTool(id);
+    }
   }
 
   for (const id of background.toolProficiencies?.granted ?? []) {
