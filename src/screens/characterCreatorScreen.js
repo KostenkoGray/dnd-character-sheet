@@ -1,7 +1,7 @@
 import { STATS, ABILITY_KEYS } from "../data/rulesData.js";
 import { RACES } from "../data/racesData.js";
 import { CLASSES } from "../data/classesData.js";
-import { CREATOR_ABILITY_SCORE_ARRAY, CREATOR_CLASS_EQUIPMENT, CREATOR_TOOL_OPTIONS } from "../data/characterCreatorData.js";
+import { CREATOR_ABILITY_SCORE_ARRAY, CREATOR_CLASS_EQUIPMENT, CREATOR_TOOL_OPTIONS, CREATOR_RACE_DETAILS } from "../data/characterCreatorData.js";
 import { BACKGROUNDS } from "../data/backgroundsData.js";
 import { getItemCatalog } from "../services/inventoryService.js";
 import {
@@ -55,11 +55,11 @@ function renderChoiceCards(options, selected, attributes = "", multiple = false)
     options.map(option => {
       const isSelected = selectedValues.includes(option.id);
       return (
-        '<label class="creator-choice-card ' + (isSelected ? "selected" : "") + '">' +
+        '<label class="creator-choice-card ' + (isSelected ? "selected" : "") + '" data-creator-choice-option="' + escapeHtml(attributes) + '">' +
           '<input type="' + (multiple ? "checkbox" : "radio") + '"' +
             ' name="creator-choice-' + escapeHtml(attributes) + '"' +
             ' value="' + escapeHtml(option.id) + '"' +
-            ' data-creator-choice-option="' + escapeHtml(attributes) + '"' +
+
             (isSelected ? " checked" : "") +
           '>' +
           '<span class="creator-choice-card-body">' +
@@ -182,7 +182,8 @@ function renderSubraceOptions(state) {
 }
 
 function renderHumanVariantOptions(state) {
-  const variants = Object.entries(RACES.human?.variants ?? {});
+  const creatorData = CREATOR_RACE_DETAILS.human ?? {};
+  const variants = Object.entries(creatorData.variants ?? {});
 
   if (!variants.length) return "";
 
@@ -210,6 +211,7 @@ function renderRaceSummary(summary) {
     .join(", ");
 
   const armor = (summary.armorProficiencies ?? []).join(", ");
+  const tools = (summary.toolProficiencies ?? []).join(", ");
 
   return (
     '<section class="creator-summary-card">' +
@@ -217,11 +219,14 @@ function renderRaceSummary(summary) {
         '<div><span>Швидкість</span><strong>' + escapeHtml(summary.speed ? summary.speed + " ft." : "—") + '</strong></div>' +
         '<div><span>Темнобачення</span><strong>' + escapeHtml(summary.darkvision ? summary.darkvision + " ft." : "—") + '</strong></div>' +
         '<div><span>Бонуси характеристик</span><strong>' + escapeHtml(bonuses || "Немає") + '</strong></div>' +
+        '<div><span>Розмір</span><strong>' + escapeHtml(summary.size || "—") + '</strong></div>' +
       '</div>' +
       '<div class="creator-summary-lines">' +
         '<p><span>Мови:</span> ' + escapeHtml((summary.languages ?? []).join(", ") || "—") + '</p>' +
         '<p><span>Зброя:</span> ' + escapeHtml(weapons || "—") + '</p>' +
         '<p><span>Броня:</span> ' + escapeHtml(armor || "—") + '</p>' +
+        '<p><span>Інструменти:</span> ' + escapeHtml(tools || "—") + '</p>' +
+        '<p><span>Навички:</span> ' + escapeHtml((summary.skillProficiencies ?? []).join(", ") || "—") + '</p>' +
         (summary.traits ?? []).map(trait => '<p><span>' + escapeHtml(trait[1]) + ':</span> ' + escapeHtml(trait[2]) + '</p>').join("") +
       '</div>' +
     '</section>'
@@ -295,6 +300,8 @@ function renderClassSummary(summary) {
   const saving = summary.savingThrows.map(id => STATS[id]?.short ?? id).join(", ");
   const weapons = summary.weaponProficiencies.map(id => typeof id === "string" ? id : id?.ukr ?? id?.name ?? id).map(id => CLASS_WEAPON_NAMES[id] ?? id).join(", ");
   const armor = summary.armorProficiencies.map(id => CLASS_ARMOR_NAMES[id] ?? id).join(", ");
+  const tools = summary.toolProficiencies.map(id => formatToolName(id)).join(", ");
+
 
   return (
     '<section class="creator-summary-card">' +
@@ -303,11 +310,12 @@ function renderClassSummary(summary) {
       '</div>' +
       '<div class="creator-summary-lines">' +
         '<p><span>Ряткидки:</span> ' + escapeHtml(saving || "—") + '</p>' +
+        (summary.spellcasting
+          ? '<p><span>Магія:</span> ' + escapeHtml(summary.spellcasting) + '</p>'
+          : "") +
         '<p><span>Зброя:</span> ' + escapeHtml(weapons || "—") + '</p>' +
         '<p><span>Броня:</span> ' + escapeHtml(armor || "—") + '</p>' +
-        (Array.isArray(summary.toolProficiencies)
-          ? '<p><span>Інструменти:</span> ' + escapeHtml(summary.toolProficiencies.map(id => formatToolName(id)).join(", ") || "—") + '</p>'
-          : "") +
+        '<p><span>Інструменти:</span> ' + escapeHtml(tools || "—") + '</p>' +
         '<div class="creator-feature-list">' +
           summary.features.map(feature =>
             '<div><strong>' + escapeHtml(feature.ukr ?? feature.name) + '</strong><span>' + escapeHtml(feature.short ?? "") + '</span></div>'
@@ -355,6 +363,14 @@ function renderClassChoicesStep(state) {
   );
 }
 
+function formatCurrency(currency = {}) {
+  const names = [["pp", "PP"], ["gp", "GP"], ["ep", "EP"], ["sp", "SP"], ["cp", "CP"]];
+  return names
+    .filter(([id]) => Number(currency?.[id] ?? 0) > 0)
+    .map(([id, label]) => Number(currency[id]) + " " + label)
+    .join(", ") || "—";
+}
+
 function renderBackgroundStep(state) {
   const backgrounds = getBackgroundOptions();
   const recommended = getRecommendedBackgroundId(state);
@@ -379,6 +395,12 @@ function renderBackgroundStep(state) {
         ? '<section class="creator-background-detail">' +
             '<h3>' + escapeHtml(BACKGROUNDS[state.backgroundId]?.feature?.ukr ?? "Особливість") + '</h3>' +
             '<p>' + escapeHtml(BACKGROUNDS[state.backgroundId]?.feature?.description ?? "") + '</p>' +
+            '<div class="creator-summary-lines">' +
+              '<p><span>Навички:</span> ' + escapeHtml((BACKGROUNDS[state.backgroundId]?.skillProficiencies?.granted ?? []).join(", ") || "—") + '</p>' +
+              '<p><span>Інструменти:</span> ' + escapeHtml((BACKGROUNDS[state.backgroundId]?.toolProficiencies?.granted ?? []).join(", ") || "—") + '</p>' +
+              '<p><span>Мови:</span> ' + escapeHtml((BACKGROUNDS[state.backgroundId]?.languages?.granted ?? []).join(", ") || "—") + '</p>' +
+              '<p><span>Стартова валюта:</span> ' + escapeHtml(formatCurrency(BACKGROUNDS[state.backgroundId]?.startingCurrency)) + '</p>' +
+            '</div>' +
             (getBackgroundChoiceGroups(state).length
               ? '<div class="creator-choice-groups">' + getBackgroundChoiceGroups(state).map(group => renderChoiceGroup(state, group)).join("") + '</div>'
               : "") +
