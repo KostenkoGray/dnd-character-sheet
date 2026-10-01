@@ -827,12 +827,12 @@ export function validateCreatorStep(state, stepKey) {
 
   if (stepKey === "magic") {
     const requirements = getMagicRequirements(state);
-    if (state.magicChoices.cantrips.length < requirements.cantrips) {
-      return "Оберіть потрібну кількість заговорів.";
+    if (state.magicChoices.cantrips.length !== requirements.cantrips) {
+      return "Оберіть рівно " + requirements.cantrips + " заговорів.";
     }
 
-    if (state.magicChoices.spells.length < requirements.spells) {
-      return "Оберіть потрібну кількість заклять.";
+    if (state.magicChoices.spells.length !== requirements.spells) {
+      return "Оберіть рівно " + requirements.spells + " заклять.";
     }
 
     if (
@@ -840,6 +840,20 @@ export function validateCreatorStep(state, stepKey) {
       new Set(state.magicChoices.spells).size !== state.magicChoices.spells.length
     ) {
       return "Не можна вибрати одне й те саме закляття двічі.";
+    }
+
+    const allowedCantrips = new Set(
+      getSpellOptionsForCreator(state, 0).map(option => option.id)
+    );
+    if (state.magicChoices.cantrips.some(id => !allowedCantrips.has(id))) {
+      return "Серед заговорів є недоступне для цього класу закляття.";
+    }
+
+    const allowedSpells = new Set(
+      getSpellOptionsForCreator(state, 1).map(option => option.id)
+    );
+    if (state.magicChoices.spells.some(id => !allowedSpells.has(id))) {
+      return "Серед заклять є недоступне для цього класу закляття.";
     }
 
     return "";
@@ -953,7 +967,9 @@ function isChoiceComplete(group, value) {
   const values = Array.isArray(value) ? value : value ? [value] : [];
 
   if (group.kind === "info") return true;
-  if (values.length < Number(group.count ?? 1)) return false;
+
+  const requiredCount = Number(group.count ?? 1);
+  if (values.length !== requiredCount) return false;
 
   if (group.unique && new Set(values).size !== values.length) return false;
 
