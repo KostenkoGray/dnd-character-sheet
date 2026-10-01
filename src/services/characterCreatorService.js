@@ -225,6 +225,17 @@ export function getRaceChoices(state) {
     });
   }
 
+  if (state.raceId === "halfElf" && detail.languageChoice) {
+    groups.push({
+      id: "halfElfLanguage",
+      title: "Додаткова мова",
+      kind: "languages",
+      count: Number(detail.languageChoice.count ?? 1),
+      unique: true,
+      options: getLanguageOptions()
+    });
+  }
+
   if (state.raceId === "dragonborn" && detail.choices?.draconicAncestry) {
     groups.push({
       id: "draconicAncestry",
@@ -669,6 +680,7 @@ export function getRaceTraitSummary(state) {
 
   const toolProficiencies = [
     ...(Array.isArray(race?.toolProficiencies) ? race.toolProficiencies : []),
+    ...(Array.isArray(subDetail.toolProficiencies) ? subDetail.toolProficiencies : []),
     ...(state.raceChoices.tool ? [state.raceChoices.tool] : [])
   ].filter((id, index, list) => list.indexOf(id) === index);
 
@@ -946,6 +958,10 @@ export function getChoiceValue(state, group) {
 
   if (group.id === "humanSkill" || group.id === "halfElfSkills") {
     return state.raceChoices.skills ?? [];
+  }
+
+  if (group.id === "halfElfLanguage") {
+    return state.raceChoices.languages ?? [];
   }
 
   if (group.id === "humanFeat") {
@@ -1338,6 +1354,7 @@ export function buildCharacterFromCreator(state, id) {
   for (const ids of Object.values(state.backgroundChoices.tools ?? {})) {
     for (const id of (Array.isArray(ids) ? ids : [ids])) addTool(id);
   }
+  for (const id of subrace?.toolProficiencies ?? []) addTool(id);
   if (state.raceChoices.tool) addTool(state.raceChoices.tool);
   if (state.classChoices.expertise?.includes("thievesTools")) addTool("thievesTools");
 
@@ -1511,10 +1528,7 @@ export function buildCharacterFromCreator(state, id) {
     feats,
     backgroundId: state.backgroundId,
     backgroundFeatureId: background.feature?.id ?? null,
-    racialTraits: [
-      ...(getRaceDetails(state).traits ?? []).map(trait => trait[0]),
-      ...((getRaceDetails(state).subraces?.[state.subraceId]?.traits ?? []).map(trait => trait[0]))
-    ],
+    racialTraits: (getRaceTraitSummary(state).traits ?? []).map(trait => trait[0]),
     proficiencies: {
       savingThrows: [...(classData.savingThrows ?? [])],
       skills,
