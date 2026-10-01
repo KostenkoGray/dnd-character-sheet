@@ -2,8 +2,10 @@ import {
   ITEM_TYPES,
   getEquippedArmor,
   getEquippedShield,
-  getEquippedArtifacts
+  getEquippedArtifacts,
+  getEquipmentBonuses
 } from "../services/inventoryService.js";
+import { STATS } from "../data/rulesData.js";
 import { collapsibleSection } from "./collapsibleSection.js";
 
 function escapeHtml(value) {
@@ -19,7 +21,53 @@ function itemLabel(item) {
   return item?.ukr ?? item?.name ?? "—";
 }
 
-function renderSlot({ label, item, types, emptyText = "Не екіпіровано" }) {
+function formatSigned(value) {
+  const number = Number(value ?? 0);
+  return number > 0 ? `+${number}` : `${number}`;
+}
+
+function getItemBonusText(item, kind = "") {
+  if (!item) return "";
+
+  const parts = [];
+  const effects = item.effects ?? {};
+
+  if (kind === "armor" && typeof item.baseAC === "number") {
+    parts.push(`AC ${item.baseAC}`);
+  }
+
+  if (kind === "shield" && Number(item.acBonus ?? 0)) {
+    parts.push(`AC ${formatSigned(item.acBonus)}`);
+  }
+
+  if (Number(effects.acBonus ?? 0)) {
+    parts.push(`AC ${formatSigned(effects.acBonus)}`);
+  }
+
+  for (const [statKey, value] of Object.entries(effects.statBonuses ?? {})) {
+    if (!Number(value)) continue;
+    parts.push(`${STATS[statKey]?.short ?? statKey.toUpperCase()} ${formatSigned(value)}`);
+  }
+
+  return parts.join(" · ");
+}
+
+function getEquipmentBonusSummary(character, shield) {
+  const bonuses = getEquipmentBonuses(character);
+  const parts = [];
+
+  const acBonus = Number(shield?.acBonus ?? 0) + Number(bonuses.acBonus ?? 0);
+  if (acBonus) parts.push(`AC ${formatSigned(acBonus)}`);
+
+  for (const [statKey, value] of Object.entries(bonuses.statBonuses ?? {})) {
+    if (!Number(value)) continue;
+    parts.push(`${STATS[statKey]?.short ?? statKey.toUpperCase()} ${formatSigned(value)}`);
+  }
+
+  return parts.join(" · ");
+}
+
+function renderSlot({ label, item, types, kind = "", emptyText = "Не екіпіровано" }) {
   const typeAttribute = types.join(",");
 
   return `
@@ -33,7 +81,9 @@ function renderSlot({ label, item, types, emptyText = "Не екіпірован
     >
       <span class="equipment-slot-label">${escapeHtml(label)}</span>
       <strong>${escapeHtml(item ? itemLabel(item) : emptyText)}</strong>
-      ${item ? `<small>Натисніть, щоб змінити</small>` : "<small>Натисніть, щоб екіпірувати</small>"}
+      ${item
+        ? `${getItemBonusText(item, kind) ? `<small class="equipment-slot-bonus">${escapeHtml(getItemBonusText(item, kind))}</small>` : ""}<small>Натисніть, щоб змінити</small>`
+        : "<small>Натисніть, щоб екіпірувати</small>"}
     </button>
   `;
 }
@@ -75,18 +125,21 @@ export function equipmentCard(character, collapsed = false) {
   const armor = getEquippedArmor(character);
   const shield = getEquippedShield(character);
   const artifacts = getEquippedArtifacts(character);
+  const bonusSummary = getEquipmentBonusSummary(character, shield);
 
   const content = `
     <div class="equipment-grid">
       ${renderSlot({
         label: "Броня",
         item: armor,
+        kind: "armor",
         types: [ITEM_TYPES.ARMOR, ITEM_TYPES.ARTIFACT]
       })}
 
       ${renderSlot({
         label: "Щит",
         item: shield,
+        kind: "shield",
         types: [ITEM_TYPES.SHIELD]
       })}
 
@@ -96,6 +149,10 @@ export function equipmentCard(character, collapsed = false) {
           ${renderArtifactSlots(artifacts)}
         </div>
       </div>
+
+      ${bonusSummary
+        ? `<div class="equipment-bonus-summary"><span>Від спорядження</span><strong>${escapeHtml(bonusSummary)}</strong></div>`
+        : ""}
     </div>
   `;
 
