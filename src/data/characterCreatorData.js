@@ -549,3 +549,17 @@ export const CREATOR_CLASS_EQUIPMENT = {
     ]
   }
 };
+
+export const CREATOR_ABILITY_SCORE_ARRAY = [15, 14, 13, 12, 10, 8];
+
+/*
+ * Кількість відомих заклять 1-го рівня для класів,
+ * де classesData не містить таблиці spellsKnown на 1 рівні
+ * (Wizard використовує книгу заклять).
+ */
+export const CREATOR_STARTING_SPELLS = {
+  bard: 4,
+  sorcerer: 2,
+  warlock: 2,
+  wizard: 6
+};
