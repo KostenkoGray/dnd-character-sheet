@@ -548,7 +548,25 @@ export function getClassSummary(state) {
     savingThrows: classData.savingThrows ?? [],
     weaponProficiencies: classData.weaponProficiencies ?? [],
     armorProficiencies: classData.armorProficiencies ?? [],
-    toolProficiencies: classData.toolProficiencies ?? [],
+    toolProficiencies: Array.isArray(classData.toolProficiencies)
+      ? classData.toolProficiencies
+      : [],
+    toolChoices: !Array.isArray(classData.toolProficiencies)
+      ? classData.toolProficiencies
+      : null,
+    spellcasting: classData.spellcasting
+      ? [
+          classData.spellcasting.ability
+            ? "Модифікатор " + classData.spellcasting.ability
+            : "",
+          classData.spellcasting.preparation === "prepared"
+            ? "підготовка заклять"
+            : "відомі закляття",
+          getAtLevel(classData.spellcasting.cantripsKnown, 1)
+            ? "заговорів: " + getAtLevel(classData.spellcasting.cantripsKnown, 1)
+            : ""
+        ].filter(Boolean).join(" · ")
+      : "",
     featureIds,
     features: featureIds
       .map(id => FEATURES[id])
@@ -598,13 +616,16 @@ export function getRaceTraitSummary(state) {
   ];
 
   return {
+    size: subrace?.size ?? race?.size ?? null,
     speed: subrace?.speed ?? race?.speed ?? null,
     darkvision: subrace?.darkvision ?? race?.darkvision ?? null,
     traits,
     abilityScoreIncrease: getFinalRaceAbilityBonuses(state),
     languages: race?.languages ?? [],
+    skillProficiencies: race?.skillProficiencies ?? [],
     weaponProficiencies: race?.weaponProficiencies ?? [],
-    armorProficiencies: subrace?.armorProficiencies ?? []
+    armorProficiencies: subrace?.armorProficiencies ?? [],
+    toolProficiencies: race?.toolProficiencies ?? []
   };
 }
 
