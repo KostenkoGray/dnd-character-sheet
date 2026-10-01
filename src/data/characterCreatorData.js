@@ -141,6 +141,7 @@ export const CREATOR_RACE_DETAILS = {
     subraces: {
       highElf: {
         abilityScoreIncrease: { intelligence: 1 },
+        cantripChoice: { count: 1, spellListClassId: "wizard" },
         traits: [
           ["Cantrip", "Заговор", "Один заговор зі списку мага."],
           ["Elf Weapon Training", "Ельфійська бойова підготовка", "Володіння довгим мечем, коротким мечем, коротким і довгим луком."],
@@ -159,6 +160,7 @@ export const CREATOR_RACE_DETAILS = {
       drow: {
         darkvision: 120,
         abilityScoreIncrease: { charisma: 1 },
+        grantedCantrips: ["dancingLights"],
         traits: [
           ["Superior Darkvision", "Покращене темнобачення", "Темнобачення 120 ft."],
           ["Sunlight Sensitivity", "Чутливість до сонячного світла", "Невигідність на атаки та Perception, якщо ти або ціль під прямим сонячним світлом."],
@@ -227,6 +229,7 @@ export const CREATOR_RACE_DETAILS = {
     subraces: {
       forestGnome: {
         abilityScoreIncrease: { dexterity: 1 },
+        grantedCantrips: ["minorIllusion"],
         traits: [
           ["Natural Illusionist", "Природний ілюзіоніст", "Заговор Minor Illusion."],
           ["Speak with Small Beasts", "Розмова з малими звірами", "Можна передавати прості ідеї маленьким або меншим звірам."]
@@ -255,6 +258,7 @@ export const CREATOR_RACE_DETAILS = {
 
   halfOrc: {
     abilityScoreIncrease: { strength: 2, constitution: 1 },
+    skillProficiencies: ["intimidation"],
     traits: [
       ["Menacing", "Залякування", "Володіння навичкою Intimidation."],
       ["Relentless Endurance", "Невтомна витривалість", "Раз за довгий відпочинок, коли HP падають до 0, залишаєшся на 1 HP."],
@@ -264,6 +268,7 @@ export const CREATOR_RACE_DETAILS = {
 
   tiefling: {
     abilityScoreIncrease: { charisma: 2, intelligence: 1 },
+    grantedCantrips: ["thaumaturgy"],
     traits: [
       ["Darkvision", "Темнобачення", "Темнобачення 60 ft."],
       ["Hellish Resistance", "Пекельна стійкість", "Стійкість до шкоди вогнем."],
@@ -300,7 +305,6 @@ export const CREATOR_CLASS_EQUIPMENT = {
   bard: {
     fixed: [
       item("armor", "leather"),
-      custom("lute", "Лютня", "tool"),
       item("weapon", "dagger")
     ],
     choices: [
@@ -309,6 +313,11 @@ export const CREATOR_CLASS_EQUIPMENT = {
         { id: "longsword", label: "Довгий меч", items: [item("weapon", "longsword")] },
         { id: "simpleWeapon", label: "Будь-яка проста зброя", pickFrom: "simpleWeapon", count: 1 }
       ]),
+      pick("instrument", "Музичний інструмент", CREATOR_TOOL_OPTIONS.musicalInstrument.map(([id, label]) => ({
+        id,
+        label,
+        items: [custom(id, label, "tool")]
+      }))),
       pick("pack", "Набір", [
         { id: "diplomatPack", label: "Набір дипломата", items: [custom("diplomatPack", "Набір дипломата")] },
         { id: "entertainerPack", label: "Набір артиста", items: [custom("entertainerPack", "Набір артиста")] }
@@ -361,14 +370,15 @@ export const CREATOR_CLASS_EQUIPMENT = {
   },
 
   fighter: {
-    fixed: [
-      item("weapon", "longbow"),
-      custom("arrows20", "20 стріл"),
-    ],
+    fixed: [],
     choices: [
       pick("armor", "Броня", [
         { id: "chainMail", label: "Кольчуга", items: [item("armor", "chainMail")] },
-        { id: "leatherLongbow", label: "Шкіряний обладунок", items: [item("armor", "leather")] }
+        {
+          id: "leatherLongbow",
+          label: "Шкіряний обладунок + довгий лук",
+          items: [item("armor", "leather"), item("weapon", "longbow"), custom("arrows20", "20 стріл")]
+        }
       ]),
       pick("weapons", "Основний комплект", [
         {
