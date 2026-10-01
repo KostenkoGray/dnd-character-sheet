@@ -17,6 +17,7 @@ import { renderDeathSaves } from "../components/deathSaves.js";
 import { equipmentCard } from "../components/equipmentCard.js";
 import { preparedSpellsBlock } from "../components/preparedSpells.js";
 import { spellSlotsCounter } from "../components/spellSlotsCounter.js";
+import { getSelectedHitDicePool } from "../services/hitDiceService.js";
 import {
   getEquippedWeapons,
   getEquipmentBonuses
@@ -43,10 +44,9 @@ function getPrimaryClass(character) {
 }
 
 function getHitDieLabel(character) {
-  const primaryClass = getPrimaryClass(character);
-  return primaryClass ? `d${CLASSES[primaryClass.classId]?.hitDie ?? "—"}` : "—";
+  const pool = getSelectedHitDicePool(character);
+  return pool ? `d${pool.hitDie}` : "—";
 }
-
 function getWeaponAbility(character, weapon) {
   return weapon?.type === "ranged"
     ? getEffectiveAbilityScoreLocal(character, "dexterity")
@@ -331,11 +331,13 @@ export function combatScreen(character, collapseState = {}) {
         </section>
 
           <section class="combat-hit-dice">
-            <button type="button" id="hit-dice-plus" class="hit-dice-plus" aria-label="Збільшити Hit Dice">+</button>
-            <h2>Hit Dice</h2>
-            <span class="hit-die-label">${hitDie}</span>
-            <strong class="hit-dice-value">${currentHitDice}/${hitDiceTotal}</strong>
-            <button type="button" id="hit-dice-minus" class="hit-dice-minus" aria-label="Зменшити Hit Dice">−</button>
+            <button type="button" class="hit-die-select-button" data-hit-die-cycle="-1" aria-label="Попередня кістка">‹</button>
+            <div class="hit-die-display">
+              <h2>Hit Dice</h2>
+              <span class="hit-die-label">${getHitDieLabel(character)}</span>
+              <strong class="hit-dice-value">${getSelectedHitDicePool(character)?.current ?? 0}/${getSelectedHitDicePool(character)?.max ?? 0}</strong>
+            </div>
+            <button type="button" class="hit-die-select-button" data-hit-die-cycle="1" aria-label="Наступна кістка">›</button>
           </section>
         </section>
 
