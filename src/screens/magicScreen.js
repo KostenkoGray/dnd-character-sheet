@@ -2,6 +2,7 @@ import { bottomNavigation } from "../components/bottomNavigation.js";
 import {
   getSpellcastingSources,
   getKnownSpells,
+  getKnownSpellsForSource,
   getPreparedSpells,
   getSpellLimits
 } from "../services/magicService.js";
@@ -107,10 +108,15 @@ function groupSpells(spells) {
   return [...grouped.entries()].sort((a, b) => a[0] - b[0]);
 }
 
-export function renderMagicSpellsList(character, filter = {}, collapsedLevels = {}) {
+export function renderMagicSpellsList(
+  character,
+  filter = {},
+  collapsedLevels = {},
+  sourceClassId = ""
+) {
   const search = String(filter.search ?? "").trim().toLowerCase();
 
-  const known = getKnownSpells(character).filter(spell => {
+  const known = getKnownSpellsForSource(character, sourceClassId).filter(spell => {
     if (!search) return true;
 
     const haystack = [
@@ -125,21 +131,76 @@ export function renderMagicSpellsList(character, filter = {}, collapsedLevels = 
   });
 
   if (!known.length) {
-    return '<p class="inventory-empty">Немає відомих заклинань.</p>';
+    return '<p class="inventory-empty">Немає відомих заклинань для цього класу.</p>';
   }
+
+  const sourceKey = String(sourceClassId ?? "");
 
   return groupSpells(known).map(([level, spells]) =>
     collapsibleSection({
-      id: `magic-level-${level}`,
+      id: `magic-level-${sourceKey}-${level}`,
       title: `${formatSpellLevel(level)} · ${spells.length}`,
-      collapsed: Boolean(collapsedLevels[String(level)]),
+      collapsed: Boolean(collapsedLevels[`${sourceKey}-${level}`]),
       className: "magic-level-section",
       content: `<div class="magic-spells-list">${spells.map(renderSpellCard).join("")}</div>`
     })
   ).join("");
 }
 
-export function magicScreen(character, filter = {}, collapsedLevels = {}, preparedCollapsed = false) {
+export function renderMagicSpellsLists(
+  character,
+  filter = {},
+  collapsedLevels = {}
+) {
+  const limits = getSpellLimits(character);
+
+  return getSpellcastingSources(character).map(source => {
+    const sourceId = source.classEntry.classId;
+    const known = getKnownSpellsForSource(character, sourceId);
+    const limit = limits.find(item => item.classId === sourceId);
+
+    const cantripsKnown = known.filter(spell => spell.level === 0).length;
+    const levelledKnown = known.filter(spell => spell.level > 0).length;
+
+    const knownText = limit?.knownLimit == null
+      ? String(levelledKnown)
+      : `${levelledKnown}/${limit.knownLimit}`;
+
+    const cantripText = limit?.cantripsLimit == null
+      ? String(cantripsKnown)
+      : `${cantripsKnown}/${limit.cantripsLimit}`;
+
+    return `
+      <section class="combat-section magic-known-source-section">
+        <div class="magic-title-row">
+          <div>
+            <h2>${escapeHtml(source.classData.ukr)}</h2>
+            <span>Замови ${cantripText} · Відомі ${knownText}</span>
+          </div>
+          <button
+            type="button"
+            class="inventory-add-button"
+            data-magic-add-source-class-id="${escapeHtml(sourceId)}"
+          >
+            <span>＋</span>
+            Додати
+          </button>
+        </div>
+
+        <div class="magic-spells-sections">
+          ${renderMagicSpellsList(
+            character,
+            filter,
+            collapsedLevels,
+            sourceId
+          )}
+        </div>
+      </section>
+    `;
+  }).join("");
+}
+
+export function magicScreen(character, filter = {}, collapsedLevels = {}) {
   const sources = getSpellcastingSources(character);
 
   if (!sources.length) {
@@ -165,20 +226,6 @@ export function magicScreen(character, filter = {}, collapsedLevels = {}, prepar
 
   const known = getKnownSpells(character);
   const prepared = getPreparedSpells(character);
-  const limits = getSpellLimits(character);
-
-  const sourceSummary = limits.map(limit => {
-    const knownText = limit.knownLimit === null ? `${limit.known}` : `${limit.known}/${limit.knownLimit}`;
-    const cantripText = limit.cantripsLimit === null ? `${limit.cantripsKnown}` : `${limit.cantripsKnown}/${limit.cantripsLimit}`;
-    const preparedText = limit.preparedLimit === null ? `${limit.prepared}` : `${limit.prepared}/${limit.preparedLimit}`;
-
-    return `
-      <div class="magic-source-row">
-        <strong>${escapeHtml(limit.className)}</strong>
-        <span>Замови ${cantripText} · Відомі ${knownText} · Підготовлені ${preparedText}</span>
-      </div>
-    `;
-  }).join("");
 
   return `
     <div class="app">
@@ -195,30 +242,26 @@ export function magicScreen(character, filter = {}, collapsedLevels = {}, prepar
 
         <section class="combat-section magic-source-section">
           <h2>Spellcasting</h2>
-          <div class="magic-source-list">${sourceSummary}</div>
-        </section>
-
-        <section class="combat-section">
-          <div class="magic-title-row">
-            <div>
-              <h2>Заклинання</h2>
-              <span>Підготовлено ${prepared.length} · Відомо ${known.length}</span>
+          <div class="magic-source-list">
+            <div class="magic-source-row">
+              <strong>Підготовлені закляття</strong>
+              <span>${prepared.length} · один спільний список</span>
             </div>
-            <button type="button" id="magic-add-spell" class="inventory-add-button">
-              <span>＋</span>
-              Додати заклинання
-            </button>
-          </div>
-
-          <label class="inventory-search magic-search">
-            <span>Пошук</span>
-            <input id="magic-search" type="search" value="${escapeHtml(filter.search ?? "")}" placeholder="Назва або опис..." autocomplete="off">
-          </label>
-
-          <div id="magic-spells-list" class="magic-spells-sections">
-            ${renderMagicSpellsList(character, filter, collapsedLevels)}
+            <div class="magic-source-row">
+              <strong>Відомі закляття</strong>
+              <span>${known.length} · окремий список для кожного класу-джерела</span>
+            </div>
           </div>
         </section>
+
+        <label class="inventory-search magic-search">
+          <span>Пошук</span>
+          <input id="magic-search" type="search" value="${escapeHtml(filter.search ?? "")}" placeholder="Назва або опис..." autocomplete="off">
+        </label>
+
+        <div id="magic-spells-list" class="magic-spells-sections">
+          ${renderMagicSpellsLists(character, filter, collapsedLevels)}
+        </div>
       </main>
       ${bottomNavigation("magic")}
     </div>
