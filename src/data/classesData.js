@@ -905,6 +905,7 @@ paladin: {
   spellcasting: {
   ability: "charisma",
   preparation: "prepared",
+  preparationLevelDivisor: 2,
   ritualCasting: false,
 
   slotsTable: HALF_CASTER_SLOTS
@@ -1038,7 +1039,7 @@ ranger: {
 
   spellcasting: {
   ability: "wisdom",
-  preparation: "prepared",
+  preparation: "known",
   ritualCasting: false,
 
   slotsTable: HALF_CASTER_SLOTS
