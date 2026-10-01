@@ -83,6 +83,16 @@ import {
   getLevelUpOptions,
   applyLevelUp
 } from "./services/levelUpService.js";
+import {
+  ensureHitDiceState,
+  getHitDicePools,
+  getSelectedHitDicePool,
+  cycleSelectedHitDie,
+  adjustSelectedHitDie,
+  getAvailableHitDiceTotal,
+  spendHitDice as spendHitDicePools,
+  restoreAllHitDice
+} from "./services/hitDiceService.js";
 
 const app = document.querySelector("#app");
 
