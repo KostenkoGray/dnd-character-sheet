@@ -40,7 +40,7 @@ function renderSpellCard(spell) {
   const effectType = SPELL_EFFECT_TYPE_LABELS[spell.effectType] ?? spell.effectType;
 
   return `
-    <article class="magic-spell-card ${spell.prepared ? "prepared" : ""}" data-spell-details="${escapeHtml(spell.id)}">
+    <article class="magic-spell-card ${spell.prepared ? "prepared" : ""}" data-spell-details="${escapeHtml(spell.id)}" data-spell-source-class-id="${escapeHtml(spell.sourceClassId ?? "")}">
       <div class="magic-spell-heading">
         <div>
           <strong>${escapeHtml(spell.ukr ?? spell.name)}</strong>
@@ -75,6 +75,7 @@ function renderSpellCard(spell) {
               class="inventory-action-button ${spell.prepared ? "secondary" : "primary"}"
               data-magic-action="${spell.prepared ? "unprepare" : "prepare"}"
               data-spell-id="${escapeHtml(spell.id)}"
+              data-magic-source-class-id="${escapeHtml(spell.sourceClassId ?? "")}"
             >
               ${spell.prepared ? "Зняти підготовку" : "Підготувати"}
             </button>
@@ -175,7 +176,7 @@ export function renderMagicSpellsLists(
       <section class="combat-section magic-known-source-section">
         <div class="magic-title-row">
           <div>
-            <h2>${escapeHtml(source.classData.ukr)}</h2>
+            <h2>${escapeHtml(source.displayName ?? source.classData.ukr)}</h2>
             <span>Замови ${cantripText} · Відомі ${knownText}</span>
           </div>
           <button
