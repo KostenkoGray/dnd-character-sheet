@@ -113,8 +113,11 @@ function getPreparedLimitForSource(character, source) {
 
 function getAvailableSourcesForSpell(character, spell) {
   return getSpellcastingSources(character).filter(source => {
+    const spellListClassId =
+      source.spellcasting?.spellListClassId ?? source.classEntry.classId;
+
     const classAllowed = Array.isArray(spell.classes) &&
-      spell.classes.includes(source.classEntry.classId);
+      spell.classes.includes(spellListClassId);
 
     const subclassAllowed = Array.isArray(spell.subclasses) &&
       spell.subclasses.some(access =>
@@ -124,7 +127,25 @@ function getAvailableSourcesForSpell(character, spell) {
 
     if (!classAllowed && !subclassAllowed) return false;
 
-    return spell.level <= getOwnSpellLevelForSource(source);
+    if (spell.level > getOwnSpellLevelForSource(source)) {
+      return false;
+    }
+
+    const allowedSchools = source.spellcasting?.allowedSpellSchools;
+    const unrestrictedLevels = source.spellcasting?.unrestrictedSpellLevels ?? [];
+    const classLevel = Number(source.classEntry.level ?? 0);
+
+    if (
+      spell.level > 0 &&
+      Array.isArray(allowedSchools) &&
+      allowedSchools.length &&
+      !unrestrictedLevels.includes(classLevel) &&
+      !allowedSchools.includes(spell.school)
+    ) {
+      return false;
+    }
+
+    return true;
   });
 }
 
