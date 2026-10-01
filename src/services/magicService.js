@@ -410,6 +410,12 @@ export function getTotalSpellSlots(character) {
     groups.pact.reduce((sum, slot) => sum + slot.max, 0);
 }
 
+export function getAvailableSpellSlots(character) {
+  const groups = getSpellSlotGroups(character);
+  return groups.normal.reduce((sum, slot) => sum + slot.current, 0) +
+    groups.pact.reduce((sum, slot) => sum + slot.current, 0);
+}
+
 export function ensureSpellSlotState(character) {
   ensureCombatState(character);
 
