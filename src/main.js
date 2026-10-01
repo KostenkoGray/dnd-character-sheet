@@ -332,11 +332,26 @@ function renderAddSpellBody(character, state) {
               <small>${escapeHtml(sources)}</small>
               <small>${escapeHtml(spell.description)}</small>
             </div>
-            <button
-              type="button"
-              class="inventory-action-button primary"
-              data-add-spell-id="${escapeHtml(spell.id)}"
-            >Додати</button>
+            <div class="magic-add-source-actions">
+              ${entry.sources.length === 1
+                ? `
+                  <button
+                    type="button"
+                    class="inventory-action-button primary"
+                    data-add-spell-id="${escapeHtml(spell.id)}"
+                    data-add-spell-source-class-id="${escapeHtml(entry.sources[0].classEntry.classId)}"
+                  >Додати · ${escapeHtml(entry.sources[0].classData.ukr)}</button>
+                `
+                : entry.sources.map(source => `
+                  <button
+                    type="button"
+                    class="inventory-action-button primary"
+                    data-add-spell-id="${escapeHtml(spell.id)}"
+                    data-add-spell-source-class-id="${escapeHtml(source.classEntry.classId)}"
+                  >${escapeHtml(source.classData.ukr)}</button>
+                `).join("")
+              }
+            </div>
           </article>
         `;
       }).join("")
@@ -403,7 +418,11 @@ function openAddSpellDialog(character) {
     const button = event.target.closest("[data-add-spell-id]");
     if (!button) return;
 
-    const result = addSpellToCharacter(character, button.dataset.addSpellId);
+    const result = addSpellToCharacter(
+      character,
+      button.dataset.addSpellId,
+      button.dataset.addSpellSourceClassId ?? ""
+    );
 
     if (!result.ok) {
       showCampDialog({
@@ -1697,22 +1716,10 @@ app.addEventListener("input", event => {
 });
 
 app.addEventListener("click", (event) => {
-  if (currentScreen === "magic" && currentCharacter) {
-    const addButton = event.target.closest("#magic-add-spell");
-    if (addButton) {
-      openAddSpellDialog(currentCharacter);
-      return;
-    }
-
-    const closeMagic = event.target.closest("#close-magic");
-    if (closeMagic) {
-      persistCharacters();
-      currentScreen = "sheet";
-      loadCollapseState(currentCharacter);
-      render();
-      return;
-    }
-
+  if (
+    currentCharacter &&
+    ["sheet", "combat", "magic"].includes(currentScreen)
+  ) {
     const slotDot = event.target.closest("[data-spell-slot-dot]");
     if (slotDot) {
       const level = Number(slotDot.dataset.spellSlotLevel);
@@ -1736,6 +1743,23 @@ app.addEventListener("click", (event) => {
       }
 
       persistCharacters();
+      render();
+      return;
+    }
+  }
+
+  if (currentScreen === "magic" && currentCharacter) {
+    const addButton = event.target.closest("#magic-add-spell");
+    if (addButton) {
+      openAddSpellDialog(currentCharacter);
+      return;
+    }
+
+    const closeMagic = event.target.closest("#close-magic");
+    if (closeMagic) {
+      persistCharacters();
+      currentScreen = "sheet";
+      loadCollapseState(currentCharacter);
       render();
       return;
     }
