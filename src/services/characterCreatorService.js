@@ -1505,8 +1505,7 @@ export function buildCharacterFromCreator(state, id) {
   const magicRequirements = getMagicRequirements(state);
   const classSpellIds = [
     ...(state.magicChoices.cantrips ?? []),
-    ...(state.magicChoices.spells ?? []),
-    ...(state.classChoices.natureCantrip ? [state.classChoices.natureCantrip] : [])
+    ...(state.magicChoices.spells ?? [])
   ];
 
   const classMagicEntries = classSpellIds.map(spellId => ({
@@ -1515,8 +1514,21 @@ export function buildCharacterFromCreator(state, id) {
     sourceClassIds: [state.classId],
     preparedSourceClassIds: [],
     autoKnown: false,
-    racial: false
+    racial: false,
+    classFeature: false
   }));
+
+  const classFeatureEntries = state.classChoices.natureCantrip
+    ? [{
+        spellId: state.classChoices.natureCantrip,
+        sourceClassId: state.classId,
+        sourceClassIds: [state.classId],
+        preparedSourceClassIds: [],
+        autoKnown: true,
+        racial: false,
+        classFeature: true
+      }]
+    : [];
 
   const racialMagicEntries = getRacialSpellIds(state)
     .filter(spellId => !classSpellIds.includes(spellId))
@@ -1531,6 +1543,7 @@ export function buildCharacterFromCreator(state, id) {
 
   const magicEntries = [
     ...classMagicEntries,
+    ...classFeatureEntries,
     ...racialMagicEntries
   ];
 
