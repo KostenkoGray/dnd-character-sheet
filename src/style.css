@@ -4203,3 +4203,42 @@ p {
     font-size: .54rem !important;
   }
 }
+
+
+/* ==================================================
+   WEAPON CARD: VERTICAL DETAILS
+   ================================================== */
+
+.combat-weapons-section .combat-weapon {
+  display: block;
+  min-height: 0;
+}
+
+.combat-weapons-section .combat-weapon-main {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.combat-weapons-section .combat-weapon-main strong {
+  font-size: .76rem;
+  line-height: 1.2;
+}
+
+.combat-weapons-section .combat-weapon-main span {
+  font-size: .68rem;
+  line-height: 1.15;
+}
+
+.combat-weapons-section .combat-weapon-parameters {
+  display: block;
+  margin-top: 1px;
+  color: var(--text-muted);
+  font-size: .58rem;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.combat-weapons-section .combat-weapon-damage {
+  display: none;
+}
