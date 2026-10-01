@@ -499,7 +499,7 @@ function renderMagicStep(state) {
         : "") +
       (requirements.spells
         ? '<label class="creator-field"><span>' + escapeHtml(requirements.spellsLabel ?? "Закляття 1 рівня") + ' <small>(оберіть ' + requirements.spells + ')</small></span>' +
-          '<select multiple size="8" data-creator-magic="spells">'
+          '<select multiple size="8" data-creator-magic="spells">' +
             spells.map(option =>
               '<option value="' + escapeHtml(option.id) + '"' + (selectedSpells.includes(option.id) ? " selected" : "") + '>' + escapeHtml(option.label) + '</option>'
             ).join("") +
@@ -521,9 +521,9 @@ function renderNameStep(state) {
         '<input type="text" data-creator-name value="' + escapeHtml(state.name) + '" placeholder="Наприклад, Severus Grey" autocomplete="off">' +
       '</label>' +
       '<section class="creator-final-summary">' +
-        '<div><span>Раса</span><strong>' + escapeHtml(state.raceId || "—") + '</strong></div>' +
-        '<div><span>Клас</span><strong>' + escapeHtml(state.classId || "—") + '</strong></div>' +
-        '<div><span>Походження</span><strong>' + escapeHtml(state.backgroundId || "—") + '</strong></div>' +
+        '<div><span>Раса</span><strong>' + escapeHtml(RACES[state.raceId]?.ukr ?? state.raceId ?? "—") + '</strong></div>' +
+        '<div><span>Клас</span><strong>' + escapeHtml(CLASSES[state.classId]?.ukr ?? state.classId ?? "—") + '</strong></div>' +
+        '<div><span>Походження</span><strong>' + escapeHtml(BACKGROUNDS[state.backgroundId]?.ukr ?? state.backgroundId ?? "—") + '</strong></div>' +
         '<div><span>Рівень</span><strong>1</strong></div>' +
       '</section>' +
     '</section>'
