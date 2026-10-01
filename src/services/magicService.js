@@ -375,21 +375,22 @@ export function toggleSpellPrepared(character, spellId) {
     return { ok: true, prepared: false };
   }
 
-  let source = getSpellcastingSources(character).find(item =>
-    item.classEntry.classId === entry.sourceClassId
-  );
+  const availableSources = getAvailableSourcesForSpell(character, spell);
+  const source =
+    availableSources.find(item =>
+      item.classEntry.classId === entry.sourceClassId
+    ) ??
+    availableSources[0];
 
   if (!source) {
-    const fallback = getAvailableSourcesForSpell(character, spell)[0];
-    if (fallback) {
-      entry.sourceClassId = fallback.classEntry.classId;
-      source = fallback;
-    }
+    entry.prepared = false;
+    return {
+      ok: false,
+      message: "Це заклинання зараз недоступне жодному spellcasting-класу персонажа."
+    };
   }
 
-  if (!source) {
-    return { ok: false, message: "Не знайдено клас, який надав це заклинання." };
-  }
+  entry.sourceClassId = source.classEntry.classId;
 
   const limit = getPreparedLimitForSource(character, source);
   if (limit !== null) {
