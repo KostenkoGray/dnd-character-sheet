@@ -1874,7 +1874,7 @@ function render() {
       app.innerHTML = characterSheetScreen(currentCharacter, collapseState);
       break;
 
-creator render branch    case "combat":
+   case "combat":
       app.innerHTML = combatScreen(currentCharacter, collapseState);
       break;
 
