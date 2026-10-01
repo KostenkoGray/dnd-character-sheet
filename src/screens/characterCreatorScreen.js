@@ -81,7 +81,7 @@ function renderSelect(title, group, selected) {
       '<span>' + escapeHtml(title) + (max > 1 ? ' <small>(оберіть ' + max + ')</small>' : "") + '</span>' +
       '<select ' +
         (max > 1 ? "multiple" : "") +
-        ' size="' + (max > 1 ? String(Math.min(Math.max(group.options.length, 4), 7)) : "1") + '"'
+        ' size="' + (max > 1 ? String(Math.min(Math.max(group.options.length, 4), 7)) : "1") + '"' +
         ' data-creator-choice-select="' + escapeHtml(group.id) + '"' +
         ' data-creator-choice-kind="' + escapeHtml(group.kind) + '"' +
         ' data-creator-choice-count="' + max + '"' +
