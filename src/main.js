@@ -38,13 +38,13 @@ import {
   addSpellToCharacter,
   toggleSpellPrepared,
   removeSpellFromCharacter,
-  getSpellById,
   getAvailableSpells,
   spendSpellSlot,
   restoreSpellSlot,
   restoreSpellSlotsOnLongRest
 } from "./services/magicService.js";
 import {
+  getSpellById,
   SPELL_SCHOOL_LABELS,
   SPELL_EFFECT_TYPE_LABELS
 } from "./data/spellsData.js";
