@@ -234,7 +234,8 @@ export function ensureMagicState(character) {
         sourceClassIds: sourceClassId ? [sourceClassId] : [],
         preparedSourceClassIds:
           prepared && sourceClassId ? [sourceClassId] : [],
-        autoKnown: Boolean(raw.autoKnown)
+        autoKnown: Boolean(raw.autoKnown),
+        racial: Boolean(raw.racial)
       };
     })
     .filter(entry => Boolean(getSpellById(entry.spellId)));
@@ -249,7 +250,8 @@ export function ensureMagicState(character) {
       unique.set(entry.spellId, {
         ...entry,
         sourceClassIds: [...entry.sourceClassIds],
-        preparedSourceClassIds: [...entry.preparedSourceClassIds]
+        preparedSourceClassIds: [...entry.preparedSourceClassIds],
+        racial: Boolean(entry.racial)
       });
       continue;
     }
@@ -281,6 +283,14 @@ export function ensureMagicState(character) {
   for (const entry of character.magic.spells) {
     const spell = getSpellById(entry.spellId);
     if (!spell) continue;
+
+    if (entry.racial) {
+      entry.sourceClassId = "racial";
+      entry.sourceClassIds = ["racial"];
+      entry.preparedSourceClassIds = [];
+      entry.autoKnown = false;
+      continue;
+    }
 
     const availableSources = getAvailableSourcesForSpell(character, spell);
     const availableIds = availableSources.map(
@@ -411,6 +421,7 @@ export function getKnownSpellEntries(character) {
         sources,
         autoKnown: Boolean(entry.autoKnown),
         favorite: character.magic.favoriteSpellIds.includes(spell.id),
+        racial: Boolean(entry.racial),
         preparation: source?.spellcasting?.preparation ?? null,
         prepared:
           spell.level === 0 ||
@@ -720,6 +731,13 @@ export function removeSpellFromCharacter(character, spellId) {
   }
 
   const entry = character.magic.spells[index];
+
+  if (entry.racial) {
+    return {
+      ok: false,
+      message: "Це расове заклинання надається персонажу расою й не може бути видалене."
+    };
+  }
 
   if (entry.autoKnown) {
     return {
