@@ -5,7 +5,8 @@ import {
   getPreparedSpells,
   getSpellLimits,
   getSpellSlotGroups,
-  getTotalSpellSlots
+  getTotalSpellSlots,
+  getAvailableSpellSlots
 } from "../services/magicService.js";
 import {
   SPELL_SCHOOL_LABELS,
@@ -197,6 +198,7 @@ export function magicScreen(character, filter = {}) {
 
   const groups = getSpellSlotGroups(character);
   const totalSlots = getTotalSpellSlots(character);
+  const availableSlots = getAvailableSpellSlots(character);
   const known = getKnownSpells(character);
   const prepared = getPreparedSpells(character);
   const limits = getSpellLimits(character);
@@ -234,7 +236,7 @@ export function magicScreen(character, filter = {}) {
           <div class="magic-title-row">
             <div>
               <h2>Магічні комірки</h2>
-              <span>Загалом ${totalSlots}</span>
+              <span>Доступно ${availableSlots} / ${totalSlots}</span>
             </div>
           </div>
 
