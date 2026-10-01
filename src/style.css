@@ -4397,3 +4397,136 @@ p {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 }
+
+
+/* ==================================================
+   HIT DICE TYPE SELECTOR / SHORT REST DICE
+   ================================================== */
+
+.combat-hit-dice {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 5px;
+}
+
+.hit-die-display {
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.hit-die-display h2 {
+  margin: 0;
+}
+
+.hit-die-select-button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface-light);
+  color: var(--text);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.hit-die-select-button:hover {
+  border-color: var(--accent);
+}
+
+.hit-die-select-button:active {
+  transform: scale(.95);
+}
+
+.short-rest-dice-list {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.short-rest-die-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface-light);
+}
+
+.short-rest-die-info {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.short-rest-die-info strong {
+  font-size: .72rem;
+  line-height: 1.1;
+}
+
+.short-rest-die-info span {
+  color: var(--text-muted);
+  font-size: .6rem;
+  line-height: 1.1;
+}
+
+.short-rest-die-counter {
+  display: grid;
+  grid-template-columns: 30px 26px 30px;
+  align-items: center;
+  gap: 4px;
+}
+
+.short-rest-die-counter button {
+  min-width: 30px;
+  min-height: 30px;
+  padding: 0;
+}
+
+.short-rest-die-counter > strong {
+  text-align: center;
+  font-size: .75rem;
+}
+
+@media (max-width: 380px) {
+  .combat-hit-dice {
+    grid-template-columns: 30px minmax(0, 1fr) 30px;
+  }
+
+  .hit-die-select-button {
+    width: 27px;
+    height: 27px;
+    font-size: 1.1rem;
+  }
+
+  .short-rest-die-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 5px;
+    padding: 6px;
+  }
+
+  .short-rest-die-info strong {
+    font-size: .66rem;
+  }
+
+  .short-rest-die-info span {
+    font-size: .56rem;
+  }
+
+  .short-rest-die-counter {
+    grid-template-columns: 27px 23px 27px;
+    gap: 3px;
+  }
+
+  .short-rest-die-counter button {
+    min-width: 27px;
+    min-height: 27px;
+  }
+}
