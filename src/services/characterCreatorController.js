@@ -382,7 +382,13 @@ export async function startCharacterCreator({ app, onCancel, onCreate, onError }
 
     const subclassButton = event.target.closest("[data-creator-subclass]");
     if (subclassButton) {
-      state.subclassId = subclassButton.dataset.creatorSubclass ?? "";
+      const nextSubclass = subclassButton.dataset.creatorSubclass ?? "";
+
+      state.subclassId = nextSubclass;
+      state.classChoices.knowledgeExpertise = [];
+      state.classChoices.knowledgeLanguages = [];
+      state.classChoices.natureCantrip = "";
+      state.classChoices.dragonAncestor = "";
       state.error = "";
       safeRender();
       return;
