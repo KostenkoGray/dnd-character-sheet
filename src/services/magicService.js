@@ -128,9 +128,10 @@ function getPreparedLimitForSource(character, source) {
   const modifier = getStatModifier(
     getEffectiveAbilityScore(character, ability)
   );
+  const divisor = Number(source.spellcasting.preparationLevelDivisor ?? 1);
   const classLevel = Number(source.classEntry.level ?? 0);
 
-  return Math.max(1, classLevel + modifier);
+  return Math.max(1, Math.floor(classLevel / divisor) + modifier);
 }
 
 function getAvailableSourcesForSpell(character, spell) {
@@ -279,6 +280,10 @@ export function ensureMagicState(character) {
 
     entry.sourceClassId = entry.sourceClassIds[0] ?? "";
 
+    if (entry.autoKnown && entry.sourceClassId === "wizard") {
+      entry.autoKnown = false;
+    }
+
     entry.preparedSourceClassIds = entry.preparedSourceClassIds.filter(id => {
       const source = availableSources.find(
         item => item.classEntry.classId === id
@@ -302,7 +307,8 @@ export function ensureMagicState(character) {
 function syncPreparedClassSpells(character) {
   const sources = getSpellcastingSources(character)
     .filter(source =>
-      source.spellcasting?.preparation === MAGIC_PREPARATION.PREPARED
+      source.spellcasting?.preparation === MAGIC_PREPARATION.PREPARED &&
+      source.spellcasting?.autoKnownSpells === true
     );
 
   if (!sources.length) return;
