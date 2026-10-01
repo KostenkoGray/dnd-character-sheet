@@ -112,6 +112,30 @@ function getSubraceData(state) {
   return getRaceData(state)?.subraces?.[state.subraceId] ?? null;
 }
 
+function getRacialSpellIds(state) {
+  const detail = getRaceDetails(state);
+  const subDetail = detail.subraces?.[state.subraceId] ?? {};
+
+  const ids = [
+    ...(detail.grantedCantrips ?? []),
+    ...(subDetail.grantedCantrips ?? [])
+  ];
+
+  const selectedCantrip =
+    subDetail.cantripChoice && state.raceChoices.cantrip
+      ? [state.raceChoices.cantrip]
+      : [];
+
+  return [...new Set([...ids, ...selectedCantrip])];
+}
+
+function getRacialSkillProficiencies(state) {
+  return [
+    ...(getRaceData(state)?.skillProficiencies ?? []),
+    ...(getRaceDetails(state).skillProficiencies ?? [])
+  ].filter((id, index, list) => list.indexOf(id) === index);
+}
+
 function getSelectedHumanVariant(state) {
   return state.raceId === "human" && state.raceVariant
     ? getRaceData(state)?.variants?.[state.raceVariant] ?? null
@@ -215,15 +239,21 @@ export function getRaceChoices(state) {
     });
   }
 
-  if (state.raceId === "elf" && state.subraceId === "highElf") {
+  const subDetail = detail.subraces?.[state.subraceId] ?? {};
+  if (subDetail.cantripChoice) {
     groups.push({
       id: "highElfCantrip",
-      title: "Заговор високого ельфа",
+      title: "Заговор раси",
       kind: "single",
-      count: 1,
-      options: getSpellOptionsForClass("wizard", 0)
+      count: Number(subDetail.cantripChoice.count ?? 1),
+      options: getSpellOptionsForClass(
+        subDetail.cantripChoice.spellListClassId ?? "wizard",
+        0
+      )
     });
+  }
 
+  if (state.raceId === "elf" && state.subraceId === "highElf") {
     groups.push({
       id: "highElfLanguage",
       title: "Додаткова мова",
@@ -628,7 +658,7 @@ export function getRaceTraitSummary(state) {
   ];
 
   const skillProficiencies = [
-    ...(race?.skillProficiencies ?? []),
+    ...getRacialSkillProficiencies(state),
     ...(state.raceChoices.skills ?? [])
   ].filter((id, index, list) => list.indexOf(id) === index);
 
@@ -665,6 +695,7 @@ export function getRaceTraitSummary(state) {
     speed: subrace?.speed ?? subDetail.speed ?? race?.speed ?? null,
     darkvision: subrace?.darkvision ?? subDetail.darkvision ?? race?.darkvision ?? null,
     traits,
+    cantrips: getRacialSpellIds(state),
     abilityScoreIncrease: getFinalRaceAbilityBonuses(state),
     languages: race?.languages ?? [],
     skillProficiencies,
@@ -1090,6 +1121,18 @@ function addInventoryEntry(inventory, entry, token) {
   });
 }
 
+function resolveChoiceItem(item) {
+  if (!item) return null;
+  if (item.source === "custom") return item;
+  return resolveGenericItem(item.source, item.itemId) ??
+    toCustomItem(
+      item.itemId,
+      item.itemId,
+      item.type ?? "other",
+      Number(item.quantity ?? 1)
+    );
+}
+
 function addChoiceItems(inventory, choice, selectedValue, token) {
   if (!choice) return;
 
@@ -1112,8 +1155,7 @@ function addChoiceItems(inventory, choice, selectedValue, token) {
     for (const extra of choice.extraItems ?? []) {
       addInventoryEntry(
         inventory,
-        resolveGenericItem(extra.source, extra.itemId) ??
-        toCustomItem(extra.itemId, extra.itemId),
+        resolveChoiceItem(extra),
         token + "-extra-" + extra.itemId
       );
     }
@@ -1127,8 +1169,7 @@ function addChoiceItems(inventory, choice, selectedValue, token) {
   for (const item of option.items ?? []) {
     addInventoryEntry(
       inventory,
-      resolveGenericItem(item.source, item.itemId) ??
-      toCustomItem(item.itemId, item.itemId),
+      resolveChoiceItem(item),
       token + "-" + item.itemId
     );
   }
@@ -1136,8 +1177,7 @@ function addChoiceItems(inventory, choice, selectedValue, token) {
   for (const item of option.extraItems ?? []) {
     addInventoryEntry(
       inventory,
-      resolveGenericItem(item.source, item.itemId) ??
-      toCustomItem(item.itemId, item.itemId),
+      resolveChoiceItem(item),
       token + "-extra-" + item.itemId
     );
   }
@@ -1200,7 +1240,7 @@ export function buildCharacterFromCreator(state, id) {
     );
   };
 
-  for (const id of race.skillProficiencies ?? []) {
+  for (const id of getRacialSkillProficiencies(state)) {
     addSkill(id, PROFICIENCY.PROFICIENT);
   }
 
@@ -1370,16 +1410,35 @@ export function buildCharacterFromCreator(state, id) {
   }
 
   const magicRequirements = getMagicRequirements(state);
-  const magicEntries = [
+  const classSpellIds = [
     ...(state.magicChoices.cantrips ?? []),
     ...(state.magicChoices.spells ?? [])
-  ].map(spellId => ({
+  ];
+
+  const classMagicEntries = classSpellIds.map(spellId => ({
     spellId,
     sourceClassId: state.classId,
     sourceClassIds: [state.classId],
     preparedSourceClassIds: [],
-    autoKnown: false
+    autoKnown: false,
+    racial: false
   }));
+
+  const racialMagicEntries = getRacialSpellIds(state)
+    .filter(spellId => !classSpellIds.includes(spellId))
+    .map(spellId => ({
+      spellId,
+      sourceClassId: "racial",
+      sourceClassIds: ["racial"],
+      preparedSourceClassIds: [],
+      autoKnown: false,
+      racial: true
+    }));
+
+  const magicEntries = [
+    ...classMagicEntries,
+    ...racialMagicEntries
+  ];
 
   const firstLevelResourceState = {};
   for (const [resourceId, table] of Object.entries(classData.resourcesByLevel ?? {})) {
