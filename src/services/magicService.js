@@ -167,14 +167,15 @@ export function ensureMagicState(character) {
     character.magic.spells = [];
   }
 
-  character.magic.spells = character.magic.spells
+  const sources = getSpellcastingSources(character);
+  const normalized = character.magic.spells
     .map(rawEntry => {
       const entry = (
         rawEntry &&
         typeof rawEntry === "object" &&
         !Array.isArray(rawEntry)
       )
-        ? rawEntry
+        ? { ...rawEntry }
         : {
             spellId: typeof rawEntry === "string" ? rawEntry : "",
             sourceClassId: "",
@@ -189,46 +190,49 @@ export function ensureMagicState(character) {
     })
     .filter(entry => Boolean(getSpellById(entry.spellId)));
 
-  const sources = getSpellcastingSources(character);
+  // Один spell зберігається один раз, навіть якщо його дають
+  // кілька класів. Зберігаємо перший source і не губимо prepared.
+  const unique = new Map();
 
+  for (const entry of normalized) {
+    const existing = unique.get(entry.spellId);
+
+    if (!existing) {
+      unique.set(entry.spellId, entry);
+      continue;
+    }
+
+    existing.prepared = existing.prepared || entry.prepared;
+
+    if (!existing.sourceClassId && entry.sourceClassId) {
+      existing.sourceClassId = entry.sourceClassId;
+    }
+  }
+
+  character.magic.spells = [...unique.values()];
+
+  // Після зміни мультикласу перев'язуємо spell з актуальним джерелом.
   for (const entry of character.magic.spells) {
-    if (entry.sourceClassId) continue;
-
     const spell = getSpellById(entry.spellId);
     if (!spell) continue;
 
     const availableSources = getAvailableSourcesForSpell(character, spell);
 
-    const exactClass = availableSources.find(source =>
-      source.classEntry.classId === entry.sourceClassId
-    );
-
-    const fallbackSource = availableSources[0];
-
-    if (exactClass) {
-      entry.sourceClassId = exactClass.classEntry.classId;
-    } else if (fallbackSource) {
-      entry.sourceClassId = fallbackSource.classEntry.classId;
-    }
-  }
-
-  // Keep source ids valid after multiclass/class changes.
-  for (const entry of character.magic.spells) {
-    if (!entry.sourceClassId) continue;
-
-    const sourceStillExists = sources.some(source =>
+    const sourceStillExists = availableSources.some(source =>
       source.classEntry.classId === entry.sourceClassId
     );
 
     if (!sourceStillExists) {
-      entry.sourceClassId = "";
-      entry.prepared = false;
+      entry.sourceClassId = availableSources[0]?.classEntry.classId ?? "";
+
+      if (!entry.sourceClassId) {
+        entry.prepared = false;
+      }
     }
   }
 
   return character.magic.spells;
 }
-
 export function getKnownSpellEntries(character) {
   const state = ensureMagicState(character);
 
@@ -292,26 +296,22 @@ export function addSpellToCharacter(character, spellId, sourceClassId = "") {
     return { ok: false, message: "Персонажу недоступне це заклинання на поточному рівні." };
   }
 
+  // Один і той самий spell не додаємо двічі, навіть через різні класи.
+  if (character.magic.spells.some(entry => entry.spellId === spellId)) {
+    return { ok: false, message: "Це заклинання вже додане персонажу." };
+  }
+
   const source = sourceClassId
     ? availableSources.find(item =>
         item.classEntry.classId === sourceClassId
       )
-    : availableSources.length === 1
-      ? availableSources[0]
-      : null;
+    : availableSources[0];
 
   if (!source) {
     return {
       ok: false,
-      message: "Оберіть клас, для якого додається це заклинання."
+      message: "Не знайдено доступного класу-джерела для цього заклинання."
     };
-  }
-
-  if (character.magic.spells.some(entry =>
-    entry.spellId === spellId &&
-    entry.sourceClassId === source.classEntry.classId
-  )) {
-    return { ok: false, message: "Це заклинання вже додане для цього класу." };
   }
 
   if (spell.level === 0) {
