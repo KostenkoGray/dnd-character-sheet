@@ -17,6 +17,7 @@ import { bottomNavigation } from "../components/bottomNavigation.js";
 import { collapsibleSection } from "../components/collapsibleSection.js";
 import { renderDeathSaves } from "../components/deathSaves.js";
 import { equipmentCard } from "../components/equipmentCard.js";
+import { preparedSpellsBlock } from "../components/preparedSpells.js";
 import {
   getInventoryFeatureEntries,
   getEffectiveAbilityScore,
@@ -584,10 +585,7 @@ export function characterSheetScreen(character, collapseState = {}) {
 
         ${equipmentCard(character, Boolean(collapseState.equipment))}
 
-        <section class="combat-section">
-          <h2>Prepared Spells</h2>
-          <p>Поки немає підготовлених заклинань.</p>
-        </section>
+        ${preparedSpellsBlock(character)}
 
 
 
