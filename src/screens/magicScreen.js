@@ -88,6 +88,7 @@ function renderSpellCard(spell) {
         <span>${escapeHtml(spell.castingTime)}</span>
         <span>${escapeHtml(spell.range)}</span>
         <span>${escapeHtml(formatComponents(spell.components))}</span>
+        <span>${spell.level === 0 ? "Без комірки" : "Комірка " + spell.level + "+"}</span>
       </div>
 
       <p>${escapeHtml(spell.description)}</p>
