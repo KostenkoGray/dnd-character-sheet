@@ -846,6 +846,17 @@ export function validateCreatorStep(state, stepKey) {
   }
 
   if (stepKey === "name") {
+    if (state.classId === "rogue") {
+      const proficientSkills = getFinalSkillProficiencyIds(state);
+      const invalidExpertise = (state.classChoices.expertise ?? []).find(
+        id => id !== "thievesTools" && !proficientSkills.has(id)
+      );
+
+      if (invalidExpertise) {
+        return "Експертність має бути обрана для навички, якою персонаж володіє.";
+      }
+    }
+
     return String(state.name ?? "").trim()
       ? ""
       : "Введіть ім'я персонажа.";
@@ -946,7 +957,20 @@ function isChoiceComplete(group, value) {
 
   if (group.unique && new Set(values).size !== values.length) return false;
 
+  const allowedIds = new Set((group.options ?? []).map(option => option.id));
+  if (allowedIds.size && values.some(id => !allowedIds.has(id))) return false;
+
   return true;
+}
+
+function getFinalSkillProficiencyIds(state) {
+  const background = BACKGROUNDS[state.backgroundId];
+
+  return new Set([
+    ...getRacialSkillProficiencies(state),
+    ...(state.classChoices.skills ?? []),
+    ...(background?.skillProficiencies?.granted ?? [])
+  ]);
 }
 
 function getSelectedSubclass(state) {
