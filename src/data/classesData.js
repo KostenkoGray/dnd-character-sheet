@@ -294,6 +294,7 @@ cleric: {
   spellcasting: {
     ability: "wisdom",
     preparation: "prepared",
+    autoKnownSpells: true,
     ritualCasting: true,
 
 slotsTable: FULL_CASTER_SLOTS,
@@ -497,6 +498,7 @@ druid: {
   spellcasting: {
     ability: "wisdom",
     preparation: "prepared",
+    autoKnownSpells: true,
     ritualCasting: true,
 
 slotsTable: FULL_CASTER_SLOTS,
@@ -916,6 +918,8 @@ paladin: {
   spellcasting: {
   ability: "charisma",
   preparation: "prepared",
+  preparationLevelDivisor: 2,
+  autoKnownSpells: true,
   ritualCasting: false,
 
   slotsTable: HALF_CASTER_SLOTS
