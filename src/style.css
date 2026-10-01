@@ -4279,3 +4279,92 @@ p {
 .combat-weapons-section .combat-weapon-parameters {
   display: block;
 }
+
+
+/* ==================================================
+   40 / 60 EQUIPMENT BALANCE + EXPANDED WALLET
+   ================================================== */
+
+.sheet-equipment-wallet-row,
+.combat-equipment-weapons-row {
+  grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+}
+
+/* Use the newly available wallet width instead of leaving empty space. */
+.sheet-equipment-wallet-row .wallet-header {
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.sheet-equipment-wallet-row .wallet-header h2 {
+  font-size: 18px;
+}
+
+.sheet-equipment-wallet-row .wallet-header span {
+  font-size: 10px;
+}
+
+.sheet-equipment-wallet-row .wallet-coin-list {
+  gap: 5px;
+}
+
+.sheet-equipment-wallet-row .wallet-coin-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 7px;
+  padding: 6px 6px;
+}
+
+.sheet-equipment-wallet-row .wallet-coin-name strong {
+  width: 28px;
+  flex-basis: 28px;
+  font-size: 11px;
+}
+
+.sheet-equipment-wallet-row .wallet-coin-counter {
+  grid-template-columns: 30px 48px 30px;
+  gap: 4px;
+}
+
+.sheet-equipment-wallet-row .wallet-counter-button {
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+}
+
+.sheet-equipment-wallet-row .wallet-coin-amount {
+  width: 48px;
+  height: 30px;
+  border-radius: 7px;
+  font-size: 12px;
+}
+
+@media (max-width: 380px) {
+  .sheet-equipment-wallet-row {
+    grid-template-columns: minmax(0, 40fr) minmax(112px, 60fr);
+  }
+
+  .sheet-equipment-wallet-row .wallet-header h2 {
+    font-size: 17px;
+  }
+
+  .sheet-equipment-wallet-row .wallet-coin-row {
+    gap: 5px;
+    padding: 5px 4px;
+  }
+
+  .sheet-equipment-wallet-row .wallet-coin-counter {
+    grid-template-columns: 27px 43px 27px;
+    gap: 3px;
+  }
+
+  .sheet-equipment-wallet-row .wallet-counter-button {
+    width: 27px;
+    height: 27px;
+    font-size: 15px;
+  }
+
+  .sheet-equipment-wallet-row .wallet-coin-amount {
+    width: 43px;
+    height: 27px;
+  }
+}
