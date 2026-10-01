@@ -58,6 +58,12 @@ let currentScreen = "list";
 let undoState = null;
 let inventoryFilter = { search: "", type: "all" };
 
+const collapseState = {
+  stats: false,
+  equipment: false,
+  features: false
+};
+
 function cloneCharacterState(character) {
   return typeof structuredClone === "function"
     ? structuredClone(character)
@@ -1440,11 +1446,11 @@ function render() {
       break;
 
     case "sheet":
-      app.innerHTML = characterSheetScreen(currentCharacter);
+      app.innerHTML = characterSheetScreen(currentCharacter, collapseState);
       break;
 
     case "combat":
-      app.innerHTML = combatScreen(currentCharacter);
+      app.innerHTML = combatScreen(currentCharacter, collapseState);
       break;
 
     case "inventory":
@@ -1497,6 +1503,16 @@ app.addEventListener("click", (event) => {
   }
 
   if ((currentScreen === "sheet" || currentScreen === "combat") && currentCharacter) {
+    const collapseButton = event.target.closest("[data-collapse-section]");
+    if (collapseButton) {
+      const sectionId = collapseButton.dataset.collapseSection;
+      if (Object.prototype.hasOwnProperty.call(collapseState, sectionId)) {
+        collapseState[sectionId] = !collapseState[sectionId];
+        render();
+      }
+      return;
+    }
+
     const weaponPicker = event.target.closest("[data-weapon-picker]");
     if (weaponPicker) {
       openEquipmentPicker(
@@ -1522,6 +1538,9 @@ app.addEventListener("click", (event) => {
     const id = Number(card.dataset.characterId);
     currentCharacter = getCharacterById(id);
     currentScreen = "sheet";
+    collapseState.stats = false;
+    collapseState.equipment = false;
+    collapseState.features = false;
     render();
     return;
   }
