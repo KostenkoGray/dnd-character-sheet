@@ -18,6 +18,7 @@ import { collapsibleSection } from "../components/collapsibleSection.js";
 import { renderDeathSaves } from "../components/deathSaves.js";
 import { equipmentCard } from "../components/equipmentCard.js";
 import { preparedSpellsBlock } from "../components/preparedSpells.js";
+import { spellSlotsCounter } from "../components/spellSlotsCounter.js";
 import {
   getInventoryFeatureEntries,
   getEffectiveAbilityScore,
@@ -584,6 +585,8 @@ export function characterSheetScreen(character, collapseState = {}) {
         </section>
 
         ${equipmentCard(character, Boolean(collapseState.equipment))}
+
+        ${spellSlotsCounter(character)}
 
         ${preparedSpellsBlock(character)}
 
