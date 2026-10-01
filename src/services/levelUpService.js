@@ -3,6 +3,7 @@ import { getSpellSlotGroups } from "./magicService.js";
 import { FEATURES } from "../data/featuresData.js";
 import { FEATS } from "../data/featsData.js";
 import { getSpellSlots } from "./characterCalculationsService.js";
+import { addHitDieForClass, ensureHitDiceState } from "./hitDiceService.js";
 
 function getResourceValue(resourceTable, classLevel) {
   const levels = Object.keys(resourceTable)
@@ -320,6 +321,11 @@ export function applyLevelUp(character, classId, hpIncrease, choices = {}) {
 
   character.classes = preview.nextCharacter.classes;
   character.maxHp = preview.nextCharacter.maxHp;
+
+  if (character.combat) {
+    ensureHitDiceState(character);
+    addHitDieForClass(character, classId);
+  }
 
   if (preview.abilityScoreImprovement) {
     applyAbilityScoreImprovement(character, {
