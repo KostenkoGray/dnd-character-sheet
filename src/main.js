@@ -239,6 +239,44 @@ function closeCampDialog() {
   document.querySelector(".camp-dialog-backdrop")?.remove();
 }
 
+function showNumericInputDialog({ title, label, value, onConfirm }) {
+  showCampDialog({
+    title,
+    body: `
+      <label>
+        <span>${escapeHtml(label)}</span>
+        <input
+          id="camp-numeric-input"
+          class="level-up-number-input"
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          value="${escapeHtml(value)}"
+          autocomplete="off"
+        >
+      </label>
+    `,
+    confirmLabel: "Готово",
+    onConfirm: () => {
+      const input = document.querySelector("#camp-numeric-input");
+      const raw = input?.value ?? "";
+
+      if (!/^\\d+$/.test(raw)) return false;
+
+      const parsed = Number(raw);
+      if (!Number.isFinite(parsed)) return false;
+
+      onConfirm(parsed);
+    }
+  });
+
+  requestAnimationFrame(() => {
+    const input = document.querySelector("#camp-numeric-input");
+    input?.focus();
+    input?.select();
+  });
+}
+
 function showCampDialog({ title, body, confirmLabel = "OK", onConfirm }) {
   closeCampDialog();
 
@@ -2248,41 +2286,33 @@ app.addEventListener("click", (event) => {
     }
 
     if (event.target.closest("#sheet-temp-hp-value-input")) {
-      const input = prompt("Введіть Temporary HP (лише цифри)",String(currentCharacter.combat.tempHp));
-      if (input !== null) {
-        const digits = input.replace(/\D/g, "");
-        if (digits !== "") {
-          currentCharacter.combat.tempHp = Number(digits);
+      showNumericInputDialog({
+        title: "Temporary HP",
+        label: "Введіть Temporary HP",
+        value: currentCharacter.combat.tempHp,
+        onConfirm: value => {
+          currentCharacter.combat.tempHp = value;
           render();
         }
-      }
+      });
       return;
     }
 
     if (event.target.closest("#sheet-hp-value-input")) {
-      const input = prompt(
-        `Введіть поточне HP (лише цифри, 0–${currentCharacter.maxHp})`,
-        String(currentCharacter.combat.currentHp)
-      );
-
-      if (input !== null) {
-        const digits = input.replace(/\D/g, "");
-
-        if (digits !== "") {
-          const value = Number(digits);
-
-          if (Number.isFinite(value)) {
-            currentCharacter.combat.currentHp = clamp(
-              value,
-              0,
-              Number(currentCharacter.maxHp ?? 0)
-            );
-            resetDeathSavesWhenAlive(currentCharacter);
-            render();
-          }
+      showNumericInputDialog({
+        title: "Hit Points",
+        label: `Введіть поточне HP (0–${currentCharacter.maxHp})`,
+        value: currentCharacter.combat.currentHp,
+        onConfirm: value => {
+          currentCharacter.combat.currentHp = clamp(
+            value,
+            0,
+            Number(currentCharacter.maxHp ?? 0)
+          );
+          resetDeathSavesWhenAlive(currentCharacter);
+          render();
         }
-      }
-
+      });
       return;
     }
 
@@ -2374,51 +2404,33 @@ app.addEventListener("click", (event) => {
     }
 
     if (event.target.closest("#temp-hp-value-input")) {
-      const input = prompt(
-        "Введіть Temporary HP (лише цифри)",
-        String(currentCharacter.combat.tempHp)
-      );
-
-      if (input !== null) {
-        const digits = input.replace(/\D/g, "");
-
-        if (digits !== "") {
-          const value = Number(digits);
-
-          if (Number.isFinite(value)) {
-            currentCharacter.combat.tempHp = value;
-            render();
-          }
+      showNumericInputDialog({
+        title: "Temporary HP",
+        label: "Введіть Temporary HP",
+        value: currentCharacter.combat.tempHp,
+        onConfirm: value => {
+          currentCharacter.combat.tempHp = value;
+          render();
         }
-      }
-
+      });
       return;
     }
 
     if (event.target.closest("#hp-value-input")) {
-      const input = prompt(
-        `Введіть поточне HP (лише цифри, 0–${currentCharacter.maxHp})`,
-        String(currentCharacter.combat.currentHp)
-      );
-
-      if (input !== null) {
-        const digits = input.replace(/\D/g, "");
-
-        if (digits !== "") {
-          const value = Number(digits);
-
-          if (Number.isFinite(value)) {
-            currentCharacter.combat.currentHp = clamp(
-              value,
-              0,
-              Number(currentCharacter.maxHp ?? 0)
-            );
-            resetDeathSavesWhenAlive(currentCharacter);
-            render();
-          }
+      showNumericInputDialog({
+        title: "Hit Points",
+        label: `Введіть поточне HP (0–${currentCharacter.maxHp})`,
+        value: currentCharacter.combat.currentHp,
+        onConfirm: value => {
+          currentCharacter.combat.currentHp = clamp(
+            value,
+            0,
+            Number(currentCharacter.maxHp ?? 0)
+          );
+          resetDeathSavesWhenAlive(currentCharacter);
+          render();
         }
-      }
-
+      });
       return;
     }
 
