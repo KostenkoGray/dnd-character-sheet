@@ -91,7 +91,7 @@ function renderSpellCard(spell) {
         <span>${spell.level === 0 ? "Без комірки" : "Комірка " + spell.level + "+"}</span>
       </div>
 
-      <p>${escapeHtml(spell.description)}</p>
+      <p>${escapeHtml(spell.description || "Опис ще не внесено до локального каталогу.")}</p>
 
       <div class="magic-spell-flags">
         ${spell.prepared ? '<span class="inventory-equipped-badge">Підготовлено</span>' : ""}
