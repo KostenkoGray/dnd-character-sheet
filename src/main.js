@@ -17,6 +17,7 @@ import { charactersScreen } from "./screens/characterListScreen.js";
 import { characterSheetScreen } from "./screens/characterSheetScreen.js";
 import { combatScreen } from "./screens/combatScreen.js";
 import { inventoryScreen, renderInventoryList } from "./screens/inventoryScreen.js";
+import { magicScreen, renderMagicSpellsList } from "./screens/magicScreen.js";
 import { getStatModifier, getHitDiceTotal, clamp } from "./services/characterCalculationsService.js";
 import { CLASSES } from "./data/classesData.js";
 import {
@@ -31,6 +32,22 @@ import { bottomNavigation } from "./components/bottomNavigation.js";
 import { FEATS } from "./data/featsData.js";
 import { handleDeathSaveClick } from "./components/deathSaves.js";
 import { ensureCombatState } from "./services/combatStateService.js";
+import {
+  ensureMagicState,
+  ensureSpellSlotState,
+  addSpellToCharacter,
+  toggleSpellPrepared,
+  removeSpellFromCharacter,
+  getSpellById,
+  getAvailableSpells,
+  spendSpellSlot,
+  restoreSpellSlot,
+  restoreSpellSlotsOnLongRest
+} from "./services/magicService.js";
+import {
+  SPELL_SCHOOL_LABELS,
+  SPELL_EFFECT_TYPE_LABELS
+} from "./data/spellsData.js";
 import {
   ITEM_TYPES,
   ITEM_TYPE_LABELS,
@@ -63,6 +80,7 @@ let currentCharacter = null;
 let currentScreen = "list";
 let undoState = null;
 let inventoryFilter = { search: "", type: "all" };
+let magicFilter = { search: "" };
 
 const DEFAULT_COLLAPSE_STATE = {
   stats: false,
@@ -260,6 +278,178 @@ function confirmUndoLastAction(character) {
         });
       }, 0);
     }
+  });
+}
+
+function formatSpellComponents(components) {
+  if (!components) return "—";
+  const values = [];
+  if (components.verbal) values.push("V");
+  if (components.somatic) values.push("S");
+  if (components.material) values.push("M");
+  return values.join(", ") || "—";
+}
+
+function renderAddSpellBody(character, state) {
+  const search = String(state.search ?? "").trim().toLowerCase();
+  const levelFilter = state.level ?? "all";
+  const knownIds = new Set((character.magic?.spells ?? []).map(entry => entry.spellId));
+
+  const available = getAvailableSpells(character)
+    .filter(entry => !knownIds.has(entry.spell.id))
+    .filter(entry => levelFilter === "all" || Number(entry.spell.level) === Number(levelFilter))
+    .filter(entry => {
+      if (!search) return true;
+      const spell = entry.spell;
+      return [
+        spell.ukr,
+        spell.name,
+        spell.description,
+        SPELL_SCHOOL_LABELS[spell.school] ?? "",
+        SPELL_EFFECT_TYPE_LABELS[spell.effectType] ?? ""
+      ].join(" ").toLowerCase().includes(search);
+    })
+    .sort((a, b) => {
+      if (a.spell.level !== b.spell.level) return a.spell.level - b.spell.level;
+      return String(a.spell.ukr ?? a.spell.name).localeCompare(
+        String(b.spell.ukr ?? b.spell.name),
+        "uk"
+      );
+    });
+
+  const results = available.length
+    ? available.map(entry => {
+        const spell = entry.spell;
+        const sources = entry.sources.map(source => source.classData.ukr).join(", ");
+
+        return `
+          <article class="magic-add-result">
+            <div class="magic-add-result-info">
+              <strong>${escapeHtml(spell.ukr ?? spell.name)}</strong>
+              <span>${escapeHtml(spell.level === 0 ? "Замова" : `Рівень ${spell.level}`)} · ${escapeHtml(SPELL_SCHOOL_LABELS[spell.school] ?? spell.school)}</span>
+              <small>${escapeHtml(sources)}</small>
+              <small>${escapeHtml(spell.description)}</small>
+            </div>
+            <button
+              type="button"
+              class="inventory-action-button primary"
+              data-add-spell-id="${escapeHtml(spell.id)}"
+            >Додати</button>
+          </article>
+        `;
+      }).join("")
+    : '<p class="inventory-empty">Немає доступних нових заклинань за цими умовами.</p>';
+
+  return `
+    <section class="inventory-add-filters magic-add-filters">
+      <label class="inventory-search">
+        <span>Пошук</span>
+        <input id="magic-add-search" type="search" value="${escapeHtml(state.search ?? "")}" placeholder="Назва або опис..." autocomplete="off">
+      </label>
+      <label class="inventory-type-filter">
+        <span>Рівень</span>
+        <select id="magic-add-level">
+          <option value="all" ${levelFilter === "all" ? "selected" : ""}>Усі рівні</option>
+          <option value="0" ${String(levelFilter) === "0" ? "selected" : ""}>Замови</option>
+          ${[1,2,3,4,5,6,7,8,9].map(level => `<option value="${level}" ${String(levelFilter) === String(level) ? "selected" : ""}>Рівень ${level}</option>`).join("")}
+        </select>
+      </label>
+    </section>
+    <div class="magic-add-results">${results}</div>
+  `;
+}
+
+function openAddSpellDialog(character) {
+  ensureMagicState(character);
+
+  const state = { search: "", level: "all" };
+
+  showCampDialog({
+    title: "Додати заклинання",
+    body: renderAddSpellBody(character, state),
+    confirmLabel: "Готово"
+  });
+
+  const backdrop = document.querySelector(".camp-dialog-backdrop");
+  if (!backdrop) return;
+
+  const rerenderBody = focusSearch => {
+    const body = backdrop.querySelector(".camp-dialog-body");
+    if (!body) return;
+    body.innerHTML = renderAddSpellBody(character, state);
+
+    if (focusSearch) {
+      const input = body.querySelector("#magic-add-search");
+      input?.focus();
+      input?.setSelectionRange(state.search.length, state.search.length);
+    }
+  };
+
+  backdrop.addEventListener("input", event => {
+    if (event.target.id !== "magic-add-search") return;
+    state.search = event.target.value;
+    rerenderBody(true);
+  });
+
+  backdrop.addEventListener("change", event => {
+    if (event.target.id !== "magic-add-level") return;
+    state.level = event.target.value;
+    rerenderBody(false);
+  });
+
+  backdrop.addEventListener("click", event => {
+    const button = event.target.closest("[data-add-spell-id]");
+    if (!button) return;
+
+    const result = addSpellToCharacter(character, button.dataset.addSpellId);
+
+    if (!result.ok) {
+      showCampDialog({
+        title: "Не вдалося додати",
+        body: `<p>${escapeHtml(result.message)}</p>`,
+        confirmLabel: "Закрити"
+      });
+      return;
+    }
+
+    persistCharacters();
+    render();
+
+    setTimeout(() => openAddSpellDialog(character), 0);
+  });
+}
+
+function openSpellDetailsDialog(character, spellId) {
+  const spell = getSpellById(spellId);
+  if (!spell) return;
+
+  const details = [
+    ["Рівень", spell.level === 0 ? "Замова" : spell.level],
+    ["Школа", SPELL_SCHOOL_LABELS[spell.school] ?? spell.school],
+    ["Тип", SPELL_EFFECT_TYPE_LABELS[spell.effectType] ?? spell.effectType],
+    ["Час накладання", spell.castingTime],
+    ["Дистанція", spell.range],
+    ["Компоненти", formatSpellComponents(spell.components)],
+    ["Тривалість", spell.duration],
+    ["Концентрація", spell.concentration ? "Так" : "Ні"],
+    ["Ритуал", spell.ritual ? "Так" : "Ні"],
+    ["Комірка", spell.requiresSlot ? `Рівня ${spell.level} або вище` : "Не потрібна"]
+  ].map(([label, value]) =>
+    `<div class="magic-detail-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`
+  ).join("");
+
+  showCampDialog({
+    title: spell.ukr ?? spell.name,
+    body: `
+      <p class="magic-detail-original">${escapeHtml(spell.name)}</p>
+      <div class="magic-detail-grid">${details}</div>
+      <p class="magic-detail-description">${escapeHtml(spell.description)}</p>
+      ${spell.higherLevel ? `<p class="magic-detail-description"><strong>На вищому рівні:</strong> ${escapeHtml(spell.higherLevel)}</p>` : ""}
+      ${spell.savingThrow ? `<p class="magic-detail-description"><strong>Ряткидок:</strong> ${escapeHtml(spell.savingThrow)}</p>` : ""}
+      ${spell.damageType ? `<p class="magic-detail-description"><strong>Тип шкоди:</strong> ${escapeHtml(spell.damageType)}</p>` : ""}
+      ${spell.components?.materialText ? `<p class="magic-detail-description"><strong>Матеріал:</strong> ${escapeHtml(spell.components.materialText)}</p>` : ""}
+    `,
+    confirmLabel: "Закрити"
   });
 }
 
@@ -518,42 +708,7 @@ function restoreLongRestResources(character) {
 }
 
 function restoreLongRestSpellSlots(character) {
-  character.combat ??= {};
-
-  for (const cls of character.classes ?? []) {
-    const spellcasting = CLASSES[cls.classId]?.spellcasting;
-    const slotsTable = spellcasting?.slotsTable;
-
-    if (!slotsTable || typeof slotsTable !== "object") continue;
-
-    const levelData =
-      slotsTable[cls.level] ??
-      slotsTable[String(cls.level)];
-
-    if (!levelData || typeof levelData !== "object") continue;
-
-    const maxSlots = Number(levelData.slots);
-    if (!Number.isFinite(maxSlots) || maxSlots <= 0) continue;
-
-    if (spellcasting.pactMagic) {
-      character.combat.pactMagicSlots = maxSlots;
-      character.combat.currentPactMagicSlots = maxSlots;
-      character.combat.pactMagicSlotLevel = Number(levelData.slotLevel) || 0;
-      continue;
-    }
-
-    const spellSlotLevels = Object.keys(levelData)
-      .filter(key => /^\d+$/.test(key))
-      .reduce((result, key) => {
-        const level = Number(key);
-        const value = Number(levelData[key]);
-        if (Number.isFinite(value)) result[level] = value;
-        return result;
-      }, {});
-
-    character.combat.spellSlots = spellSlotLevels;
-    character.combat.currentSpellSlots = { ...spellSlotLevels };
-  }
+  restoreSpellSlotsOnLongRest(character);
 }
 
 function performLongRest(character) {
@@ -1475,7 +1630,11 @@ function persistCharacters() {
 }
 
 function render() {
-  if (currentCharacter) ensureInventory(currentCharacter);
+  if (currentCharacter) {
+    ensureInventory(currentCharacter);
+    ensureMagicState(currentCharacter);
+    ensureSpellSlotState(currentCharacter);
+  }
   persistCharacters();
   switch (currentScreen) {
     case "list":
@@ -1495,6 +1654,9 @@ function render() {
       break;
 
     case "magic":
+      app.innerHTML = magicScreen(currentCharacter, magicFilter);
+      break;
+
     case "dice":
     case "notes":
       app.innerHTML = `
@@ -1524,7 +1686,83 @@ app.addEventListener("change", event => {
   if (sections) sections.innerHTML = renderInventoryList(currentCharacter, inventoryFilter);
 });
 
+app.addEventListener("input", event => {
+  if (currentScreen !== "magic" || event.target.id !== "magic-search") return;
+  magicFilter.search = event.target.value;
+  const list = document.querySelector("#magic-spells-list");
+  if (list) list.innerHTML = renderMagicSpellsList(currentCharacter, magicFilter);
+});
+
 app.addEventListener("click", (event) => {
+  if (currentScreen === "magic" && currentCharacter) {
+    const addButton = event.target.closest("#magic-add-spell");
+    if (addButton) {
+      openAddSpellDialog(currentCharacter);
+      return;
+    }
+
+    const closeMagic = event.target.closest("#close-magic");
+    if (closeMagic) {
+      persistCharacters();
+      currentScreen = "sheet";
+      loadCollapseState(currentCharacter);
+      render();
+      return;
+    }
+
+    const slotButton = event.target.closest("[data-spell-slot-action]");
+    if (slotButton) {
+      const level = Number(slotButton.dataset.spellSlotLevel);
+      const pactMagic = slotButton.dataset.spellSlotPact === "true";
+      const action = slotButton.dataset.spellSlotAction;
+
+      const result = action === "spend"
+        ? spendSpellSlot(currentCharacter, level, pactMagic)
+        : restoreSpellSlot(currentCharacter, level, pactMagic);
+
+      if (!result.ok) {
+        showCampDialog({
+          title: "Магічні комірки",
+          body: `<p>${escapeHtml(result.message)}</p>`,
+          confirmLabel: "Закрити"
+        });
+        return;
+      }
+
+      persistCharacters();
+      render();
+      return;
+    }
+
+    const magicAction = event.target.closest("[data-magic-action]");
+    if (magicAction) {
+      const spellId = magicAction.dataset.spellId;
+      const action = magicAction.dataset.magicAction;
+      const result = action === "delete"
+        ? removeSpellFromCharacter(currentCharacter, spellId)
+        : toggleSpellPrepared(currentCharacter, spellId);
+
+      if (!result.ok) {
+        showCampDialog({
+          title: "Магія",
+          body: `<p>${escapeHtml(result.message)}</p>`,
+          confirmLabel: "Закрити"
+        });
+        return;
+      }
+
+      persistCharacters();
+      render();
+      return;
+    }
+
+    const spellCard = event.target.closest("[data-spell-details]");
+    if (spellCard) {
+      openSpellDetailsDialog(currentCharacter, spellCard.dataset.spellDetails);
+      return;
+    }
+  }
+
   if (currentScreen === "inventory" && currentCharacter) {
     const addButton = event.target.closest("#inventory-add-item");
     if (addButton) {
@@ -1853,6 +2091,7 @@ app.addEventListener("click", (event) => {
 
   currentScreen = nav.dataset.screen;
   if (currentScreen !== "inventory") inventoryFilter = { search: "", type: "all" };
+  if (currentScreen !== "magic") magicFilter = { search: "" };
   render();
 });
 
