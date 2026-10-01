@@ -324,13 +324,13 @@ export function combatScreen(character, collapseState = {}) {
           </section>
         </section>
 
-        ${spellSlotsCounter(character)}
-
-        ${preparedSpellsBlock(character)}
-
         ${renderDeathSaves(character)}
 
         ${renderClassResources(character)}
+
+        ${spellSlotsCounter(character)}
+
+        ${preparedSpellsBlock(character)}
 
         <section class="combat-section">
           <h2>Weapons</h2>
