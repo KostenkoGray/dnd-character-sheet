@@ -1399,6 +1399,7 @@ export function buildCharacterFromCreator(state, id) {
   for (const id of Object.values(state.backgroundChoices.languages ?? {}).flat()) pushLanguage(id);
 
   const raceWeaponProficiencies = [
+    ...(classData.weaponProficiencies ?? []),
     ...(race.weaponProficiencies ?? [])
   ];
 
