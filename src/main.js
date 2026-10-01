@@ -1809,6 +1809,7 @@ async function openCharacterCreator() {
 
   creatorOpening = true;
   currentCharacter = null;
+  currentScreen = "creator";
 
   try {
     const { startCharacterCreator } = await import(
