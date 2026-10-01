@@ -287,18 +287,32 @@ export function addSpellToCharacter(character, spellId, sourceClassId = "") {
 
   ensureMagicState(character);
 
-  if (character.magic.spells.some(entry => entry.spellId === spellId)) {
-    return { ok: false, message: "Це заклинання вже відоме персонажу." };
-  }
-
   const availableSources = getAvailableSourcesForSpell(character, spell);
   if (!availableSources.length) {
     return { ok: false, message: "Персонажу недоступне це заклинання на поточному рівні." };
   }
 
-  const source = availableSources.find(item =>
-    item.classEntry.classId === sourceClassId
-  ) ?? availableSources[0];
+  const source = sourceClassId
+    ? availableSources.find(item =>
+        item.classEntry.classId === sourceClassId
+      )
+    : availableSources.length === 1
+      ? availableSources[0]
+      : null;
+
+  if (!source) {
+    return {
+      ok: false,
+      message: "Оберіть клас, для якого додається це заклинання."
+    };
+  }
+
+  if (character.magic.spells.some(entry =>
+    entry.spellId === spellId &&
+    entry.sourceClassId === source.classEntry.classId
+  )) {
+    return { ok: false, message: "Це заклинання вже додане для цього класу." };
+  }
 
   if (spell.level === 0) {
     const limit = getCantripsKnownLimitForSource(source);
