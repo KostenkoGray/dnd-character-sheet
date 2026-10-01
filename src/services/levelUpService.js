@@ -1,4 +1,5 @@
 import { CLASSES, CLASS_LEVEL_UP } from "../data/classesData.js";
+import { getSpellSlotGroups } from "./magicService.js";
 import { FEATURES } from "../data/featuresData.js";
 import { FEATS } from "../data/featsData.js";
 import { getSpellSlots } from "./characterCalculationsService.js";
@@ -113,7 +114,7 @@ export function getLevelUpOptions(character, classId, choices = {}) {
   const asiLevels = CLASS_LEVEL_UP[classId]?.abilityScoreImprovementLevels ?? [];
   const abilityScoreImprovement = asiLevels.includes(nextLevel);
 
-  const spellcastingBefore = getSpellSlots(character);
+  const spellcastingBefore = getSpellSlotGroups(character);
 
   const previewClasses = currentClass
     ? character.classes.map(cls =>
@@ -139,7 +140,7 @@ export function getLevelUpOptions(character, classId, choices = {}) {
     classes: previewClasses
   };
 
-  const spellcastingAfter = getSpellSlots(previewCharacter);
+  const spellcastingAfter = getSpellSlotGroups(previewCharacter);
 
   return {
     classId,
