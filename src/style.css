@@ -2872,3 +2872,350 @@ p {
     grid-column: auto;
   }
 }
+
+
+/* ==================================================
+   MAGIC SCREEN
+   ================================================== */
+
+.magic-main {
+  padding-bottom: 100px;
+}
+
+.magic-header,
+.magic-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.magic-header {
+  padding: 16px 16px 8px;
+}
+
+.magic-header h1,
+.magic-title-row h2 {
+  margin: 0;
+}
+
+.magic-header p,
+.magic-title-row span {
+  margin: 2px 0 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.magic-slots-section {
+  margin: 8px 12px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.magic-title-row > div {
+  min-width: 0;
+}
+
+.magic-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.magic-slot-card {
+  padding: 10px;
+  background: var(--surface-light);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.magic-slot-card.pact-slot-card {
+  grid-column: 1 / -1;
+}
+
+.magic-slot-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.magic-slot-heading div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.magic-slot-heading span {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.magic-slot-current {
+  font-size: 19px;
+  white-space: nowrap;
+}
+
+.magic-slot-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.magic-slot-controls .inventory-action-button {
+  min-width: 38px;
+  padding: 6px 10px;
+}
+
+.magic-slot-controls span {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.magic-source-section {
+  margin: 8px 12px;
+}
+
+.magic-source-list {
+  display: grid;
+  gap: 6px;
+}
+
+.magic-source-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-light);
+}
+
+.magic-source-row span {
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.magic-search {
+  margin-top: 12px;
+}
+
+.magic-spells-sections {
+  margin-top: 12px;
+}
+
+.magic-level-section + .magic-level-section {
+  margin-top: 16px;
+}
+
+.magic-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.magic-section-heading h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.magic-section-heading span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.magic-spells-list,
+.magic-add-results {
+  display: grid;
+  gap: 8px;
+}
+
+.magic-spell-card,
+.magic-add-result {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 14px;
+}
+
+.magic-spell-card {
+  padding: 11px;
+  cursor: pointer;
+}
+
+.magic-spell-card.prepared {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-bg);
+}
+
+.magic-spell-heading,
+.magic-add-result {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.magic-spell-heading > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.magic-spell-heading small,
+.magic-spell-heading > span,
+.magic-add-result-info span {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.magic-spell-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.magic-spell-meta span,
+.magic-spell-flags span {
+  padding: 3px 7px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.magic-spell-card p {
+  margin: 9px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.magic-spell-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.magic-spell-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.magic-spell-actions .inventory-action-button {
+  flex: 1;
+}
+
+.magic-add-result {
+  align-items: center;
+  padding: 10px;
+}
+
+.magic-add-result-info {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.magic-add-result-info small {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.magic-add-filters {
+  margin-bottom: 10px;
+}
+
+.magic-detail-original {
+  margin-top: -8px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.magic-detail-grid {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.magic-detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.magic-detail-row span {
+  color: var(--text-muted);
+}
+
+.magic-detail-row strong {
+  text-align: right;
+}
+
+.magic-detail-description {
+  white-space: pre-wrap;
+}
+
+.prepared-spells-list {
+  display: grid;
+  gap: 6px;
+}
+
+.prepared-spell-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-light);
+}
+
+.prepared-spell-row > div {
+  display: grid;
+  gap: 2px;
+}
+
+.prepared-spell-row small,
+.prepared-spell-row > span {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.magic-add-result button {
+  flex-shrink: 0;
+}
+
+@media (max-width: 380px) {
+  .magic-slots-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .magic-source-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .magic-source-row span {
+    text-align: left;
+  }
+
+  .magic-spell-actions {
+    flex-direction: column;
+  }
+
+  .magic-add-result {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
