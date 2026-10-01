@@ -180,22 +180,33 @@ export function ensureMagicState(character) {
               prepared: false
             };
 
-      const sourceClassIds = Array.from(new Set([
+      const legacySourceClassIds = Array.from(new Set([
         ...(Array.isArray(raw.sourceClassIds) ? raw.sourceClassIds : []),
         raw.sourceClassId
       ].filter(Boolean)));
 
-      const preparedSourceClassIds = Array.from(new Set([
+      const legacyPreparedSourceClassIds = Array.from(new Set([
         ...(Array.isArray(raw.preparedSourceClassIds)
           ? raw.preparedSourceClassIds
-          : []),
-        ...(raw.prepared ? sourceClassIds : [])
+          : [])
       ].filter(Boolean)));
+
+      const sourceClassId =
+        raw.sourceClassId ||
+        legacySourceClassIds[0] ||
+        legacyPreparedSourceClassIds[0] ||
+        "";
+
+      const prepared =
+        Boolean(raw.prepared) ||
+        legacyPreparedSourceClassIds.includes(sourceClassId);
 
       return {
         spellId: raw.spellId ?? "",
-        sourceClassIds,
-        preparedSourceClassIds
+        sourceClassId,
+        sourceClassIds: sourceClassId ? [sourceClassId] : [],
+        preparedSourceClassIds:
+          prepared && sourceClassId ? [sourceClassId] : []
       };
     })
     .filter(entry => Boolean(getSpellById(entry.spellId)));
@@ -215,15 +226,12 @@ export function ensureMagicState(character) {
       continue;
     }
 
-    existing.sourceClassIds = Array.from(new Set([
-      ...existing.sourceClassIds,
-      ...entry.sourceClassIds
-    ]));
-
-    existing.preparedSourceClassIds = Array.from(new Set([
-      ...existing.preparedSourceClassIds,
-      ...entry.preparedSourceClassIds
-    ]));
+    if (
+      !existing.preparedSourceClassIds.length &&
+      entry.preparedSourceClassIds.includes(existing.sourceClassId)
+    ) {
+      existing.preparedSourceClassIds = [existing.sourceClassId];
+    }
   }
 
   character.magic.spells = [...unique.values()];
@@ -246,6 +254,8 @@ export function ensureMagicState(character) {
     if (!entry.sourceClassIds.length && availableIds.length) {
       entry.sourceClassIds = [availableIds[0]];
     }
+
+    entry.sourceClassId = entry.sourceClassIds[0] ?? "";
 
     entry.preparedSourceClassIds = entry.preparedSourceClassIds.filter(id => {
       const source = availableSources.find(
@@ -281,8 +291,7 @@ export function getKnownSpellEntries(character) {
         ...spell,
         sourceClassIds,
         preparedSourceClassIds,
-        sourceClassId:
-          preparedSourceClassIds[0] ?? sourceClassIds[0] ?? "",
+        sourceClassId: entry.sourceClassId ?? sourceClassIds[0] ?? "",
         sources,
         prepared: preparedSourceClassIds.length > 0
       };
@@ -294,6 +303,14 @@ export function getKnownSpells(character) {
   return getKnownSpellEntries(character);
 }
 
+export function getKnownSpellsForSource(character, sourceClassId) {
+  const normalizedSourceId = String(sourceClassId ?? "");
+
+  return getKnownSpellEntries(character).filter(spell =>
+    String(spell.sourceClassId ?? "") === normalizedSourceId
+  );
+}
+
 export function getPreparedSpells(character) {
   return getKnownSpellEntries(character).filter(spell =>
     spell.level > 0 && spell.prepared
@@ -301,8 +318,10 @@ export function getPreparedSpells(character) {
 }
 
 function countKnownForSource(character, sourceClassId, level = null) {
+  const normalizedSourceId = String(sourceClassId ?? "");
+
   return getKnownSpellEntries(character).filter(spell => {
-    if (!spell.sourceClassIds.includes(sourceClassId)) return false;
+    if (String(spell.sourceClassId ?? "") !== normalizedSourceId) return false;
     return level === null || spell.level === level;
   }).length;
 }
@@ -366,51 +385,9 @@ export function addSpellToCharacter(character, spellId, sourceClassId = "") {
   );
 
   if (existing) {
-    const source = sourceClassId
-      ? availableSources.find(item =>
-          item.classEntry.classId === sourceClassId
-        )
-      : availableSources.find(item =>
-          !existing.sourceClassIds.includes(item.classEntry.classId)
-        );
-
-    if (!source) {
-      return {
-        ok: false,
-        message: "Це заклинання вже додане для всіх доступних класів."
-      };
-    }
-
-    const sourceId = source.classEntry.classId;
-
-    if (!existing.sourceClassIds.includes(sourceId)) {
-      if (!getSourceKnownCapacity(character, source, spell)) {
-        return {
-          ok: false,
-          message: "Для " + source.classData.ukr + " вже досягнуто ліміту відомих заклинань."
-        };
-      }
-
-      const freshExisting = character.magic.spells.find(
-        item => item.spellId === spellId
-      );
-
-      if (!freshExisting) {
-        return {
-          ok: false,
-          message: "Не вдалося оновити джерело заклинання."
-        };
-      }
-
-      existing = freshExisting;
-      existing.sourceClassIds.push(sourceId);
-    }
-
     return {
-      ok: true,
-      entry: existing,
-      spell,
-      addedSourceClassId: sourceId
+      ok: false,
+      message: "Це заклинання вже відоме персонажу."
     };
   }
 
@@ -431,6 +408,7 @@ export function addSpellToCharacter(character, spellId, sourceClassId = "") {
 
   const entry = {
     spellId,
+    sourceClassId: source.classEntry.classId,
     sourceClassIds: [source.classEntry.classId],
     preparedSourceClassIds: []
   };
@@ -467,13 +445,11 @@ export function toggleSpellPrepared(character, spellId, sourceClassId = "") {
     source.spellcasting?.preparation === MAGIC_PREPARATION.PREPARED
   );
 
-  const source = sourceClassId
-    ? preparedSources.find(item =>
-        item.classEntry.classId === sourceClassId
-      )
-    : preparedSources.find(item =>
-        entry.sourceClassIds.includes(item.classEntry.classId)
-      ) ?? preparedSources[0];
+  const source = preparedSources.find(item =>
+    item.classEntry.classId === (sourceClassId || entry.sourceClassId)
+  ) ?? preparedSources.find(item =>
+    entry.sourceClassIds.includes(item.classEntry.classId)
+  );
 
   if (!source) {
     return {
