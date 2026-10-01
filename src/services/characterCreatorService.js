@@ -714,7 +714,10 @@ export function getRaceTraitSummary(state) {
     traits,
     cantrips: getRacialSpellIds(state),
     abilityScoreIncrease: getFinalRaceAbilityBonuses(state),
-    languages: race?.languages ?? [],
+    languages: [
+      ...(race?.languages ?? []),
+      ...(state.raceChoices.languages ?? [])
+    ].filter((id, index, list) => list.indexOf(id) === index),
     skillProficiencies,
     weaponProficiencies,
     armorProficiencies: subrace?.armorProficiencies ?? [],
