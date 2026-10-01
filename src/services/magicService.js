@@ -269,8 +269,17 @@ export function addSpellToCharacter(character, spellId, sourceClassId = "") {
     }
   } else {
     const limit = getSpellKnownLimitForSource(source);
-    if (limit !== null &&
-        countKnownForSource(character, source.classEntry.classId) >= limit) {
+    const knownLevelled = countKnownForSource(
+      character,
+      source.classEntry.classId,
+      null
+    ) - countKnownForSource(
+      character,
+      source.classEntry.classId,
+      0
+    );
+
+    if (limit !== null && knownLevelled >= limit) {
       return {
         ok: false,
         message: `Для ${source.classData.ukr} уже вибрано максимальну кількість відомих заклинань (${limit}).`
