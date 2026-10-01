@@ -4368,3 +4368,32 @@ p {
     height: 27px;
   }
 }
+
+
+/* ==================================================
+   50 / 50 EQUIPMENT BALANCE + NUMERIC WALLET INPUT
+   ================================================== */
+
+.sheet-equipment-wallet-row,
+.combat-equipment-weapons-row {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.sheet-equipment-wallet-row .wallet-coin-amount {
+  appearance: textfield;
+  -moz-appearance: textfield;
+  text-align: center;
+}
+
+.sheet-equipment-wallet-row .wallet-coin-amount::-webkit-outer-spin-button,
+.sheet-equipment-wallet-row .wallet-coin-amount::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+@media (max-width: 380px) {
+  .sheet-equipment-wallet-row,
+  .combat-equipment-weapons-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
