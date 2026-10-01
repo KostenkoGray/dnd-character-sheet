@@ -97,6 +97,7 @@ import {
   getCurrentStep,
   getChoiceValue,
   validateCreatorState,
+  validateCreatorStep,
   buildCharacterFromCreator
 } from "./services/characterCreatorService.js";
 import {
@@ -1973,7 +1974,9 @@ function handleCreatorClick(event) {
 
     if (type === "next") {
       const step = getCurrentStep(creatorState);
-      const error = validateCreatorState(creatorState);
+      const error = step
+        ? validateCreatorStep(creatorState, step.key)
+        : "Некоректний крок створення персонажа.";
 
       if (error) {
         creatorState.error = error;
