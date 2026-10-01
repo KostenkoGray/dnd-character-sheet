@@ -54,5 +54,17 @@ export function ensureCombatState(character) {
   );
 
   character.combat.inspiration = Boolean(character.combat.inspiration);
+
+  character.combat.currentSpellSlots ??= {};
+  if (!character.combat.currentSpellSlots || typeof character.combat.currentSpellSlots !== "object") {
+    character.combat.currentSpellSlots = {};
+  }
+
+  if (character.combat.currentPactMagicSlots != null) {
+    character.combat.currentPactMagicSlots = Math.max(
+      0,
+      Number(character.combat.currentPactMagicSlots ?? 0)
+    );
+  }
 }
 
