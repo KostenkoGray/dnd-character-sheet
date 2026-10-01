@@ -639,8 +639,10 @@ export function getFinalRaceAbilityBonuses(state) {
     );
   }
 
+  const creatorRace = getRaceDetails(state);
   const result = {
-    ...(race.abilityScoreIncrease ?? {})
+    ...(race.abilityScoreIncrease ?? {}),
+    ...(creatorRace.abilityScoreIncrease ?? {})
   };
 
   const subDetail = getRaceDetails(state).subraces?.[state.subraceId];
@@ -1156,6 +1158,10 @@ export function buildCharacterFromCreator(state, id) {
     addSkill(id, PROFICIENCY.PROFICIENT);
   }
 
+  for (const id of background.skillProficiencies?.granted ?? []) {
+    addSkill(id, PROFICIENCY.PROFICIENT);
+  }
+
   for (const id of state.backgroundChoices.skills ?? []) {
     addSkill(id, PROFICIENCY.PROFICIENT);
   }
@@ -1181,6 +1187,10 @@ export function buildCharacterFromCreator(state, id) {
     for (const id of state.classChoices.tools.tools ?? []) addTool(id);
   }
 
+  for (const id of background.toolProficiencies?.granted ?? []) {
+    addTool(id);
+  }
+
   for (const ids of Object.values(state.backgroundChoices.tools ?? {})) {
     for (const id of (Array.isArray(ids) ? ids : [ids])) addTool(id);
   }
@@ -1194,6 +1204,7 @@ export function buildCharacterFromCreator(state, id) {
 
   for (const id of state.raceChoices.languages ?? []) pushLanguage(id);
   for (const id of state.classChoices.knowledgeLanguages ?? []) pushLanguage(id);
+  for (const id of background.languages?.granted ?? []) pushLanguage(id);
   for (const id of Object.values(state.backgroundChoices.languages ?? {}).flat()) pushLanguage(id);
 
   const raceWeaponProficiencies = [
@@ -1361,6 +1372,13 @@ export function buildCharacterFromCreator(state, id) {
     magic: {
       spells: magicEntries,
       favoriteSpellIds: []
+    },
+    currency: {
+      pp: Number(background.startingCurrency?.pp ?? 0),
+      gp: Number(background.startingCurrency?.gp ?? 0),
+      ep: Number(background.startingCurrency?.ep ?? 0),
+      sp: Number(background.startingCurrency?.sp ?? 0),
+      cp: Number(background.startingCurrency?.cp ?? 0)
     },
     combat: {
       currentHp: maxHp,
