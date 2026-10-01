@@ -1,4 +1,4 @@
-import { getPreparedSpells } from "../services/magicService.js";
+import { getPreparedSpells, getSpellcastingSources } from "../services/magicService.js";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -10,6 +10,9 @@ function escapeHtml(value) {
 }
 
 export function preparedSpellsBlock(character) {
+  const sources = getSpellcastingSources(character);
+  if (!sources.length) return "";
+
   const spells = getPreparedSpells(character);
 
   if (!spells.length) {
