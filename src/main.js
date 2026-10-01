@@ -2260,19 +2260,29 @@ app.addEventListener("click", (event) => {
     }
 
     if (event.target.closest("#sheet-hp-value-input")) {
-      const input = prompt(`Введіть поточне HP (лише цифри, 0–${currentCharacter.maxHp})`,String(currentCharacter.combat.currentHp));
+      const input = prompt(
+        `Введіть поточне HP (лише цифри, 0–${currentCharacter.maxHp})`,
+        String(currentCharacter.combat.currentHp)
+      );
+
       if (input !== null) {
         const digits = input.replace(/\D/g, "");
+
         if (digits !== "") {
           const value = Number(digits);
+
           if (Number.isFinite(value)) {
             currentCharacter.combat.currentHp = clamp(
-              value,0,Number(currentCharacter.maxHp ?? 0)
+              value,
+              0,
+              Number(currentCharacter.maxHp ?? 0)
             );
-          resetDeathSavesWhenAlive(currentCharacter);
-          render();
+            resetDeathSavesWhenAlive(currentCharacter);
+            render();
+          }
         }
       }
+
       return;
     }
 
@@ -2365,17 +2375,23 @@ app.addEventListener("click", (event) => {
 
     if (event.target.closest("#temp-hp-value-input")) {
       const input = prompt(
-        "Введіть Temporary HP",
+        "Введіть Temporary HP (лише цифри)",
         String(currentCharacter.combat.tempHp)
       );
 
-      if (input !== null && input.trim() !== "") {
-        const value = Number(input);
-        if (Number.isFinite(value)) {
-          currentCharacter.combat.tempHp = Math.max(0, Math.floor(value));
-          render();
+      if (input !== null) {
+        const digits = input.replace(/\D/g, "");
+
+        if (digits !== "") {
+          const value = Number(digits);
+
+          if (Number.isFinite(value)) {
+            currentCharacter.combat.tempHp = value;
+            render();
+          }
         }
       }
+
       return;
     }
 
@@ -2397,9 +2413,12 @@ app.addEventListener("click", (event) => {
               0,
               Number(currentCharacter.maxHp ?? 0)
             );
-          render();
+            resetDeathSavesWhenAlive(currentCharacter);
+            render();
+          }
         }
       }
+
       return;
     }
 
