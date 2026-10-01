@@ -168,20 +168,24 @@ export function ensureMagicState(character) {
   }
 
   character.magic.spells = character.magic.spells
-    .map(entry => {
-      if (typeof entry === "string") {
-        return {
-          spellId: entry,
-          sourceClassId: "",
-          prepared: false
-        };
-      }
+    .map(rawEntry => {
+      const entry = (
+        rawEntry &&
+        typeof rawEntry === "object" &&
+        !Array.isArray(rawEntry)
+      )
+        ? rawEntry
+        : {
+            spellId: typeof rawEntry === "string" ? rawEntry : "",
+            sourceClassId: "",
+            prepared: false
+          };
 
-      return {
-        spellId: entry?.spellId,
-        sourceClassId: entry?.sourceClassId ?? "",
-        prepared: Boolean(entry?.prepared)
-      };
+      entry.spellId = entry.spellId ?? "";
+      entry.sourceClassId = entry.sourceClassId ?? "";
+      entry.prepared = Boolean(entry.prepared);
+
+      return entry;
     })
     .filter(entry => Boolean(getSpellById(entry.spellId)));
 
