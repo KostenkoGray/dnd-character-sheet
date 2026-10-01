@@ -40,15 +40,18 @@ export function wallet(character) {
             aria-label="Зменшити ${escapeHtml(coin.ukr)}"
           >−</button>
 
-          <button
-            type="button"
+          <input
+            type="number"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            min="0"
+            step="1"
             class="wallet-coin-amount"
             data-wallet-action="set"
             data-wallet-coin="${escapeHtml(coinId)}"
+            value="${item.amount}"
             aria-label="Ввести кількість ${escapeHtml(coin.ukr)}"
-          >
-            ${item.amount}
-          </button>
+          />
 
           <button
             type="button"
