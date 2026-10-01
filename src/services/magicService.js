@@ -443,7 +443,7 @@ export function addSpellToCharacter(character, spellId, sourceClassId = "") {
 export function toggleSpellPrepared(character, spellId, sourceClassId = "") {
   ensureMagicState(character);
 
-  const entry = character.magic.spells.find(
+  let entry = character.magic.spells.find(
     item => item.spellId === spellId
   );
 
