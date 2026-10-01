@@ -1750,14 +1750,6 @@ app.addEventListener("click", (event) => {
       return;
     }
 
-    const preparedSpellsCollapse = event.target.closest('[data-collapse-section="prepared-spells"]');
-    if (preparedSpellsCollapse) {
-      collapseState.preparedSpells = !collapseState.preparedSpells;
-      persistCollapseState(currentCharacter.id);
-      render();
-      return;
-    }
-
     const magicLevelCollapse = event.target.closest('[data-collapse-section^="magic-level-"]');
     if (magicLevelCollapse) {
       const collapseId = magicLevelCollapse.dataset.collapseSection;
