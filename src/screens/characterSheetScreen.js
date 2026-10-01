@@ -20,6 +20,7 @@ import { renderDeathSaves } from "../components/deathSaves.js";
 import { equipmentCard } from "../components/equipmentCard.js";
 import { preparedSpellsBlock } from "../components/preparedSpells.js";
 import { spellSlotsCounter } from "../components/spellSlotsCounter.js";
+import { wallet } from "../components/wallet.js";
 import {
   getInventoryFeatureEntries,
   getEffectiveAbilityScore,
@@ -575,6 +576,8 @@ export function characterSheetScreen(character, collapseState = {}) {
         ${renderDeathSaves(character)}
 
         ${renderClassResources(character)}
+
+        ${wallet(character)}
 
         <section class="combat-section">
           <h2>Weapons</h2>
