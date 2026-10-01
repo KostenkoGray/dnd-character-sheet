@@ -577,15 +577,15 @@ export function characterSheetScreen(character, collapseState = {}) {
 
         ${renderClassResources(character)}
 
-        <div class="sheet-equipment-wallet-row">
-          ${equipmentCard(character, Boolean(collapseState.equipment))}
-          ${wallet(character)}
-        </div>
-
         <section class="combat-section">
           <h2>Weapons</h2>
           <div class="combat-weapons-list">${weaponsBlock}</div>
         </section>
+
+        <div class="sheet-equipment-wallet-row">
+          ${equipmentCard(character, Boolean(collapseState.equipment))}
+          ${wallet(character)}
+        </div>
 
         ${spellSlotsCounter(character)}
 
