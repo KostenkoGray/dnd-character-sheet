@@ -186,7 +186,9 @@ export function getKnownSpells(character) {
 }
 
 export function getPreparedSpells(character) {
-  return getKnownSpellEntries(character).filter(spell => spell.prepared);
+  return getKnownSpellEntries(character).filter(spell =>
+    spell.level > 0 && spell.prepared
+  );
 }
 
 function countKnownForSource(character, sourceClassId, level = null) {
@@ -202,7 +204,8 @@ export function getSpellLimits(character) {
     className: source.classData.ukr,
     level: source.classEntry.level,
     preparation: source.spellcasting.preparation,
-    known: countKnownForSource(character, source.classEntry.classId),
+    known: countKnownForSource(character, source.classEntry.classId)
+      - countKnownForSource(character, source.classEntry.classId, 0),
     knownLimit: getSpellKnownLimitForSource(source),
     cantripsKnown: countKnownForSource(character, source.classEntry.classId, 0),
     cantripsLimit: getCantripsKnownLimitForSource(source),
