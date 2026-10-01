@@ -1,3 +1,5 @@
+import { generateCharacterId } from "../data/charactersData.js";
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -287,9 +289,7 @@ export async function startCharacterCreator({ app, onCancel, onCreate, onError }
         }
 
         try {
-          const id = typeof creatorService.generateCharacterId === "function"
-            ? creatorService.generateCharacterId()
-            : Math.floor(Date.now());
+          const id = generateCharacterId();
 
           const character = buildCharacterFromCreator(state, id);
           cleanup();
