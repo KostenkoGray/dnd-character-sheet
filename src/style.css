@@ -3298,6 +3298,126 @@ p {
   flex-shrink: 0;
 }
 
+/* ==================================================
+   WALLET
+   ================================================== */
+
+.wallet-section {
+  padding-bottom: 12px;
+}
+
+.wallet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.wallet-header > div {
+  min-width: 0;
+}
+
+.wallet-header h2 {
+  margin-bottom: 2px;
+}
+
+.wallet-header span {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.wallet-help-button {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface-light);
+  color: var(--text-muted);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.wallet-help-button:hover,
+.wallet-counter-button:hover {
+  border-color: var(--accent);
+  background: var(--surface-light);
+}
+
+.wallet-coin-list {
+  display: grid;
+  gap: 6px;
+}
+
+.wallet-coin-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 9px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-light);
+}
+
+.wallet-coin-name {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  min-width: 0;
+}
+
+.wallet-coin-name strong {
+  width: 24px;
+  flex: 0 0 24px;
+  font-size: 12px;
+}
+
+.wallet-coin-name span {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wallet-coin-counter {
+  display: grid;
+  grid-template-columns: 30px 48px 30px;
+  align-items: center;
+  gap: 5px;
+}
+
+.wallet-counter-button,
+.wallet-coin-amount {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.wallet-counter-button {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.wallet-coin-amount {
+  width: 48px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.wallet-counter-button:active,
+.wallet-coin-amount:active {
+  transform: scale(.96);
+}
+
 @media (max-width: 380px) {
   .magic-slots-grid {
     grid-template-columns: 1fr;

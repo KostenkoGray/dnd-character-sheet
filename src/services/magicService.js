@@ -184,14 +184,9 @@ export function getAvailableSpells(character) {
 export function ensureMagicState(character) {
   character.magic ??= {};
   character.magic.spells ??= [];
-  character.magic.favoriteSpellIds ??= [];
 
   if (!Array.isArray(character.magic.spells)) {
     character.magic.spells = [];
-  }
-
-  if (!Array.isArray(character.magic.favoriteSpellIds)) {
-    character.magic.favoriteSpellIds = [];
   }
 
   const normalized = character.magic.spells
@@ -263,18 +258,6 @@ export function ensureMagicState(character) {
   }
 
   character.magic.spells = [...unique.values()];
-
-  const validFavoriteIds = new Set(
-    character.magic.spells.map(entry => entry.spellId)
-  );
-
-  character.magic.favoriteSpellIds = [
-    ...new Set(
-      character.magic.favoriteSpellIds
-        .map(id => String(id))
-        .filter(id => validFavoriteIds.has(id))
-    )
-  ];
 
   // Після зміни мультикласу відновлюємо актуальне джерело
   // для старих записів, у яких sourceClassId був порожнім або застарілим.
@@ -410,10 +393,8 @@ export function getKnownSpellEntries(character) {
         sourceClassId: entry.sourceClassId ?? sourceClassIds[0] ?? "",
         sources,
         autoKnown: Boolean(entry.autoKnown),
-        favorite: character.magic.favoriteSpellIds.includes(spell.id),
         preparation: source?.spellcasting?.preparation ?? null,
         prepared:
-          spell.level === 0 ||
           automaticPrepared ||
           preparedSourceClassIds.length > 0
       };
@@ -435,31 +416,6 @@ export function getKnownSpellsForSource(character, sourceClassId) {
 
 export function getPreparedSpells(character) {
   return getKnownSpellEntries(character).filter(spell => spell.prepared);
-}
-
-export function toggleSpellFavorite(character, spellId) {
-  ensureMagicState(character);
-
-  const spell = getSpellById(spellId);
-  if (!spell) {
-    return {
-      ok: false,
-      message: "Заклинання не знайдено."
-    };
-  }
-
-  const id = String(spellId);
-  const favorites = new Set(character.magic.favoriteSpellIds);
-
-  if (favorites.has(id)) {
-    favorites.delete(id);
-    character.magic.favoriteSpellIds = [...favorites];
-    return { ok: true, favorite: false };
-  }
-
-  favorites.add(id);
-  character.magic.favoriteSpellIds = [...favorites];
-  return { ok: true, favorite: true };
 }
 
 function countKnownForSource(character, sourceClassId, level = null) {

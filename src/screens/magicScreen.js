@@ -35,20 +35,6 @@ function formatSpellLevel(level) {
   return Number(level) === 0 ? "Замова" : `Рівень ${level}`;
 }
 
-
-function renderFavoriteButton(spell) {
-  return `
-    <button
-      type="button"
-      class="magic-favorite-button ${spell.favorite ? "is-favorite" : ""}"
-      data-magic-favorite="${escapeHtml(spell.id)}"
-      aria-pressed="${spell.favorite ? "true" : "false"}"
-      aria-label="${spell.favorite ? "Прибрати з улюблених" : "Додати до улюблених"}"
-      title="${spell.favorite ? "Прибрати з улюблених" : "Додати до улюблених"}"
-    >${spell.favorite ? "★" : "☆"}</button>
-  `;
-}
-
 function renderSpellActions(spell) {
   const deleteButton = spell.autoKnown
     ? ""
@@ -66,7 +52,7 @@ function renderSpellActions(spell) {
   if (spell.level === 0) {
     return `
       <span class="inventory-equipped-badge magic-cantrip-badge">
-        Замова · завжди підготовлена
+        Замова · завжди доступна
       </span>
       ${deleteButton}
     `;
@@ -106,10 +92,7 @@ function renderSpellCard(spell) {
           <strong>${escapeHtml(spell.ukr ?? spell.name)}</strong>
           <small>${escapeHtml(spell.name)}</small>
         </div>
-        <div class="magic-spell-heading-right">
-          ${renderFavoriteButton(spell)}
-          <span>${escapeHtml(formatSpellLevel(spell.level))}</span>
-        </div>
+        <span>${escapeHtml(formatSpellLevel(spell.level))}</span>
       </div>
 
       <div class="magic-spell-meta">
@@ -175,24 +158,8 @@ export function renderMagicSpellsList(
   }
 
   const sourceKey = String(sourceClassId ?? "");
-  const favoriteSpells = known.filter(spell => spell.favorite);
-  const regularSpells = known.filter(spell => !spell.favorite);
 
-  const favoriteBlock = favoriteSpells.length
-    ? `
-      <section class="magic-favorites-section">
-        <div class="magic-favorites-heading">
-          <strong>★ Улюблені</strong>
-          <span>${favoriteSpells.length}</span>
-        </div>
-        <div class="magic-spells-list">
-          ${favoriteSpells.map(renderSpellCard).join("")}
-        </div>
-      </section>
-    `
-    : "";
-
-  const levelBlocks = groupSpells(regularSpells).map(([level, spells]) =>
+  return groupSpells(known).map(([level, spells]) =>
     collapsibleSection({
       id: `magic-level-${sourceKey}-${level}`,
       title: `${formatSpellLevel(level)} · ${spells.length}`,
@@ -204,8 +171,6 @@ export function renderMagicSpellsList(
       content: `<div class="magic-spells-list">${spells.map(renderSpellCard).join("")}</div>`
     })
   ).join("");
-
-  return favoriteBlock + levelBlocks;
 }
 
 export function renderMagicSpellsLists(
