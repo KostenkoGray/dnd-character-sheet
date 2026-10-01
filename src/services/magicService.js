@@ -235,7 +235,8 @@ export function ensureMagicState(character) {
         preparedSourceClassIds:
           prepared && sourceClassId ? [sourceClassId] : [],
         autoKnown: Boolean(raw.autoKnown),
-        racial: Boolean(raw.racial)
+        racial: Boolean(raw.racial),
+        classFeature: Boolean(raw.classFeature)
       };
     })
     .filter(entry => Boolean(getSpellById(entry.spellId)));
@@ -251,7 +252,8 @@ export function ensureMagicState(character) {
         ...entry,
         sourceClassIds: [...entry.sourceClassIds],
         preparedSourceClassIds: [...entry.preparedSourceClassIds],
-        racial: Boolean(entry.racial)
+        racial: Boolean(entry.racial),
+        classFeature: Boolean(entry.classFeature)
       });
       continue;
     }
@@ -290,6 +292,19 @@ export function ensureMagicState(character) {
       entry.preparedSourceClassIds = [];
       entry.autoKnown = false;
       continue;
+    }
+
+    if (entry.classFeature) {
+      const hasSourceClass = (character.classes ?? []).some(
+        cls => String(cls.classId) === String(entry.sourceClassId)
+      );
+
+      if (hasSourceClass && entry.sourceClassId) {
+        entry.sourceClassIds = [entry.sourceClassId];
+        entry.preparedSourceClassIds = [];
+        entry.autoKnown = true;
+        continue;
+      }
     }
 
     const availableSources = getAvailableSourcesForSpell(character, spell);
@@ -422,6 +437,7 @@ export function getKnownSpellEntries(character) {
         autoKnown: Boolean(entry.autoKnown),
         favorite: character.magic.favoriteSpellIds.includes(spell.id),
         racial: Boolean(entry.racial),
+        classFeature: Boolean(entry.classFeature),
         preparation: source?.spellcasting?.preparation ?? null,
         prepared:
           spell.level === 0 ||
