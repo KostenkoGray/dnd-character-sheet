@@ -15,7 +15,7 @@ const custom = (itemId, name, type = "other", quantity = 1, description = "") =>
     name,
     ukr: name,
     type,
-    equipable: false,
+    equipable: ["armor", "shield", "weapon"].includes(type),
     equipmentSlot: type,
     description
   }
