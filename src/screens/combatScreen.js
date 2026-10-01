@@ -332,12 +332,14 @@ export function combatScreen(character, collapseState = {}) {
 
         ${preparedSpellsBlock(character, Boolean(collapseState.preparedSpells), collapseState.preparedSpellLevels)}
 
-        <section class="combat-section">
-          <h2>Weapons</h2>
-          <div class="combat-weapons-list">${weaponsBlock}</div>
-        </section>
+        <div class="combat-equipment-weapons-row">
+          ${equipmentCard(character, Boolean(collapseState.equipment))}
 
-        ${equipmentCard(character, Boolean(collapseState.equipment))}
+          <section class="combat-section combat-weapons-section">
+            <h2>Weapons</h2>
+            <div class="combat-weapons-list">${weaponsBlock}</div>
+          </section>
+        </div>
 
         <section class="combat-section">
           <h2>Saving Throws &amp; Skills</h2>
