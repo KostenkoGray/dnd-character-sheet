@@ -3404,3 +3404,69 @@ p {
 .magic-add-source-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:5px;flex:0 0 auto;}
 .magic-add-source-actions .inventory-action-button{flex:0 0 auto;}
 @media (max-width:420px){.magic-add-source-actions{width:100%;justify-content:stretch}.magic-add-source-actions .inventory-action-button{flex:1;}}
+
+
+/* Final compact layout for spell picker */
+.magic-add-result{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+  padding:9px;
+}
+
+.magic-add-result-info{
+  min-width:0;
+  display:grid;
+  gap:2px;
+  overflow:hidden;
+}
+
+.magic-add-result-info strong,
+.magic-add-result-info span,
+.magic-add-result-info small{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.magic-add-result-info strong{
+  font-size:.74rem;
+}
+
+.magic-add-result-info span,
+.magic-add-result-info small{
+  color:var(--text-muted);
+  font-size:.6rem;
+  line-height:1.15;
+}
+
+.magic-add-source-actions{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+}
+
+.magic-add-source-actions .inventory-action-button{
+  flex:0 0 auto;
+  min-width:0;
+  white-space:nowrap;
+}
+
+@media (max-width:420px){
+  .magic-add-result{
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+  }
+
+  .magic-add-source-actions{
+    width:auto;
+  }
+
+  .magic-add-source-actions .inventory-action-button{
+    flex:0 0 auto;
+  }
+}
