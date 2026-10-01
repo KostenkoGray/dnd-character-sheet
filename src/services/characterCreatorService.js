@@ -371,6 +371,31 @@ export function getClassChoiceGroups(state) {
   }
 
   const subclass = getSelectedSubclass(state);
+
+  if (state.classId === "cleric" && subclass?.id === "nature") {
+    groups.push({
+      id: "natureCantrip",
+      title: "Послушник природи — заговор друїда",
+      kind: "single",
+      count: 1,
+      options: getSpellOptionsForClass("druid", 0)
+    });
+  }
+
+  if (state.classId === "sorcerer" && subclass?.id === "draconicBloodline") {
+    groups.push({
+      id: "dragonAncestor",
+      title: "Драконячий предок",
+      kind: "single",
+      count: 1,
+      options: Object.entries(DRACONIC_ANCESTRY).map(([id, data]) => ({
+        id,
+        label: data.name,
+        description: data.damageType
+      }))
+    });
+  }
+
   if (state.classId === "cleric" && subclass?.featuresByLevel?.[1]?.includes("blessingsOfKnowledge")) {
     groups.push({
       id: "knowledgeExpertise",
@@ -1479,7 +1504,8 @@ export function buildCharacterFromCreator(state, id) {
   const magicRequirements = getMagicRequirements(state);
   const classSpellIds = [
     ...(state.magicChoices.cantrips ?? []),
-    ...(state.magicChoices.spells ?? [])
+    ...(state.magicChoices.spells ?? []),
+    ...(state.classChoices.natureCantrip ? [state.classChoices.natureCantrip] : [])
   ];
 
   const classMagicEntries = classSpellIds.map(spellId => ({
