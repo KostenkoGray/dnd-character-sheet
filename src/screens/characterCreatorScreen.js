@@ -5,6 +5,7 @@ import { CREATOR_ABILITY_SCORE_ARRAY, CREATOR_CLASS_EQUIPMENT, CREATOR_TOOL_OPTI
 import { WEAPONS } from "../data/weaponsData.js";
 import { ARMOR } from "../data/armorData.js";
 import { OTHER_ITEMS } from "../data/otherItemsData.js";
+import { SPELLS } from "../data/spellsData.js";
 import { BACKGROUNDS } from "../data/backgroundsData.js";
 import {
   getRaceChoices,
@@ -235,6 +236,12 @@ function renderRaceSummary(summary) {
 
   const armor = (summary.armorProficiencies ?? []).join(", ");
   const tools = (summary.toolProficiencies ?? []).join(", ");
+  const cantrips = (summary.cantrips ?? [])
+    .map(id => {
+      const spell = Object.values(SPELLS).find(item => item.id === id);
+      return spell?.ukr ?? spell?.name ?? id;
+    })
+    .join(", ");
 
   return (
     '<section class="creator-summary-card">' +
@@ -249,6 +256,7 @@ function renderRaceSummary(summary) {
         '<p><span>Зброя:</span> ' + escapeHtml(weapons || "—") + '</p>' +
         '<p><span>Броня:</span> ' + escapeHtml(armor || "—") + '</p>' +
         '<p><span>Інструменти:</span> ' + escapeHtml(tools || "—") + '</p>' +
+        '<p><span>Расові заговори:</span> ' + escapeHtml(cantrips || "—") + '</p>' +
         '<p><span>Навички:</span> ' + escapeHtml((summary.skillProficiencies ?? []).join(", ") || "—") + '</p>' +
         (summary.traits ?? []).map(trait => '<p><span>' + escapeHtml(trait[1]) + ':</span> ' + escapeHtml(trait[2]) + '</p>').join("") +
       '</div>' +
