@@ -15,6 +15,7 @@ import { CLASSES } from "../data/classesData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
 import { renderDeathSaves } from "../components/deathSaves.js";
 import { equipmentCard } from "../components/equipmentCard.js";
+import { preparedSpellsBlock } from "../components/preparedSpells.js";
 import {
   getEquippedWeapons,
   getEquipmentBonuses
@@ -333,10 +334,7 @@ export function combatScreen(character, collapseState = {}) {
 
         ${equipmentCard(character, Boolean(collapseState.equipment))}
 
-        <section class="combat-section">
-          <h2>Prepared Spells</h2>
-          <p>Поки немає підготовлених заклинань.</p>
-        </section>
+        ${preparedSpellsBlock(character)}
 
         <section class="combat-section">
           <h2>Saving Throws &amp; Skills</h2>
