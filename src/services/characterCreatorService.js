@@ -615,19 +615,24 @@ export function getSubclassOptions(state) {
   const classData = getClassData(state);
   if (!classData) return [];
 
-  return Object.values(classData.subclasses ?? {}).map(subclass => ({
-    id: subclass.id,
-    name: subclass.name ?? subclass.ukr ?? subclass.id,
-    ukr: subclass.ukr ?? subclass.name ?? subclass.id,
-    level1Features: (subclass.featuresByLevel?.[1] ?? [])
-      .map(id => FEATURES[id])
-      .filter(Boolean)
-  }));
+  return Object.values(classData.subclasses ?? {}).map(subclass => {
+    const level1FeatureIds = [...(subclass.featuresByLevel?.[1] ?? [])];
+
+    return {
+      id: subclass.id,
+      name: subclass.name ?? subclass.ukr ?? subclass.id,
+      ukr: subclass.ukr ?? subclass.name ?? subclass.id,
+      level1FeatureIds,
+      level1Features: level1FeatureIds
+        .map(id => FEATURES[id])
+        .filter(Boolean)
+    };
+  });
 }
 
 export function isSubclassRequiredAtLevel1(state) {
   const options = getSubclassOptions(state);
-  return options.some(option => option.level1Features.length > 0);
+  return options.some(option => option.level1FeatureIds.length > 0);
 }
 
 export function getBackgroundOptions() {
