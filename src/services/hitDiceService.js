@@ -86,6 +86,34 @@ export function ensureHitDiceState(character) {
     character.combat.selectedHitDieClassId =
       getClassKey(firstAvailable?.classId ?? classes[0]?.classId ?? "");
   }
+  const selectedType = Number(character.combat.selectedHitDieType);
+  const validHitDieTypes = new Set(
+    classes
+      .map(cls => getClassHitDie(cls.classId))
+      .filter(Number.isFinite)
+      .filter(value => value > 0)
+  );
+
+  if (!validHitDieTypes.has(selectedType)) {
+    const selectedPool = classes
+      .map(cls => ({
+        classId: getClassKey(cls.classId),
+        hitDie: getClassHitDie(cls.classId),
+        current: Number(
+          character.combat.hitDiceByClass[getClassKey(cls.classId)] ?? 0
+        )
+      }))
+      .find(pool => pool.current > 0 && pool.hitDie > 0)
+      ?? classes
+        .map(cls => ({
+          classId: getClassKey(cls.classId),
+          hitDie: getClassHitDie(cls.classId)
+        }))
+        .find(pool => pool.hitDie > 0);
+
+    character.combat.selectedHitDieType = selectedPool?.hitDie ?? 0;
+  }
+
 
   character.combat.currentHitDice = getAvailableHitDiceTotal(character);
 }
@@ -134,6 +162,31 @@ function ensureHitDiceStateWithoutTotalRecursion(character) {
   }
 }
 
+export function getHitDiceTypePools(character) {
+  const pools = getHitDicePools(character);
+  const grouped = new Map();
+
+  for (const pool of pools) {
+    if (!grouped.has(pool.hitDie)) {
+      grouped.set(pool.hitDie, {
+        hitDie: pool.hitDie,
+        current: 0,
+        max: 0,
+        classIds: [],
+        classNames: []
+      });
+    }
+
+    const group = grouped.get(pool.hitDie);
+    group.current += pool.current;
+    group.max += pool.max;
+    group.classIds.push(pool.classId);
+    group.classNames.push(pool.className);
+  }
+
+  return [...grouped.values()].sort((a, b) => a.hitDie - b.hitDie);
+}
+
 export function getSelectedHitDicePool(character) {
   const pools = getHitDicePools(character);
   const selectedId = getClassKey(character.combat?.selectedHitDieClassId);
@@ -146,27 +199,50 @@ export function getSelectedHitDicePool(character) {
   );
 }
 
-export function getSelectedHitDie(character) {
-  return getSelectedHitDicePool(character)?.hitDie ?? 0;
+export function getSelectedHitDieTypePool(character) {
+  ensureHitDiceState(character);
+
+  const types = getHitDiceTypePools(character);
+  if (!types.length) return null;
+
+  const selectedType = Number(character.combat.selectedHitDieType);
+  const selected = types.find(pool => pool.hitDie === selectedType);
+
+  return selected ?? types.find(pool => pool.current > 0) ?? types[0];
 }
 
 export function cycleSelectedHitDie(character, direction) {
   ensureHitDiceState(character);
 
-  const pools = getHitDicePools(character);
-  if (!pools.length) return null;
+  const types = getHitDiceTypePools(character);
+  if (!types.length) return null;
 
-  const currentId = getClassKey(character.combat.selectedHitDieClassId);
-  let index = pools.findIndex(pool => pool.classId === currentId);
+  const currentType = Number(character.combat.selectedHitDieType);
+  let index = types.findIndex(pool => pool.hitDie === currentType);
 
   if (index < 0) index = 0;
 
-  index = (index + Number(direction)) % pools.length;
-  if (index < 0) index += pools.length;
+  index = (index + Number(direction)) % types.length;
+  if (index < 0) index += types.length;
 
-  character.combat.selectedHitDieClassId = pools[index].classId;
+  const selected = types[index];
+  character.combat.selectedHitDieType = selected.hitDie;
 
-  return pools[index];
+  const selectedClass = getHitDicePools(character).find(
+    pool => pool.hitDie === selected.hitDie && pool.current > 0
+  ) ?? getHitDicePools(character).find(
+    pool => pool.hitDie === selected.hitDie
+  );
+
+  if (selectedClass) {
+    character.combat.selectedHitDieClassId = selectedClass.classId;
+  }
+
+  return selected;
+}
+
+export function getSelectedHitDie(character) {
+  return getSelectedHitDicePool(character)?.hitDie ?? 0;
 }
 
 export function adjustSelectedHitDie(character, delta) {
@@ -202,6 +278,7 @@ export function addHitDieForClass(character, classId) {
   const current = Number(character.combat.hitDiceByClass[key] ?? 0);
   character.combat.hitDiceByClass[key] = clamp(current + 1, 0, max);
   character.combat.selectedHitDieClassId = key;
+  character.combat.selectedHitDieType = getClassHitDie(key);
   character.combat.currentHitDice = getAvailableHitDiceTotal(character);
 
   return getSelectedHitDicePool(character);
