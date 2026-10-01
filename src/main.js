@@ -11,12 +11,10 @@ window.onerror = (message, source, line, column, error) => {
 import {
   getCharacters,
   getCharacterById,
-  addCharacter,
-  generateCharacterId
+  addCharacter
 } from "./data/charactersData.js";
 
 import { charactersScreen } from "./screens/characterListScreen.js";
-import { characterCreatorScreen } from "./screens/characterCreatorScreen.js";
 import { characterSheetScreen } from "./screens/characterSheetScreen.js";
 import { combatScreen } from "./screens/combatScreen.js";
 import { inventoryScreen, renderInventoryList } from "./screens/inventoryScreen.js";
@@ -87,20 +85,6 @@ import {
   applyLevelUp
 } from "./services/levelUpService.js";
 import {
-  createCreatorState,
-  getRaceChoices,
-  getClassChoiceGroups,
-  getBackgroundChoiceGroups,
-  getEquipmentChoiceGroups,
-  getMagicRequirements,
-  getCreatorSteps,
-  getCurrentStep,
-  getChoiceValue,
-  validateCreatorState,
-  validateCreatorStep,
-  buildCharacterFromCreator
-} from "./services/characterCreatorService.js";
-import {
   ensureHitDiceState,
   getHitDicePools,
   getSelectedHitDicePool,
@@ -115,6 +99,7 @@ const app = document.querySelector("#app");
 
 let currentCharacter = null;
 let currentScreen = "list";
+let creatorOpening = false;
 let undoState = null;
 let inventoryFilter = { search: "", type: "all" };
 let magicFilter = { search: "" };
@@ -1820,332 +1805,57 @@ function persistCharacters() {
   saveCharacters(getCharacters());
 }
 
-function startCharacterCreation() {
+async function openCharacterCreator() {
+  if (creatorOpening) return;
+
+  creatorOpening = true;
   currentCharacter = null;
-  creatorState = createCreatorState();
-  currentScreen = "creator";
-  render();
-}
 
-function cancelCharacterCreation() {
-  creatorState = null;
-  currentCharacter = null;
-  currentScreen = "list";
-  render();
-}
+  try {
+    const { startCharacterCreator } = await import(
+      "./services/characterCreatorController.js"
+    );
 
-function setCreatorChoiceValue(state, groupId, values) {
-  const valueList = Array.isArray(values)
-    ? values
-    : [values].filter(Boolean);
-  const value = valueList.length === 1 ? valueList[0] : valueList;
-
-  if (groupId === "raceTool") {
-    state.raceChoices.tool = valueList[0] ?? "";
-    return;
-  }
-
-  if (groupId === "humanAbilityScores" || groupId === "halfElfAbilityScores") {
-    state.raceChoices.abilityScores = valueList;
-    return;
-  }
-
-  if (groupId === "humanSkill" || groupId === "halfElfSkills") {
-    state.raceChoices.skills = valueList;
-    return;
-  }
-
-  if (groupId === "humanFeat") {
-    state.raceChoices.featId = valueList[0] ?? "";
-    return;
-  }
-
-  if (groupId === "humanLanguage" || groupId === "highElfLanguage") {
-    state.raceChoices.languages = valueList;
-    return;
-  }
-
-  if (groupId === "draconicAncestry") {
-    state.raceChoices.draconicAncestry = valueList[0] ?? "";
-    return;
-  }
-
-  if (groupId === "highElfCantrip") {
-    state.raceChoices.cantrip = valueList[0] ?? "";
-    return;
-  }
-
-  if (groupId === "tools") {
-    state.classChoices.tools.tools = valueList;
-    return;
-  }
-
-  if (groupId === "knowledgeExpertise" || groupId === "knowledgeLanguages") {
-    state.classChoices[groupId] = valueList;
-    return;
-  }
-
-  if (groupId.startsWith("language:")) {
-    state.backgroundChoices.languages[groupId] = valueList;
-    return;
-  }
-
-  if (groupId.startsWith("tool:")) {
-    state.backgroundChoices.tools[groupId] = valueList;
-    return;
-  }
-
-  if (groupId.startsWith("class:") || groupId.startsWith("background:")) {
-    state.equipmentChoices[groupId] =
-      valueList.length === 1 ? value : valueList;
-    return;
-  }
-
-  state.classChoices[groupId] =
-    valueList.length === 1 ? value : valueList;
-}
-
-function handleCreatorChange(event) {
-  if (!creatorState) return false;
-
-  if (event.target.matches("[data-creator-stat]")) {
-    const statId = event.target.dataset.creatorStat;
-    creatorState.stats[statId] = event.target.value === ""
-      ? null
-      : Number(event.target.value);
-    creatorState.error = "";
-    render();
-    return true;
-  }
-
-  if (event.target.matches("[data-creator-choice-select]")) {
-    const groupId = event.target.dataset.creatorChoiceSelect;
-    const values = Array.from(event.target.selectedOptions)
-      .map(option => option.value);
-
-    setCreatorChoiceValue(creatorState, groupId, values);
-    creatorState.error = "";
-    render();
-    return true;
-  }
-
-  if (event.target.matches("[data-creator-equipment-multi]")) {
-    const groupId = event.target.dataset.creatorEquipmentMulti;
-    creatorState.equipmentChoices[groupId] =
-      Array.from(event.target.selectedOptions).map(option => option.value);
-    creatorState.error = "";
-    render();
-    return true;
-  }
-
-  if (event.target.matches("[data-creator-magic]")) {
-    const key = event.target.dataset.creatorMagic;
-    creatorState.magicChoices[key] =
-      Array.from(event.target.selectedOptions).map(option => option.value);
-    creatorState.error = "";
-    render();
-    return true;
-  }
-
-  return false;
-}
-
-function handleCreatorClick(event) {
-  if (!creatorState) return false;
-
-  const action = event.target.closest("[data-creator-action]");
-  if (action) {
-    const type = action.dataset.creatorAction;
-
-    if (type === "cancel") {
-      cancelCharacterCreation();
-      return true;
-    }
-
-    if (type === "back") {
-      creatorState.step = Math.max(
-        0,
-        Number(creatorState.step ?? 0) - 1
-      );
-      creatorState.error = "";
-      render();
-      return true;
-    }
-
-    if (type === "next") {
-      const step = getCurrentStep(creatorState);
-      const error = step
-        ? validateCreatorStep(creatorState, step.key)
-        : "Некоректний крок створення персонажа.";
-
-      if (error) {
-        creatorState.error = error;
+    await startCharacterCreator({
+      app,
+      onCancel: () => {
+        creatorOpening = false;
+        currentScreen = "list";
+        currentCharacter = null;
         render();
-        return true;
-      }
-
-      creatorState.step = Math.min(
-        Number(creatorState.step ?? 0) + 1,
-        getCreatorSteps(creatorState).length - 1
-      );
-      creatorState.error = "";
-      render();
-      return true;
-    }
-
-    if (type === "create") {
-      const error = validateCreatorState(creatorState);
-
-      if (error) {
-        creatorState.error = error;
-        render();
-        return true;
-      }
-
-      try {
-        const character = buildCharacterFromCreator(
-          creatorState,
-          generateCharacterId()
-        );
-
+      },
+      onCreate: character => {
         addCharacter(character);
         persistCharacters();
-
         currentCharacter = character;
         currentScreen = "sheet";
-        creatorState = null;
+        creatorOpening = false;
         loadCollapseState(currentCharacter);
         render();
-      } catch (creationError) {
-        creatorState.error =
-          creationError.message || "Не вдалося створити персонажа.";
+      },
+      onError: error => {
+        creatorOpening = false;
+        currentScreen = "list";
+        currentCharacter = null;
         render();
+        showCampDialog({
+          title: "Створення персонажа",
+          body: `<p>${escapeHtml(error?.message ?? "Не вдалося завантажити Creator.")}</p>`,
+          confirmLabel: "Закрити"
+        });
       }
-
-      return true;
-    }
-  }
-
-  const race = event.target.closest("[data-creator-race]");
-  if (race) {
-    creatorState.raceId = race.dataset.creatorRace;
-    creatorState.subraceId = "";
-    creatorState.raceVariant = "";
-    creatorState.raceChoices = {
-      abilityScores: [],
-      skills: [],
-      featId: "",
-      languages: [],
-      tool: "",
-      draconicAncestry: "",
-      cantrip: ""
-    };
-    creatorState.error = "";
+    });
+  } catch (error) {
+    creatorOpening = false;
+    currentScreen = "list";
+    currentCharacter = null;
     render();
-    return true;
+    showCampDialog({
+      title: "Створення персонажа",
+      body: `<p>${escapeHtml(error?.message ?? "Не вдалося відкрити Creator.")}</p>`,
+      confirmLabel: "Закрити"
+    });
   }
-
-  const subrace = event.target.closest("[data-creator-subrace]");
-  if (subrace) {
-    creatorState.subraceId = subrace.dataset.creatorSubrace;
-    creatorState.raceChoices.abilityScores = [];
-    creatorState.error = "";
-    render();
-    return true;
-  }
-
-  const raceVariant = event.target.closest("[data-creator-race-variant]");
-  if (raceVariant) {
-    creatorState.raceVariant = raceVariant.dataset.creatorRaceVariant;
-    creatorState.raceChoices = {
-      abilityScores: [],
-      skills: [],
-      featId: "",
-      languages: [],
-      tool: "",
-      draconicAncestry: "",
-      cantrip: ""
-    };
-    creatorState.error = "";
-    render();
-    return true;
-  }
-
-  const classButton = event.target.closest("[data-creator-class]");
-  if (classButton) {
-    const classId = classButton.dataset.creatorClass;
-
-    creatorState.classId = classId;
-    creatorState.subclassId = "";
-    creatorState.classChoices = {
-      skills: [],
-      expertise: [],
-      tools: {},
-      fightingStyle: "",
-      favoredEnemy: "",
-      naturalExplorer: "",
-      knowledgeExpertise: [],
-      knowledgeLanguages: []
-    };
-    creatorState.magicChoices = {
-      cantrips: [],
-      spells: []
-    };
-    creatorState.equipmentChoices = {};
-    creatorState.backgroundChoices = {
-      languages: {},
-      tools: {}
-    };
-    creatorState.backgroundId =
-      CLASSES[classId]?.recommendedBackgroundId ?? "";
-    creatorState.error = "";
-    render();
-    return true;
-  }
-
-  const subclassButton = event.target.closest("[data-creator-subclass]");
-  if (subclassButton) {
-    creatorState.subclassId = subclassButton.dataset.creatorSubclass;
-    creatorState.classChoices.expertise = [];
-    creatorState.classChoices.knowledgeExpertise = [];
-    creatorState.classChoices.knowledgeLanguages = [];
-    creatorState.error = "";
-    render();
-    return true;
-  }
-
-  const backgroundButton = event.target.closest("[data-creator-background]");
-  if (backgroundButton) {
-    creatorState.backgroundId =
-      backgroundButton.dataset.creatorBackground;
-    creatorState.backgroundChoices = {
-      languages: {},
-      tools: {}
-    };
-
-    for (const key of Object.keys(creatorState.equipmentChoices)) {
-      if (key.startsWith("background:")) {
-        delete creatorState.equipmentChoices[key];
-      }
-    }
-
-    creatorState.error = "";
-    render();
-    return true;
-  }
-
-  const equipmentButton =
-    event.target.closest("[data-creator-equipment-choice]");
-  if (equipmentButton) {
-    creatorState.equipmentChoices[
-      equipmentButton.dataset.creatorEquipmentChoice
-    ] = equipmentButton.querySelector("input")?.value ?? "";
-    creatorState.error = "";
-    render();
-    return true;
-  }
-
-  return false;
 }
 
 function render() {
@@ -2165,13 +1875,7 @@ function render() {
       app.innerHTML = characterSheetScreen(currentCharacter, collapseState);
       break;
 
-    case "creator":
-      app.innerHTML = characterCreatorScreen(
-        creatorState ?? createCreatorState()
-      );
-      break;
-
-    case "combat":
+creator render branch    case "combat":
       app.innerHTML = combatScreen(currentCharacter, collapseState);
       break;
 
@@ -2199,10 +1903,6 @@ function render() {
 }
 
 app.addEventListener("change", event => {
-  if (currentScreen === "creator") {
-    if (handleCreatorChange(event)) return;
-  }
-
   if (currentScreen !== "sheet") return;
 
   const walletInput = event.target.closest('[data-wallet-action="set"]');
@@ -2236,14 +1936,6 @@ app.addEventListener("change", event => {
 });
 
 app.addEventListener("input", event => {
-  if (currentScreen === "creator") {
-    if (event.target.matches("[data-creator-name]")) {
-      creatorState.name = event.target.value;
-      creatorState.error = "";
-      return;
-    }
-  }
-
   if (currentScreen === "sheet") {
     const walletInput = event.target.closest('[data-wallet-action="set"]');
     if (walletInput) {
@@ -2279,10 +1971,6 @@ app.addEventListener("input", event => {
 });
 
 app.addEventListener("click", (event) => {
-  if (currentScreen === "creator") {
-    if (handleCreatorClick(event)) return;
-  }
-
   if (
     currentCharacter &&
     currentScreen === "sheet"
@@ -2538,7 +2226,8 @@ app.addEventListener("click", (event) => {
   
   const createCharacterButton = event.target.closest(".create-button");
   if (createCharacterButton && currentScreen === "list") {
-    startCharacterCreation();
+    event.preventDefault();
+    openCharacterCreator();
     return;
   }
 
