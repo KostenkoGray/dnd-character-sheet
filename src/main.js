@@ -2283,21 +2283,13 @@ app.addEventListener("click", (event) => {
     }
 
     if (event.target.closest("#sheet-hit-dice-minus")) {
-      currentCharacter.combat.currentHitDice = clamp(
-        currentCharacter.combat.currentHitDice - 1,
-        0,
-        getHitDiceTotal(currentCharacter)
-      );
+      adjustSelectedHitDie(currentCharacter, -1);
       render();
       return;
     }
 
     if (event.target.closest("#sheet-hit-dice-plus")) {
-      currentCharacter.combat.currentHitDice = clamp(
-        currentCharacter.combat.currentHitDice + 1,
-        0,
-        getHitDiceTotal(currentCharacter)
-      );
+      adjustSelectedHitDie(currentCharacter, 1);
       render();
       return;
     }
@@ -2419,21 +2411,13 @@ app.addEventListener("click", (event) => {
     }
 
     if (event.target.closest("#hit-dice-minus")) {
-      currentCharacter.combat.currentHitDice = clamp(
-        currentCharacter.combat.currentHitDice - 1,
-        0,
-        getHitDiceTotal(currentCharacter)
-      );
+      adjustSelectedHitDie(currentCharacter, -1);
       render();
       return;
     }
 
     if (event.target.closest("#hit-dice-plus")) {
-      currentCharacter.combat.currentHitDice = clamp(
-        currentCharacter.combat.currentHitDice + 1,
-        0,
-        getHitDiceTotal(currentCharacter)
-      );
+      adjustSelectedHitDie(currentCharacter, 1);
       render();
       return;
     }
