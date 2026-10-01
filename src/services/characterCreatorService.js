@@ -617,8 +617,8 @@ export function getRaceTraitSummary(state) {
 
   return {
     size: subrace?.size ?? race?.size ?? null,
-    speed: subrace?.speed ?? race?.speed ?? null,
-    darkvision: subrace?.darkvision ?? race?.darkvision ?? null,
+    speed: subrace?.speed ?? subDetail.speed ?? race?.speed ?? null,
+    darkvision: subrace?.darkvision ?? subDetail.darkvision ?? race?.darkvision ?? null,
     traits,
     abilityScoreIncrease: getFinalRaceAbilityBonuses(state),
     languages: race?.languages ?? [],
