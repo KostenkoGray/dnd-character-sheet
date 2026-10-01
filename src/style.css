@@ -4721,3 +4721,30 @@ p {
     font-size: 1.08rem;
   }
 }
+
+/* Hit Dice final controls */
+.combat-hit-dice.has-hit-die-selector{
+  grid-template-columns: 18px minmax(0, 1fr) 18px;
+}
+
+.combat-hit-dice.single-hit-die{
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.hit-dice-plus,
+.hit-dice-minus{
+  height: 32px;
+  min-height: 32px;
+}
+
+@media (max-width: 380px){
+  .combat-hit-dice.has-hit-die-selector{
+    grid-template-columns: 16px minmax(0, 1fr) 16px;
+  }
+
+  .hit-dice-plus,
+  .hit-dice-minus{
+    height: 30px;
+    min-height: 30px;
+  }
+}
