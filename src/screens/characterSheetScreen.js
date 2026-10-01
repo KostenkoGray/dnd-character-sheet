@@ -562,7 +562,7 @@ export function characterSheetScreen(character, collapseState = {}) {
             <div class="hit-die-display">
               <h2>Hit Dice</h2>
               <span class="hit-die-label">${getHitDieLabel(character)}</span>
-              <strong class="hit-dice-value">${getSelectedHitDicePool(character)?.current ?? 0}/${getSelectedHitDicePool(character)?.max ?? 0}</strong>
+              <strong class="hit-dice-value">${getSelectedHitDieTypePool(character)?.current ?? 0}/${getSelectedHitDieTypePool(character)?.max ?? 0}</strong>
             </div>
             <button type="button" class="hit-die-select-button" data-hit-die-cycle="1" aria-label="Наступна кістка">›</button>
           </section>
