@@ -116,9 +116,19 @@ function renderWeapon(weapon, character, index = 0) {
     ? `${weapon.damage} ${formatModifier(damageBonus)}`
     : "Без шкоди";
 
-  const properties = weapon.properties?.length
-    ? weapon.properties.join(" • ")
-    : "";
+  const damageLine = weapon.damageType
+    ? `${damage} ${weapon.damageType}`
+    : damage;
+
+  const otherParameters = [
+    weapon.range ? `Дальність: ${weapon.range} ft.` : "",
+    weapon.properties?.length
+      ? `Властивості: ${weapon.properties.join(" • ")}`
+      : "",
+    weapon.versatileDamage
+      ? `Універсальна: ${weapon.versatileDamage}`
+      : ""
+  ].filter(Boolean).join(" · ");
 
   return `
     <article
@@ -128,18 +138,14 @@ function renderWeapon(weapon, character, index = 0) {
       aria-label="Змінити зброю ${index + 1}"
     >
       <div class="combat-weapon-main">
-        <strong>${weapon.ukr}</strong>
-        <span>${formatModifier(attackBonus)} атака</span>
-      </div>
-      <div class="combat-weapon-damage">
-        <span>${damage} ${weapon.damageType ?? ""}</span>
-        ${weapon.range ? `<small>${weapon.range} ft.</small>` : ""}
-        ${properties ? `<small>${properties}</small>` : ""}
+        <strong>${escapeHtml(weapon.ukr)}</strong>
+        <span>${formatModifier(attackBonus)} на потрапляння</span>
+        <span>${escapeHtml(damageLine)}</span>
+        ${otherParameters ? `<small class="combat-weapon-parameters">${escapeHtml(otherParameters)}</small>` : ""}
       </div>
     </article>
   `;
 }
-
 function getResourceValue(resourceTable, classLevel) {
   const levels = Object.keys(resourceTable).map(Number)
     .filter(level => level <= classLevel)
