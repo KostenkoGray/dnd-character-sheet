@@ -525,11 +525,11 @@ function renderNameStep(state) {
   return (
     '<section class="creator-step">' +
       '<div class="creator-section-heading">' +
-        '<h2>Ім\\'я персонажа</h2>' +
+        '<h2>Ім\'я персонажа</h2>' +
         '<p>Останній крок. Після створення персонаж одразу відкриється у Character Sheet.</p>' +
       '</div>' +
       '<label class="creator-name-field">' +
-        '<span>Ім\\'я</span>' +
+        '<span>Ім\'я</span>' +
         '<input type="text" data-creator-name value="' + escapeHtml(state.name) + '" placeholder="Наприклад, Severus Grey" autocomplete="off">' +
       '</label>' +
       '<section class="creator-final-summary">' +
