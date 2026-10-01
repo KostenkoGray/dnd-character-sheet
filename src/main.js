@@ -41,7 +41,8 @@ import {
   getAvailableSpells,
   spendSpellSlot,
   restoreSpellSlot,
-  restoreSpellSlotsOnLongRest
+  restoreSpellSlotsOnLongRest,
+  toggleSpellSlotDot
 } from "./services/magicService.js";
 import {
   getSpellById,
@@ -85,7 +86,8 @@ let magicFilter = { search: "" };
 const DEFAULT_COLLAPSE_STATE = {
   stats: false,
   equipment: false,
-  features: false
+  features: false,
+  magicLevels: {}
 };
 
 const uiState = loadUiState({
@@ -1655,7 +1657,7 @@ function render() {
       break;
 
     case "magic":
-      app.innerHTML = magicScreen(currentCharacter, magicFilter);
+      app.innerHTML = magicScreen(currentCharacter, magicFilter, collapseState.magicLevels);
       break;
 
     case "dice":
@@ -1691,7 +1693,7 @@ app.addEventListener("input", event => {
   if (currentScreen !== "magic" || event.target.id !== "magic-search") return;
   magicFilter.search = event.target.value;
   const list = document.querySelector("#magic-spells-list");
-  if (list) list.innerHTML = renderMagicSpellsList(currentCharacter, magicFilter);
+  if (list) list.innerHTML = renderMagicSpellsList(currentCharacter, magicFilter, collapseState.magicLevels);
 });
 
 app.addEventListener("click", (event) => {
@@ -1707,6 +1709,45 @@ app.addEventListener("click", (event) => {
       persistCharacters();
       currentScreen = "sheet";
       loadCollapseState(currentCharacter);
+      render();
+      return;
+    }
+
+    const slotDot = event.target.closest("[data-spell-slot-dot]");
+    if (slotDot) {
+      const level = Number(slotDot.dataset.spellSlotLevel);
+      const index = Number(slotDot.dataset.spellSlotIndex);
+      const pactMagic = slotDot.dataset.spellSlotPact === "true";
+
+      const result = toggleSpellSlotDot(
+        currentCharacter,
+        level,
+        index,
+        pactMagic
+      );
+
+      if (!result.ok) {
+        showCampDialog({
+          title: "Магічні комірки",
+          body: `<p>${escapeHtml(result.message)}</p>`,
+          confirmLabel: "Закрити"
+        });
+        return;
+      }
+
+      persistCharacters();
+      render();
+      return;
+    }
+
+    const magicLevelCollapse = event.target.closest("[data-collapse-section^="magic-level-"]");
+    if (magicLevelCollapse) {
+      const collapseId = magicLevelCollapse.dataset.collapseSection;
+      collapseState.magicLevels ??= {};
+      collapseState.magicLevels[collapseId.replace("magic-level-", "")] =
+        !collapseState.magicLevels[collapseId.replace("magic-level-", "")];
+
+      persistCollapseState(currentCharacter.id);
       render();
       return;
     }
