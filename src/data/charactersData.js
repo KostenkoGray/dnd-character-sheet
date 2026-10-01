@@ -53,6 +53,10 @@ const defaultCharacters = [
       }
     ],
 
+    magic: {
+      spells: []
+    },
+
     skills: {
       stealth: PROFICIENCY.EXPERTISE,
       arcana: PROFICIENCY.PROFICIENT,
@@ -116,6 +120,10 @@ const defaultCharacters = [
         quantity: 1
       }
     ],
+
+    magic: {
+      spells: []
+    },
 
     skills: {
       stealth: PROFICIENCY.PROFICIENT,
@@ -186,6 +194,10 @@ const defaultCharacters = [
         quantity: 1
       }
     ],
+
+    magic: {
+      spells: []
+    },
 
     skills: {
       stealth: PROFICIENCY.EXPERTISE,
