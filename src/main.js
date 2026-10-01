@@ -87,6 +87,7 @@ const DEFAULT_COLLAPSE_STATE = {
   stats: false,
   equipment: false,
   features: false,
+  preparedSpells: false,
   magicLevels: {}
 };
 
@@ -1661,7 +1662,7 @@ function render() {
       break;
 
     case "magic":
-      app.innerHTML = magicScreen(currentCharacter, magicFilter, collapseState.magicLevels);
+      app.innerHTML = magicScreen(currentCharacter, magicFilter, collapseState.magicLevels, Boolean(collapseState.preparedSpells));
       break;
 
     case "dice":
@@ -1745,6 +1746,14 @@ app.addEventListener("click", (event) => {
       persistCharacters();
       currentScreen = "sheet";
       loadCollapseState(currentCharacter);
+      render();
+      return;
+    }
+
+    const preparedSpellsCollapse = event.target.closest('[data-collapse-section="prepared-spells"]');
+    if (preparedSpellsCollapse) {
+      collapseState.preparedSpells = !collapseState.preparedSpells;
+      persistCollapseState(currentCharacter.id);
       render();
       return;
     }
