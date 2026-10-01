@@ -585,7 +585,7 @@ export function characterSheetScreen(character, collapseState = {}) {
 
         ${spellSlotsCounter(character)}
 
-        ${preparedSpellsBlock(character, Boolean(collapseState.preparedSpells))}
+        ${preparedSpellsBlock(character, Boolean(collapseState.preparedSpells), collapseState.preparedSpellLevels)}
 
 
 
