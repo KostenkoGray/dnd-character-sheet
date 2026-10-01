@@ -17,7 +17,7 @@ import { renderDeathSaves } from "../components/deathSaves.js";
 import { equipmentCard } from "../components/equipmentCard.js";
 import { preparedSpellsBlock } from "../components/preparedSpells.js";
 import { spellSlotsCounter } from "../components/spellSlotsCounter.js";
-import { getSelectedHitDieTypePool } from "../services/hitDiceService.js";
+import { getSelectedHitDieTypePool, getHitDiceTypePools } from "../services/hitDiceService.js";
 import {
   getEquippedWeapons,
   getEquipmentBonuses
@@ -268,6 +268,7 @@ export function combatScreen(character, collapseState = {}) {
 
   const maxHp = character.maxHp ?? 0;
   const currentHp = character.combat?.currentHp ?? maxHp;
+  const hasMultipleHitDieTypes = getHitDiceTypePools(character).length > 1;
   const tempHp = character.combat?.tempHp ?? 0;
   const currentHitDice = character.combat?.currentHitDice ?? getCharacterLevel(character);
   const deathSaves = character.combat?.deathSaves ?? { success: 0, fail: 0 };
@@ -330,8 +331,8 @@ export function combatScreen(character, collapseState = {}) {
           </div>
         </section>
 
-          <section class="combat-hit-dice">
-            <button type="button" class="hit-die-select-button" data-hit-die-cycle="-1" aria-label="Попередня кістка">‹</button>
+          <section class="combat-hit-dice ${hasMultipleHitDieTypes ? "has-hit-die-selector" : "single-hit-die"}">
+            ${hasMultipleHitDieTypes ? `<button type="button" class="hit-die-select-button" data-hit-die-cycle="-1" aria-label="Попередня кістка">‹</button>` : ""}
             <div class="hit-dice-main">
               <button id="hit-dice-plus" class="hit-dice-plus" type="button" aria-label="Витратити ще одну кістку">+</button>
               <div class="hit-die-display">
@@ -341,7 +342,7 @@ export function combatScreen(character, collapseState = {}) {
               </div>
               <button id="hit-dice-minus" class="hit-dice-minus" type="button" aria-label="Повернути одну кістку">−</button>
             </div>
-            <button type="button" class="hit-die-select-button" data-hit-die-cycle="1" aria-label="Наступна кістка">›</button>
+            ${hasMultipleHitDieTypes ? `<button type="button" class="hit-die-select-button" data-hit-die-cycle="1" aria-label="Наступна кістка">›</button>` : ""}
           </section>
         </section>
 
