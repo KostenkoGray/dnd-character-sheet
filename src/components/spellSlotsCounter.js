@@ -50,6 +50,17 @@ export function spellSlotsCounter(character, { title = "Магічні комі�
         <strong>${title}</strong>
         <span>${available}/${total}</span>
       </div>
+
+      <button
+        type="button"
+        class="spell-concentration-button ${character.combat?.concentration ? "active" : "inactive"}"
+        data-spell-concentration
+        aria-pressed="${character.combat?.concentration ? "true" : "false"}"
+      >
+        <span>Концентрація</span>
+        <strong>${character.combat?.concentration ? "Активна" : "—"}</strong>
+      </button>
+
       <div class="spell-slots-counter-list">
         ${rows}
       </div>
