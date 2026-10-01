@@ -99,14 +99,19 @@ function renderSpellCard(spell) {
       </div>
 
       <div class="magic-spell-actions">
-        <button
-          type="button"
-          class="inventory-action-button ${spell.prepared ? "secondary" : "primary"}"
-          data-magic-action="${spell.prepared ? "unprepare" : "prepare"}"
-          data-spell-id="${escapeHtml(spell.id)}"
-        >
-          ${spell.prepared ? "Зняти підготовку" : "Підготувати"}
-        </button>
+        ${spell.level === 0
+          ? '<span class="inventory-equipped-badge magic-cantrip-badge">Замова · завжди доступна</span>'
+          : `
+            <button
+              type="button"
+              class="inventory-action-button ${spell.prepared ? "secondary" : "primary"}"
+              data-magic-action="${spell.prepared ? "unprepare" : "prepare"}"
+              data-spell-id="${escapeHtml(spell.id)}"
+            >
+              ${spell.prepared ? "Зняти підготовку" : "Підготувати"}
+            </button>
+          `
+        }
 
         <button
           type="button"
