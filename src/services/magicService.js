@@ -185,6 +185,43 @@ export function ensureMagicState(character) {
     })
     .filter(entry => Boolean(getSpellById(entry.spellId)));
 
+  const sources = getSpellcastingSources(character);
+
+  for (const entry of character.magic.spells) {
+    if (entry.sourceClassId) continue;
+
+    const spell = getSpellById(entry.spellId);
+    if (!spell) continue;
+
+    const availableSources = getAvailableSourcesForSpell(character, spell);
+
+    const exactClass = availableSources.find(source =>
+      source.classEntry.classId === entry.sourceClassId
+    );
+
+    const fallbackSource = availableSources[0];
+
+    if (exactClass) {
+      entry.sourceClassId = exactClass.classEntry.classId;
+    } else if (fallbackSource) {
+      entry.sourceClassId = fallbackSource.classEntry.classId;
+    }
+  }
+
+  // Keep source ids valid after multiclass/class changes.
+  for (const entry of character.magic.spells) {
+    if (!entry.sourceClassId) continue;
+
+    const sourceStillExists = sources.some(source =>
+      source.classEntry.classId === entry.sourceClassId
+    );
+
+    if (!sourceStillExists) {
+      entry.sourceClassId = "";
+      entry.prepared = false;
+    }
+  }
+
   return character.magic.spells;
 }
 
@@ -320,9 +357,17 @@ export function toggleSpellPrepared(character, spellId) {
     return { ok: true, prepared: false };
   }
 
-  const source = getSpellcastingSources(character).find(item =>
+  let source = getSpellcastingSources(character).find(item =>
     item.classEntry.classId === entry.sourceClassId
   );
+
+  if (!source) {
+    const fallback = getAvailableSourcesForSpell(character, spell)[0];
+    if (fallback) {
+      entry.sourceClassId = fallback.classEntry.classId;
+      source = fallback;
+    }
+  }
 
   if (!source) {
     return { ok: false, message: "Не знайдено клас, який надав це заклинання." };
