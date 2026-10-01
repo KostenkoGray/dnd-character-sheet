@@ -270,6 +270,9 @@ function showNumericInputDialog({ title, label, value, onConfirm }) {
     }
   });
 
+  const numericBackdrop = document.querySelector(".camp-dialog-backdrop");
+  numericBackdrop?.classList.add("numeric-input-dialog");
+
   requestAnimationFrame(() => {
     const input = document.querySelector("#camp-numeric-input");
     input?.focus();
