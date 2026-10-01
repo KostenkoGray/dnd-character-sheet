@@ -1,6 +1,6 @@
 export const CHARACTER_LIST_PROMPTS = [
-  "Ху ар ю тудей?",
-  "Хау мені фейсес ду ю хев?",
-  "Чуз йор хіро",
-  "Тайм ту пік"
+  "Who are you today?",
+  "How many faces do you have?",
+  "Choose your hero",
+  "Time to pick"
 ];
