@@ -148,6 +148,7 @@ export const CREATOR_RACE_DETAILS = {
         ]
       },
       woodElf: {
+        speed: 35,
         abilityScoreIncrease: { wisdom: 1 },
         traits: [
           ["Elf Weapon Training", "Ельфійська бойова підготовка", "Володіння довгим мечем, коротким мечем, коротким і довгим луком."],
@@ -156,6 +157,7 @@ export const CREATOR_RACE_DETAILS = {
         ]
       },
       drow: {
+        darkvision: 120,
         abilityScoreIncrease: { charisma: 1 },
         traits: [
           ["Superior Darkvision", "Покращене темнобачення", "Темнобачення 120 ft."],
