@@ -4667,3 +4667,57 @@ p {
     font-size: .86rem;
   }
 }
+
+/* Hit Dice final arrangement */
+.hit-die-display{
+  order: 2;
+  min-width: 0;
+}
+
+.hit-dice-main{
+  height: 100%;
+  min-height: 0;
+  grid-template-rows: 28px minmax(0, 1fr) 28px;
+}
+
+.hit-die-select-button{
+  align-self: center;
+  width: 18px;
+  height: 52px;
+  min-width: 18px;
+  padding: 0;
+  flex: 0 0 18px;
+  border-radius: 5px;
+}
+
+.hp-value span{
+  right: -28px;
+  bottom: 4px;
+  width: auto;
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+
+@media (max-width: 380px){
+  .hit-die-select-button{
+    width: 16px;
+    height: 50px;
+    min-width: 16px;
+    flex-basis: 16px;
+    border-radius: 4px;
+  }
+
+  .combat-hit-dice{
+    grid-template-columns: 16px minmax(0, 1fr) 16px;
+  }
+
+  .hit-dice-main{
+    grid-template-rows: 26px minmax(0, 1fr) 26px;
+  }
+
+  .hp-value span{
+    right: -28px;
+    bottom: 4px;
+    font-size: 1.08rem;
+  }
+}
