@@ -17,15 +17,15 @@ export function preparedSpellsBlock(character, collapsed = false) {
   const spells = getPreparedSpells(character);
 
   const rows = spells.length
-    ? spells.map(spell => \`
-        <article class="prepared-spell-row">
-          <div>
-            <strong>\${escapeHtml(spell.ukr ?? spell.name)}</strong>
-            <small>Рівень \${spell.level} · \${escapeHtml(spell.castingTime)}</small>
-          </div>
-          <span>\${escapeHtml(spell.range)}</span>
-        </article>
-      \`).join("")
+    ? spells.map(spell =>
+        '<article class="prepared-spell-row">' +
+          '<div>' +
+            '<strong>' + escapeHtml(spell.ukr ?? spell.name) + '</strong>' +
+            '<small>Рівень ' + spell.level + ' · ' + escapeHtml(spell.castingTime) + '</small>' +
+          '</div>' +
+          '<span>' + escapeHtml(spell.range) + '</span>' +
+        '</article>'
+      ).join("")
     : '<p class="inventory-empty">Поки немає підготовлених заклинань.</p>';
 
   return collapsibleSection({
@@ -33,12 +33,6 @@ export function preparedSpellsBlock(character, collapsed = false) {
     title: "Prepared Spells",
     collapsed,
     className: "combat-section prepared-spells-block",
-    content: \`<div class="prepared-spells-list">\${rows}</div>\`
+    content: '<div class="prepared-spells-list">' + rows + '</div>'
   });
-}  return `
-    <section class="combat-section prepared-spells-block">
-      <h2>Prepared Spells</h2>
-      <div class="prepared-spells-list">${rows}</div>
-    </section>
-  `;
 }
