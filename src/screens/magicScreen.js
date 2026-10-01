@@ -11,7 +11,6 @@ import {
 } from "../data/spellsData.js";
 import { collapsibleSection } from "../components/collapsibleSection.js";
 import { spellSlotsCounter } from "../components/spellSlotsCounter.js";
-import { preparedSpellsBlock } from "../components/preparedSpells.js";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -198,8 +197,6 @@ export function magicScreen(character, filter = {}, collapsedLevels = {}, prepar
           <h2>Spellcasting</h2>
           <div class="magic-source-list">${sourceSummary}</div>
         </section>
-
-        ${preparedSpellsBlock(character, preparedCollapsed)}
 
         <section class="combat-section">
           <div class="magic-title-row">
