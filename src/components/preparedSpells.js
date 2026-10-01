@@ -11,11 +11,11 @@ function escapeHtml(value) {
 }
 
 function formatSpellLevel(level) {
-  return Number(level) === 0 ? "Замови" : \`Рівень ${level}\`;
+  return Number(level) === 0 ? "Замови" : `Рівень ${level}`;
 }
 
 function renderFavoriteButton(spell) {
-  return \`
+  return `
     <button
       type="button"
       class="magic-favorite-button ${spell.favorite ? "is-favorite" : ""}"
@@ -24,11 +24,11 @@ function renderFavoriteButton(spell) {
       aria-label="${spell.favorite ? "Прибрати з улюблених" : "Додати до улюблених"}"
       title="${spell.favorite ? "Прибрати з улюблених" : "Додати до улюблених"}"
     >${spell.favorite ? "★" : "☆"}</button>
-  \`;
+  `;
 }
 
 function renderSpellRow(spell) {
-  return \`
+  return `
     <article class="prepared-spell-row">
       <div>
         <strong>${escapeHtml(spell.ukr ?? spell.name)}</strong>
@@ -39,7 +39,7 @@ function renderSpellRow(spell) {
         ${renderFavoriteButton(spell)}
       </div>
     </article>
-  \`;
+  `;
 }
 
 function groupSpells(spells) {
@@ -57,11 +57,11 @@ function groupSpells(spells) {
 function renderGroupedSpells(spells, collapsedLevels = {}) {
   return groupSpells(spells).map(([level, levelSpells]) =>
     collapsibleSection({
-      id: \`prepared-level-${level}\`,
-      title: \`${formatSpellLevel(level)} · ${levelSpells.length}\`,
+      id: `prepared-level-${level}`,
+      title: `${formatSpellLevel(level)} · ${levelSpells.length}`,
       collapsed: Boolean(collapsedLevels[String(level)]),
       className: "prepared-spell-level-section",
-      content: \`<div class="prepared-spells-list">${levelSpells.map(renderSpellRow).join("")}</div>\`
+      content: `<div class="prepared-spells-list">${levelSpells.map(renderSpellRow).join("")}</div>`
     })
   ).join("");
 }
@@ -79,7 +79,7 @@ export function preparedSpellsBlock(
   const regularSpells = spells.filter(spell => !spell.favorite);
 
   const favoriteBlock = favoriteSpells.length
-    ? \`
+    ? `
       <section class="prepared-spells-favorites">
         <div class="prepared-spells-favorites-heading">
           <strong>★ Улюблені</strong>
@@ -89,7 +89,7 @@ export function preparedSpellsBlock(
           ${favoriteSpells.map(renderSpellRow).join("")}
         </div>
       </section>
-    \`
+    `
     : "";
 
   const levelContent = regularSpells.length
