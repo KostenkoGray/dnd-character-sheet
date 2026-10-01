@@ -333,24 +333,11 @@ function renderAddSpellBody(character, state) {
               <small>${escapeHtml(spell.description)}</small>
             </div>
             <div class="magic-add-source-actions">
-              ${entry.sources.length === 1
-                ? `
-                  <button
-                    type="button"
-                    class="inventory-action-button primary"
-                    data-add-spell-id="${escapeHtml(spell.id)}"
-                    data-add-spell-source-class-id="${escapeHtml(entry.sources[0].classEntry.classId)}"
-                  >Додати · ${escapeHtml(entry.sources[0].classData.ukr)}</button>
-                `
-                : entry.sources.map(source => `
-                  <button
-                    type="button"
-                    class="inventory-action-button primary"
-                    data-add-spell-id="${escapeHtml(spell.id)}"
-                    data-add-spell-source-class-id="${escapeHtml(source.classEntry.classId)}"
-                  >${escapeHtml(source.classData.ukr)}</button>
-                `).join("")
-              }
+              <button
+                type="button"
+                class="inventory-action-button primary"
+                data-add-spell-id="${escapeHtml(spell.id)}"
+              >Додати</button>
             </div>
           </article>
         `;
@@ -420,8 +407,7 @@ function openAddSpellDialog(character) {
 
     const result = addSpellToCharacter(
       character,
-      button.dataset.addSpellId,
-      button.dataset.addSpellSourceClassId ?? ""
+      button.dataset.addSpellId
     );
 
     if (!result.ok) {
