@@ -213,7 +213,7 @@ function renderClassResources(character) {
   `;
 }
 
-export function combatScreen(character) {
+export function combatScreen(character, collapseState = {}) {
   const armorClass = getArmorClass(character);
   const initiative = getInitiative(character);
   const proficiency = getProficiencyBonus(character);
