@@ -165,7 +165,7 @@ export const CREATOR_RACE_DETAILS = {
           ["Superior Darkvision", "Покращене темнобачення", "Темнобачення 120 ft."],
           ["Sunlight Sensitivity", "Чутливість до сонячного світла", "Невигідність на атаки та Perception, якщо ти або ціль під прямим сонячним світлом."],
           ["Drow Weapon Training", "Бойова підготовка дроу", "Володіння рапірою, коротким мечем і ручним арбалетом."],
-          ["Drow Magic", "Магія дроу", "Thaumaturgy; на 3 рівні Hellish Rebuke замінюється відповідним расовим закляттям за правилами PHB."]
+          ["Drow Magic", "Магія дроу", "Заговор Dancing Lights; на 3 рівні — Faerie Fire, на 5 рівні — Darkness."]
         ]
       }
     }
