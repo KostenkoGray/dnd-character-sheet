@@ -39,6 +39,8 @@ import {
   toggleSpellPrepared,
   removeSpellFromCharacter,
   getAvailableSpells,
+  getKnownSpells,
+  getSpellLimits,
   spendSpellSlot,
   restoreSpellSlot,
   restoreSpellSlotsOnLongRest,
