@@ -1,15 +1,15 @@
-// D&D 5e Character Sheet — Spells Data
-// 2014 rules spell catalogue data. Character state stores only references.
+// D&D 5e Character Sheet — Spell Data
+// PHB 2014 catalogue. Character state stores only spellId references.
 
 export const SPELL_SCHOOLS = {
-  "abjuration": "abjuration",
-  "conjuration": "conjuration",
-  "divination": "divination",
-  "enchantment": "enchantment",
-  "evocation": "evocation",
-  "illusion": "illusion",
-  "necromancy": "necromancy",
-  "transmutation": "transmutation"
+  "A": "abjuration",
+  "C": "conjuration",
+  "D": "divination",
+  "E": "enchantment",
+  "V": "evocation",
+  "I": "illusion",
+  "N": "necromancy",
+  "T": "transmutation"
 };
 export const SPELL_SCHOOL_LABELS = {
   "abjuration": "Огородження",
@@ -24,131 +24,78 @@ export const SPELL_SCHOOL_LABELS = {
 export const SPELL_EFFECT_TYPES = { ATTACK:"attack", SAVE:"save", UTILITY:"utility", HEALING:"healing", BUFF:"buff", DEBUFF:"debuff" };
 export const SPELL_EFFECT_TYPE_LABELS = { attack:"Атака", save:"Ряткидок", utility:"Утилітарне", healing:"Лікування", buff:"Посилення", debuff:"Послаблення" };
 export const SPELLS = {
-  "absorb_elements": {
-    "id": "absorb_elements",
-    "name": "absorb elements",
-    "ukr": "absorb elements",
-    "level": 1,
-    "type": "spell",
-    "school": "abjuration",
-    "effectType": "utility",
-    "classes": [
-      "druid",
-      "ranger",
-      "sorcerer",
-      "wizard"
-    ],
-    "subclasses": [],
-    "castingTime": "1 reaction",
-    "range": "Self",
-    "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
-    },
-    "materialText": "",
-    "duration": "1 round",
-    "concentration": false,
-    "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 1,
-    "description": "",
-    "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
-  },
-  "acid_arrow": {
-    "id": "acid_arrow",
-    "name": "acid arrow",
-    "ukr": "acid arrow",
-    "level": 2,
-    "type": "spell",
-    "school": "evocation",
-    "effectType": "utility",
-    "classes": [
-      "wizard"
-    ],
-    "subclasses": [],
-    "castingTime": "1 action",
-    "range": "90 feet",
-    "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
-    },
-    "materialText": "",
-    "duration": "Instantaneous",
-    "concentration": false,
-    "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 2,
-    "description": "",
-    "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
-  },
-  "acid_splash": {
-    "id": "acid_splash",
-    "name": "acid splash",
-    "ukr": "acid splash",
+  "acidSplash": {
+    "id": "acidSplash",
+    "name": "Acid Splash",
+    "ukr": "Acid Splash",
     "level": 0,
     "type": "cantrip",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "You hurl a bubble of acid. Choose one creature within range, or choose two creatures within range that are within 5 feet of each other. A target must succeed on a Dexterity saving throw or take 1d6 acid damage. This spell’s damage increases by 1d6 when you reach 5th level (2d6), 11th level (3d6), and 17th level(4d6).",
+    "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "savingThrow": "dexterity",
+    "damageType": "acid",
+    "areaTags": [
+      "MT",
+      "ST"
+    ],
+    "damage": {
+      "label": "acid damage",
+      "scaling": {
+        "1": "1d6",
+        "5": "2d6",
+        "11": "3d6",
+        "17": "4d6"
+      }
+    },
+    "miscTags": [
+      "SCL",
+      "SGT"
+    ],
+    "page": 211,
+    "source": "PHB 2014"
   },
   "aid": {
     "id": "aid",
-    "name": "aid",
+    "name": "Aid",
     "ukr": "aid",
     "level": 2,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "cleric",
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "8 hours",
+    "materialText": "a tiny strip of white cloth",
+    "duration": "8 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -157,13 +104,19 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL"
+    ],
+    "page": 211,
+    "source": "PHB 2014"
   },
   "alarm": {
     "id": "alarm",
-    "name": "alarm",
+    "name": "Alarm",
     "ukr": "alarm",
     "level": 1,
     "type": "spell",
@@ -174,49 +127,53 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute (Ritual)",
-    "range": "30 feet",
+    "castingTime": "1 хв",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "8 hours",
+    "materialText": "a tiny bell and a piece of fine silver wire",
+    "duration": "8 год",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 1,
     "description": "You set an alarm against unwanted intrusion. Choose a door, a window, or an area within range that is no larger than a 20-foot cube. Until the spell ends, an alarm alerts you whenever a Tiny or larger creature touches or enters the warded area. When you cast the spell, you can designate creatures that won't set off the alarm. You also choose whether the alarm is mental or audible.A mental alarm alerts you with a ping in your mind if you are within 1 mile of the warded area. This ping awakens you if you are sleeping.An audible alarm produces the sound of a hand bell for 10 seconds within 60 feet",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "C"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 211,
+    "source": "PHB 2014"
   },
-  "alter_self": {
-    "id": "alter_self",
-    "name": "alter self",
-    "ukr": "alter self",
+  "alterSelf": {
+    "id": "alterSelf",
+    "name": "Alter Self",
+    "ukr": "Alter Self",
     "level": 2,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -224,50 +181,59 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "bludgeoning, piercing, slashing",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 211,
+    "source": "PHB 2014"
   },
-  "animal_friendship": {
-    "id": "animal_friendship",
-    "name": "animal friendship",
-    "ukr": "animal friendship",
+  "animalFriendship": {
+    "id": "animalFriendship",
+    "name": "Animal Friendship",
+    "ukr": "Animal Friendship",
     "level": 1,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "druid",
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "24 hours",
+    "materialText": "a morsel of food",
+    "duration": "24 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "Choose a beast that you can see.It must be able to see and hear you. If its Intelligence is 4 or higher, the spell fails. Otherwise, it must pass a Wisdom save orbe charmed by you. If you or one of your companions harms it, the spell ends. At Higher Levels: You can target one additional beast for each slot level above 1st.",
+    "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCT",
+      "SGT"
+    ],
+    "page": 212,
+    "source": "PHB 2014"
   },
-  "animal_messenger": {
-    "id": "animal_messenger",
-    "name": "animal messenger",
-    "ukr": "animal messenger",
+  "animalMessenger": {
+    "id": "animalMessenger",
+    "name": "Animal Messenger",
+    "ukr": "Animal Messenger",
     "level": 2,
     "type": "spell",
     "school": "enchantment",
@@ -278,48 +244,54 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "24 hours",
+    "materialText": "a morsel of food",
+    "duration": "24 год",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 212,
+    "source": "PHB 2014"
   },
-  "animal_shapes": {
-    "id": "animal_shapes",
-    "name": "animal shapes",
-    "ukr": "animal shapes",
+  "animalShapes": {
+    "id": "animalShapes",
+    "name": "Animal Shapes",
+    "ukr": "Animal Shapes",
     "level": 8,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 24 hours",
+    "duration": "24 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -328,14 +300,20 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 212,
+    "source": "PHB 2014"
   },
-  "animate_dead": {
-    "id": "animate_dead",
-    "name": "animate dead",
-    "ukr": "animate dead",
+  "animateDead": {
+    "id": "animateDead",
+    "name": "Animate Dead",
+    "ukr": "Animate Dead",
     "level": 3,
     "type": "spell",
     "school": "necromancy",
@@ -345,15 +323,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "10 feet",
+    "castingTime": "1 хв",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "a drop of blood, a piece of flesh, and a pinch of bone dust",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -362,33 +340,39 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM",
+      "SMN",
+      "UBA"
+    ],
+    "page": 212,
+    "source": "PHB 2014"
   },
-  "animate_objects": {
-    "id": "animate_objects",
-    "name": "animate objects",
-    "ukr": "animate objects",
+  "animateObjects": {
+    "id": "animateObjects",
+    "name": "Animate Objects",
+    "ukr": "Animate Objects",
     "level": 5,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "bard",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -396,15 +380,23 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "bludgeoning, piercing, slashing",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "SMN",
+      "UBA"
+    ],
+    "page": 213,
+    "source": "PHB 2014"
   },
-  "antilife_shell": {
-    "id": "antilife_shell",
-    "name": "antilife shell",
-    "ukr": "antilife shell",
+  "antilifeShell": {
+    "id": "antilifeShell",
+    "name": "Antilife Shell",
+    "ukr": "Antilife Shell",
     "level": 5,
     "type": "spell",
     "school": "abjuration",
@@ -413,15 +405,15 @@ export const SPELLS = {
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -430,14 +422,18 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 213,
+    "source": "PHB 2014"
   },
-  "antimagic_field": {
-    "id": "antimagic_field",
-    "name": "antimagic field",
-    "ukr": "antimagic field",
+  "antimagicField": {
+    "id": "antimagicField",
+    "name": "Antimagic Field",
+    "ukr": "Antimagic Field",
     "level": 8,
     "type": "spell",
     "school": "abjuration",
@@ -447,15 +443,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "a pinch of powdered iron or iron filings",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -464,66 +460,77 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 213,
+    "source": "PHB 2014"
   },
-  "antipathy_sympathy": {
-    "id": "antipathy_sympathy",
-    "name": "antipathy/sympathy",
-    "ukr": "antipathy/sympathy",
+  "antipathySympathy": {
+    "id": "antipathySympathy",
+    "name": "Antipathy/Sympathy",
+    "ukr": "Antipathy/Sympathy",
     "level": 8,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 hour",
-    "range": "60 feet",
+    "castingTime": "1 год",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "10 days",
+    "materialText": "either a lump of alum soaked in vinegar for the antipathy effect or a drop of honey for the sympathy effect",
+    "duration": "10 дн",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 8,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "C"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 214,
+    "source": "PHB 2014"
   },
-  "arcane_eye": {
-    "id": "arcane_eye",
-    "name": "arcane eye",
-    "ukr": "arcane eye",
+  "arcaneEye": {
+    "id": "arcaneEye",
+    "name": "Arcane Eye",
+    "ukr": "Arcane Eye",
     "level": 4,
     "type": "spell",
     "school": "divination",
     "effectType": "utility",
     "classes": [
-      "cleric",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "a bit of bat fur",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -532,47 +539,58 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 214,
+    "source": "PHB 2014"
   },
-  "arcane_hand": {
-    "id": "arcane_hand",
-    "name": "arcane hand",
-    "ukr": "arcane hand",
-    "level": 5,
+  "arcaneGate": {
+    "id": "arcaneGate",
+    "name": "Arcane Gate",
+    "ukr": "Arcane Gate",
+    "level": 6,
     "type": "spell",
-    "school": "evocation",
+    "school": "conjuration",
     "effectType": "utility",
     "classes": [
+      "sorcerer",
+      "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "500 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
-    "spellSlotLevel": 5,
+    "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "SGT",
+      "TP",
+      "UBA"
+    ],
+    "page": 214,
+    "source": "PHB 2014"
   },
-  "arcane_lock": {
-    "id": "arcane_lock",
-    "name": "arcane lock",
-    "ukr": "arcane lock",
+  "arcaneLock": {
+    "id": "arcaneLock",
+    "name": "Arcane Lock",
+    "ukr": "Arcane Lock",
     "level": 2,
     "type": "spell",
     "school": "abjuration",
@@ -581,15 +599,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Until dispelled",
+    "duration": "Постійно",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -598,100 +616,112 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 215,
+    "source": "PHB 2014"
   },
-  "arcane_sword": {
-    "id": "arcane_sword",
-    "name": "arcane sword",
-    "ukr": "arcane sword",
-    "level": 7,
+  "armorOfAgathys": {
+    "id": "armorOfAgathys",
+    "name": "Armor of Agathys",
+    "ukr": "Armor of Agathys",
+    "level": 1,
     "type": "spell",
-    "school": "evocation",
-    "effectType": "utility",
+    "school": "abjuration",
+    "effectType": "attack",
     "classes": [
-      "bard",
-      "wizard"
+      "warlock"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a cup of water",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
-    "spellSlotLevel": 7,
+    "spellSlotLevel": 1,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "cold",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "THP"
+    ],
+    "page": 215,
+    "source": "PHB 2014"
   },
-  "arcanists_magic_aura": {
-    "id": "arcanists_magic_aura",
-    "name": "arcanist's magic aura",
-    "ukr": "arcanist's magic aura",
-    "level": 2,
+  "armsOfHadar": {
+    "id": "armsOfHadar",
+    "name": "Arms of Hadar",
+    "ukr": "Arms of Hadar",
+    "level": 1,
     "type": "spell",
-    "school": "illusion",
-    "effectType": "utility",
+    "school": "conjuration",
+    "effectType": "save",
     "classes": [
-      "wizard"
+      "warlock"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "24 hours",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
-    "spellSlotLevel": 2,
+    "spellSlotLevel": 1,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "strength",
+    "damageType": "necrotic",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 215,
+    "source": "PHB 2014"
   },
-  "astral_projection": {
-    "id": "astral_projection",
-    "name": "astral projection",
-    "ukr": "astral projection",
+  "astralProjection": {
+    "id": "astralProjection",
+    "name": "Astral Projection",
+    "ukr": "Astral Projection",
     "level": 9,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "cleric",
       "warlock",
-      "wizard"
+      "wizard",
+      "monk"
     ],
     "subclasses": [],
-    "castingTime": "1 hour",
-    "range": "10 feet",
+    "castingTime": "1 год",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Special",
+    "duration": "special",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -700,13 +730,20 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM",
+      "PS"
+    ],
+    "page": 215,
+    "source": "PHB 2014"
   },
   "augury": {
     "id": "augury",
-    "name": "augury",
+    "name": "Augury",
     "ukr": "augury",
     "level": 2,
     "type": "spell",
@@ -716,30 +753,150 @@ export const SPELLS = {
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "Self",
+    "castingTime": "1 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 215,
+    "source": "PHB 2014"
+  },
+  "auraOfLife": {
+    "id": "auraOfLife",
+    "name": "Aura of Life",
+    "ukr": "Aura of Life",
+    "level": 4,
+    "type": "spell",
+    "school": "abjuration",
+    "effectType": "healing",
+    "classes": [
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "10 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 4,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "",
+    "areaTags": [
+      "S"
+    ],
+    "damage": null,
+    "miscTags": [
+      "HL"
+    ],
+    "page": 216,
+    "source": "PHB 2014"
+  },
+  "auraOfPurity": {
+    "id": "auraOfPurity",
+    "name": "Aura of Purity",
+    "ukr": "Aura of Purity",
+    "level": 4,
+    "type": "spell",
+    "school": "abjuration",
+    "effectType": "utility",
+    "classes": [
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "10 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 4,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "",
+    "areaTags": [
+      "S"
+    ],
+    "damage": null,
+    "miscTags": [
+      "ADV"
+    ],
+    "page": 216,
+    "source": "PHB 2014"
+  },
+  "auraOfVitality": {
+    "id": "auraOfVitality",
+    "name": "Aura of Vitality",
+    "ukr": "Aura of Vitality",
+    "level": 3,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "healing",
+    "classes": [
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 3,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "",
+    "areaTags": [
+      "S"
+    ],
+    "damage": null,
+    "miscTags": [
+      "HL",
+      "UBA"
+    ],
+    "page": 216,
+    "source": "PHB 2014"
   },
   "awaken": {
     "id": "awaken",
-    "name": "awaken",
+    "name": "Awaken",
     "ukr": "awaken",
     "level": 5,
     "type": "spell",
@@ -750,15 +907,15 @@ export const SPELLS = {
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "8 hours",
-    "range": "Touch",
+    "castingTime": "8 год",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -767,52 +924,102 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM"
+    ],
+    "page": 216,
+    "source": "PHB 2014"
   },
   "bane": {
     "id": "bane",
-    "name": "bane",
+    "name": "Bane",
     "ukr": "bane",
     "level": 1,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Conc. Up to 1 minute",
+    "materialText": "a drop of blood",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
     "description": "Up to three creatures you can see must make Charisma saving throws. If a target fails, whenever they make an attack roll or saving throw before the spell ends, they must roll a d4 and subtract the number rolled. At Higher Levels: You can target one additional creature for each slot level above 1st.",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "charisma",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCT",
+      "SGT"
+    ],
+    "page": 216,
+    "source": "PHB 2014"
+  },
+  "banishingSmite": {
+    "id": "banishingSmite",
+    "name": "Banishing Smite",
+    "ukr": "Banishing Smite",
+    "level": 5,
+    "type": "spell",
+    "school": "abjuration",
+    "effectType": "attack",
+    "classes": [
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 бонусна дія",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 5,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "force",
+    "areaTags": [],
+    "damage": null,
+    "miscTags": [
+      "AAD"
+    ],
+    "page": 216,
+    "source": "PHB 2014"
   },
   "banishment": {
     "id": "banishment",
-    "name": "banishment",
+    "name": "Banishment",
     "ukr": "banishment",
     "level": 4,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric",
       "paladin",
@@ -821,30 +1028,37 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "an item distasteful to the target",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 4,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "charisma",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCT",
+      "SGT"
+    ],
+    "page": 217,
+    "source": "PHB 2014"
   },
   "barkskin": {
     "id": "barkskin",
-    "name": "barkskin",
+    "name": "Barkskin",
     "ukr": "barkskin",
     "level": 2,
     "type": "spell",
@@ -855,15 +1069,15 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "a handful of oak bark",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -872,31 +1086,37 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "MAC"
+    ],
+    "page": 217,
+    "source": "PHB 2014"
   },
-  "beacon_of_hope": {
-    "id": "beacon_of_hope",
-    "name": "beacon of hope",
-    "ukr": "beacon of hope",
+  "beaconOfHope": {
+    "id": "beaconOfHope",
+    "name": "Beacon of Hope",
+    "ukr": "Beacon of Hope",
     "level": 3,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -905,114 +1125,217 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV",
+      "HL"
+    ],
+    "page": 217,
+    "source": "PHB 2014"
   },
-  "bestow_curse": {
-    "id": "bestow_curse",
-    "name": "bestow curse",
-    "ukr": "bestow curse",
+  "beastSense": {
+    "id": "beastSense",
+    "name": "Beast Sense",
+    "ukr": "Beast Sense",
+    "level": 2,
+    "type": "spell",
+    "school": "divination",
+    "effectType": "utility",
+    "classes": [
+      "druid",
+      "ranger"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "point",
+    "components": {
+      "verbal": false,
+      "somatic": true,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 год",
+    "concentration": false,
+    "ritual": true,
+    "requiresSlot": true,
+    "spellSlotLevel": 2,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 217,
+    "source": "PHB 2014"
+  },
+  "bestowCurse": {
+    "id": "bestowCurse",
+    "name": "Bestow Curse",
+    "ukr": "Bestow Curse",
     "level": 3,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "cleric",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "wisdom",
+    "damageType": "necrotic",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM"
+    ],
+    "page": 218,
+    "source": "PHB 2014"
   },
-  "black_tentacles": {
-    "id": "black_tentacles",
-    "name": "black tentacles",
-    "ukr": "black tentacles",
-    "level": 4,
+  "bigbySHand": {
+    "id": "bigbySHand",
+    "name": "Bigby's Hand",
+    "ukr": "Bigby's Hand",
+    "level": 5,
     "type": "spell",
-    "school": "conjuration",
-    "effectType": "utility",
+    "school": "evocation",
+    "effectType": "attack",
     "classes": [
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "90 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "an eggshell and a snakeskin glove",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
-    "spellSlotLevel": 4,
+    "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "bludgeoning, force",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "DFT",
+      "FMV",
+      "OBJ",
+      "SGT",
+      "UBA"
+    ],
+    "page": 218,
+    "source": "PHB 2014"
   },
-  "blade_barrier": {
-    "id": "blade_barrier",
-    "name": "blade barrier",
-    "ukr": "blade barrier",
+  "bladeBarrier": {
+    "id": "bladeBarrier",
+    "name": "Blade Barrier",
+    "ukr": "Blade Barrier",
     "level": 6,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "90 feet",
+    "castingTime": "1 дія",
+    "range": "90 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
+    "savingThrow": "dexterity",
+    "damageType": "slashing",
+    "areaTags": [
+      "W"
+    ],
+    "damage": null,
+    "miscTags": [
+      "DFT"
+    ],
+    "page": 218,
+    "source": "PHB 2014"
+  },
+  "bladeWard": {
+    "id": "bladeWard",
+    "name": "Blade Ward",
+    "ukr": "Blade Ward",
+    "level": 0,
+    "type": "cantrip",
+    "school": "abjuration",
+    "effectType": "utility",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 раунд",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": false,
+    "spellSlotLevel": 0,
+    "description": "",
+    "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 218,
+    "source": "PHB 2014"
   },
   "bless": {
     "id": "bless",
-    "name": "bless",
+    "name": "Bless",
     "ukr": "bless",
     "level": 1,
     "type": "spell",
@@ -1023,15 +1346,15 @@ export const SPELLS = {
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Concentration, up to 1 minute",
+    "materialText": "a sprinkling of holy water",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -1040,18 +1363,24 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCT"
+    ],
+    "page": 219,
+    "source": "PHB 2014"
   },
   "blight": {
     "id": "blight",
-    "name": "blight",
+    "name": "Blight",
     "ukr": "blight",
     "level": 4,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid",
       "sorcerer",
@@ -1059,35 +1388,78 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 4,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "constitution",
+    "damageType": "necrotic",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 219,
+    "source": "PHB 2014"
   },
-  "blindness_deafness": {
-    "id": "blindness_deafness",
-    "name": "blindness/deafness",
-    "ukr": "blindness/deafness",
+  "blindingSmite": {
+    "id": "blindingSmite",
+    "name": "Blinding Smite",
+    "ukr": "Blinding Smite",
+    "level": 3,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "save",
+    "classes": [
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 бонусна дія",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 3,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "constitution",
+    "damageType": "radiant",
+    "areaTags": [],
+    "damage": null,
+    "miscTags": [
+      "AAD"
+    ],
+    "page": 219,
+    "source": "PHB 2014"
+  },
+  "blindnessDeafness": {
+    "id": "blindnessDeafness",
+    "name": "Blindness/Deafness",
+    "ukr": "Blindness/Deafness",
     "level": 2,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "cleric",
@@ -1095,30 +1467,37 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "constitution",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCT",
+      "SGT"
+    ],
+    "page": 219,
+    "source": "PHB 2014"
   },
   "blink": {
     "id": "blink",
-    "name": "blink",
+    "name": "Blink",
     "ukr": "blink",
     "level": 3,
     "type": "spell",
@@ -1129,15 +1508,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -1146,13 +1525,17 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 219,
+    "source": "PHB 2014"
   },
   "blur": {
     "id": "blur",
-    "name": "blur",
+    "name": "Blur",
     "ukr": "blur",
     "level": 2,
     "type": "spell",
@@ -1163,15 +1546,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -1180,31 +1563,33 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 219,
+    "source": "PHB 2014"
   },
-  "branding_smite": {
-    "id": "branding_smite",
-    "name": "branding smite",
-    "ukr": "branding smite",
+  "brandingSmite": {
+    "id": "brandingSmite",
+    "name": "Branding Smite",
+    "ukr": "Branding Smite",
     "level": 2,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "Self",
+    "castingTime": "1 бонусна дія",
+    "range": "point",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -1212,188 +1597,185 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "radiant",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "AAD",
+      "LGT"
+    ],
+    "page": 219,
+    "source": "PHB 2014"
   },
-  "burning_hands": {
-    "id": "burning_hands",
-    "name": "burning hands",
-    "ukr": "burning hands",
+  "burningHands": {
+    "id": "burningHands",
+    "name": "Burning Hands",
+    "ukr": "Burning Hands",
     "level": 1,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self (15-foot cone)",
+    "castingTime": "1 дія",
+    "range": "15 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "As you hold your hands with thumbs touching and fingers spread, a thin sheet of flames shoots forth from your outstretched fingertips. Each creature in a 15-foot cone must make a Dexterity saving throw. A creature takes 3d6 fire damage on a failed save, or half as much damage on a successful one. The fire ignites any flammable objects in the area that aren’t being worn or carried. At Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st.",
+    "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "fire",
+    "areaTags": [
+      "N"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 220,
+    "source": "PHB 2014"
   },
-  "call_lightning": {
-    "id": "call_lightning",
-    "name": "call lightning",
-    "ukr": "call lightning",
+  "callLightning": {
+    "id": "callLightning",
+    "name": "Call Lightning",
+    "ukr": "Call Lightning",
     "level": 3,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "lightning",
+    "areaTags": [
+      "S",
+      "Y"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 220,
+    "source": "PHB 2014"
   },
-  "calm_emotions": {
-    "id": "calm_emotions",
-    "name": "calm emotions",
-    "ukr": "calm emotions",
+  "calmEmotions": {
+    "id": "calmEmotions",
+    "name": "Calm Emotions",
+    "ukr": "Calm Emotions",
     "level": 2,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "charisma",
     "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
-  },
-  "catapult": {
-    "id": "catapult",
-    "name": "catapult",
-    "ukr": "catapult",
-    "level": 1,
-    "type": "spell",
-    "school": "transmutation",
-    "effectType": "utility",
-    "classes": [
-      "sorcerer",
-      "wizard"
+    "areaTags": [
+      "S"
     ],
-    "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
-    "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
-    },
-    "materialText": "",
-    "duration": "Instantaneous",
-    "concentration": false,
-    "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 1,
-    "description": "",
-    "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 221,
+    "source": "PHB 2014"
   },
-  "chain_lightning": {
-    "id": "chain_lightning",
-    "name": "chain lightning",
-    "ukr": "chain lightning",
+  "chainLightning": {
+    "id": "chainLightning",
+    "name": "Chain Lightning",
+    "ukr": "Chain Lightning",
     "level": 6,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "150 feet",
+    "castingTime": "1 дія",
+    "range": "150 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "a bit of fur; a piece of amber, glass, or a crystal rod; and three silver pins",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "lightning",
+    "areaTags": [
+      "MT",
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "SCT",
+      "SGT"
+    ],
+    "page": 221,
+    "source": "PHB 2014"
   },
-  "charm_person": {
-    "id": "charm_person",
-    "name": "charm person",
-    "ukr": "charm person",
+  "charmPerson": {
+    "id": "charmPerson",
+    "name": "Charm Person",
+    "ukr": "Charm Person",
     "level": 1,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "druid",
@@ -1402,100 +1784,204 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "You attempt to charm a humanoid you can see within range. It must make a Wisdom saving throw, and does so with advantage if you or your companions are fighting it. If it fails the saving throw, it is charmed by you until the spell ends or until you or your companions do anything harmful to it. The charmed creature regards you as a friendly acquaintance. When the spell ends,the creature knows it was charmed by you. At Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other when you target them.",
+    "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCT",
+      "SGT"
+    ],
+    "page": 221,
+    "source": "PHB 2014"
   },
-  "chill_touch": {
-    "id": "chill_touch",
-    "name": "chill touch",
-    "ukr": "chill touch",
+  "chillTouch": {
+    "id": "chillTouch",
+    "name": "Chill Touch",
+    "ukr": "Chill Touch",
     "level": 0,
     "type": "cantrip",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "sorcerer",
       "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 round",
+    "duration": "1 раунд",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "Make a ranged spell attack. On hit, the target takes 1d8 necrotic damage and can't regain hit points until the start of your next turn. If you hit an undead target, it also has disadvantage on attack rolls against you until the end of your next turn.This spell's damage increases by 1d8 when you reach 5th, 11th, and 17th level.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "damageType": "necrotic",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": {
+      "label": "necrotic damage",
+      "scaling": {
+        "1": "1d8",
+        "5": "2d8",
+        "11": "3d8",
+        "17": "4d8"
+      }
+    },
+    "miscTags": [
+      "SCL"
+    ],
+    "page": 221,
+    "source": "PHB 2014"
   },
-  "circle_of_death": {
-    "id": "circle_of_death",
-    "name": "circle of death",
-    "ukr": "circle of death",
+  "chromaticOrb": {
+    "id": "chromaticOrb",
+    "name": "Chromatic Orb",
+    "ukr": "Chromatic Orb",
+    "level": 1,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "attack",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "90 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "",
+    "duration": "Миттєво",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 1,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "acid, cold, fire, lightning, poison, thunder",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 221,
+    "source": "PHB 2014"
+  },
+  "circleOfDeath": {
+    "id": "circleOfDeath",
+    "name": "Circle of Death",
+    "ukr": "Circle of Death",
     "level": 6,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "150 feet",
+    "castingTime": "1 дія",
+    "range": "150 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
+    "savingThrow": "constitution",
+    "damageType": "necrotic",
+    "areaTags": [
+      "S"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 221,
+    "source": "PHB 2014"
+  },
+  "circleOfPower": {
+    "id": "circleOfPower",
+    "name": "Circle of Power",
+    "ukr": "Circle of Power",
+    "level": 5,
+    "type": "spell",
+    "school": "abjuration",
+    "effectType": "utility",
+    "classes": [
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "10 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 5,
+    "description": "",
+    "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV"
+    ],
+    "page": 221,
+    "source": "PHB 2014"
   },
   "clairvoyance": {
     "id": "clairvoyance",
-    "name": "clairvoyance",
+    "name": "Clairvoyance",
     "ukr": "clairvoyance",
     "level": 3,
     "type": "spell",
@@ -1508,15 +1994,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "1 mile",
+    "castingTime": "10 хв",
+    "range": "1 миль",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Up to 10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -1525,13 +2011,15 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 222,
+    "source": "PHB 2014"
   },
   "clone": {
     "id": "clone",
-    "name": "clone",
+    "name": "Clone",
     "ukr": "clone",
     "level": 8,
     "type": "spell",
@@ -1541,15 +2029,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 hour",
-    "range": "Touch",
+    "castingTime": "1 год",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -1558,149 +2046,176 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM"
+    ],
+    "page": 222,
+    "source": "PHB 2014"
+  },
+  "cloudOfDaggers": {
+    "id": "cloudOfDaggers",
+    "name": "Cloud of Daggers",
+    "ukr": "Cloud of Daggers",
+    "level": 2,
+    "type": "spell",
+    "school": "conjuration",
+    "effectType": "attack",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "60 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a sliver of glass",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 2,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "slashing",
+    "areaTags": [
+      "C"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 222,
+    "source": "PHB 2014"
   },
   "cloudkill": {
     "id": "cloudkill",
-    "name": "cloudkill",
+    "name": "Cloudkill",
     "ukr": "cloudkill",
     "level": 5,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "constitution",
+    "damageType": "poison",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBS"
+    ],
+    "page": 222,
+    "source": "PHB 2014"
   },
-  "color_spray": {
-    "id": "color_spray",
-    "name": "color spray",
-    "ukr": "color spray",
+  "colorSpray": {
+    "id": "colorSpray",
+    "name": "Color Spray",
+    "ukr": "Color Spray",
     "level": 1,
     "type": "spell",
     "school": "illusion",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self (15 ft cone)",
+    "castingTime": "1 дія",
+    "range": "15 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 round",
+    "materialText": "a pinch of powder or sand that is colored red, yellow, and blue",
+    "duration": "1 раунд",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "Creatures in a 15-foot cone from you are blinded. If a creature is already blind or unconscious, they are not affected. Starting with the creature that has the lowest current hit points, roll 6d10 to see how many creatures you can affect. If the creature with the lowest hit points is less than the total rolled, subtract the hit points from the number, then move onto the next. When you reach a creature whose hit points would go above the number, subtractions applied, they are unaffected and this casting can't blind anything else. At Higher Levels: Roll an additional 2d10 for each slot level above 1st.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "N"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 222,
+    "source": "PHB 2014"
   },
   "command": {
     "id": "command",
-    "name": "command",
+    "name": "Command",
     "ukr": "command",
     "level": 1,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric",
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "1 round",
+    "duration": "1 раунд",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
     "description": "You speak a one-word command to a creature you can see within range. The target must succeed on a Wisdom saving throw or follow the command on its next turn. The spell has no effect if the target is undead, if it doesn’t understand your language, or if your command is directly harmful to it. Some typical commands and their effects follow. You might issue a command other than one described here. If you do so, the DM determines how the target behaves. If the target can’t follow your command, the spell ends. Approach. The target moves toward you by the shortest and most direct route, ending its turn if it moves within 5 feet of you. Drop. The target drops whatever it is holding and then ends its turn. Flee. The target spends its turn moving away from you by the fastest available means. Grovel. The target falls prone and then ends its turn. Halt. The target doesn’t move and takes no actions. A flying creature stays aloft, provided that it is able to do so. If it must move to stay aloft, it flies the minimum distance needed to remain in the air. At Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, you can affect one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other when you target them.",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
-  },
-  "commune_with_nature": {
-    "id": "commune_with_nature",
-    "name": "commune with nature",
-    "ukr": "commune with nature",
-    "level": 5,
-    "type": "spell",
-    "school": "divination",
-    "effectType": "utility",
-    "classes": [
-      "druid",
-      "ranger"
+    "areaTags": [
+      "ST"
     ],
-    "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "Self",
-    "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
-    },
-    "materialText": "",
-    "duration": "Instantaneous",
-    "concentration": false,
-    "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 5,
-    "description": "",
-    "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCT",
+      "SGT"
+    ],
+    "page": 223,
+    "source": "PHB 2014"
   },
   "commune": {
     "id": "commune",
-    "name": "commune",
+    "name": "Commune",
     "ukr": "commune",
     "level": 5,
     "type": "spell",
@@ -1710,31 +2225,108 @@ export const SPELLS = {
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "Self",
+    "castingTime": "1 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 minute",
+    "materialText": "incense and a vial of holy or unholy water",
+    "duration": "1 хв",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 223,
+    "source": "PHB 2014"
   },
-  "comprehend_languages": {
-    "id": "comprehend_languages",
-    "name": "comprehend languages",
-    "ukr": "comprehend languages",
+  "communeWithNature": {
+    "id": "communeWithNature",
+    "name": "Commune with Nature",
+    "ukr": "Commune with Nature",
+    "level": 5,
+    "type": "spell",
+    "school": "divination",
+    "effectType": "utility",
+    "classes": [
+      "druid",
+      "ranger"
+    ],
+    "subclasses": [],
+    "castingTime": "1 хв",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "Миттєво",
+    "concentration": false,
+    "ritual": true,
+    "requiresSlot": true,
+    "spellSlotLevel": 5,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "",
+    "areaTags": [],
+    "damage": null,
+    "miscTags": [],
+    "page": 224,
+    "source": "PHB 2014"
+  },
+  "compelledDuel": {
+    "id": "compelledDuel",
+    "name": "Compelled Duel",
+    "ukr": "Compelled Duel",
+    "level": 1,
+    "type": "spell",
+    "school": "enchantment",
+    "effectType": "save",
+    "classes": [
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 бонусна дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 1,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "wisdom",
+    "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 224,
+    "source": "PHB 2014"
+  },
+  "comprehendLanguages": {
+    "id": "comprehendLanguages",
+    "name": "Comprehend Languages",
+    "ukr": "Comprehend Languages",
     "level": 1,
     "type": "spell",
     "school": "divination",
@@ -1746,102 +2338,115 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 hour",
+    "materialText": "a pinch of soot and salt",
+    "duration": "1 год",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "For the duration, you understand the literal meaning of any spoken language that you hear. You also understand any written language that you see, but you must be touching the surface on which the words are written. It takes about 1 minute to read one page of text. This spell doesn’t decode secret messages in a text or a glyph, such as an arcane sigil, that isn’t part of a written language.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 224,
+    "source": "PHB 2014"
   },
   "compulsion": {
     "id": "compulsion",
-    "name": "compulsion",
+    "name": "Compulsion",
     "ukr": "compulsion",
     "level": 4,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 4,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT",
+      "UBA"
+    ],
+    "page": 224,
+    "source": "PHB 2014"
   },
-  "cone_of_cold": {
-    "id": "cone_of_cold",
-    "name": "cone of cold",
-    "ukr": "cone of cold",
+  "coneOfCold": {
+    "id": "coneOfCold",
+    "name": "Cone of Cold",
+    "ukr": "Cone of Cold",
     "level": 5,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self (60-foot cone)",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "a small crystal or glass cone",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
-    "description": "A blast of cold air erupts from your hands. Each creature in a 60-foot cone must make a Constitution saving throw. A creature takes 8d8 cold damage on a failed save, or half as much damage on a successful one. A creature killed by this spell becomes a frozen statue until it thaws. At Higher Levels. When you cast this spell using a spell slot of 6th level or higher, the damage increases by 1d8 for each slot level above 5th.",
+    "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "constitution",
+    "damageType": "cold",
+    "areaTags": [
+      "N"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 224,
+    "source": "PHB 2014"
   },
   "confusion": {
     "id": "confusion",
-    "name": "confusion",
+    "name": "Confusion",
     "ukr": "confusion",
     "level": 4,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "druid",
@@ -1849,49 +2454,55 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "90 feet",
+    "castingTime": "1 дія",
+    "range": "90 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "three nut shells",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 4,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "RO"
+    ],
+    "page": 224,
+    "source": "PHB 2014"
   },
-  "conjure_animals": {
-    "id": "conjure_animals",
-    "name": "conjure animals",
-    "ukr": "conjure animals",
+  "conjureAnimals": {
+    "id": "conjureAnimals",
+    "name": "Conjure Animals",
+    "ukr": "Conjure Animals",
     "level": 3,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "druid",
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -1900,31 +2511,73 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT",
+      "SMN"
+    ],
+    "page": 225,
+    "source": "PHB 2014"
   },
-  "conjure_celestial": {
-    "id": "conjure_celestial",
-    "name": "conjure celestial",
-    "ukr": "conjure celestial",
+  "conjureBarrage": {
+    "id": "conjureBarrage",
+    "name": "Conjure Barrage",
+    "ukr": "Conjure Barrage",
+    "level": 3,
+    "type": "spell",
+    "school": "conjuration",
+    "effectType": "save",
+    "classes": [
+      "ranger"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "60 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "one piece of ammunition or a thrown weapon",
+    "duration": "Миттєво",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 3,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "dexterity",
+    "damageType": "",
+    "areaTags": [
+      "N"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 225,
+    "source": "PHB 2014"
+  },
+  "conjureCelestial": {
+    "id": "conjureCelestial",
+    "name": "Conjure Celestial",
+    "ukr": "Conjure Celestial",
     "level": 7,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "90 feet",
+    "castingTime": "1 хв",
+    "range": "90 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -1933,32 +2586,37 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT",
+      "SMN"
+    ],
+    "page": 225,
+    "source": "PHB 2014"
   },
-  "conjure_elemental": {
-    "id": "conjure_elemental",
-    "name": "conjure elemental",
-    "ukr": "conjure elemental",
+  "conjureElemental": {
+    "id": "conjureElemental",
+    "name": "Conjure Elemental",
+    "ukr": "Conjure Elemental",
     "level": 5,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "druid",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "90 feet",
+    "castingTime": "1 хв",
+    "range": "90 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "burning incense for air, soft clay for earth, sulfur and phosphorus for fire, or water and sand for water",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -1967,32 +2625,36 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SMN"
+    ],
+    "page": 225,
+    "source": "PHB 2014"
   },
-  "conjure_fey": {
-    "id": "conjure_fey",
-    "name": "conjure fey",
-    "ukr": "conjure fey",
+  "conjureFey": {
+    "id": "conjureFey",
+    "name": "Conjure Fey",
+    "ukr": "Conjure Fey",
     "level": 6,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "druid",
       "warlock"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "90 feet",
+    "castingTime": "1 хв",
+    "range": "90 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2001,32 +2663,37 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT",
+      "SMN"
+    ],
+    "page": 226,
+    "source": "PHB 2014"
   },
-  "conjure_minor_elementals": {
-    "id": "conjure_minor_elementals",
-    "name": "conjure minor elementals",
-    "ukr": "conjure minor elementals",
+  "conjureMinorElementals": {
+    "id": "conjureMinorElementals",
+    "name": "Conjure Minor Elementals",
+    "ukr": "Conjure Minor Elementals",
     "level": 4,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "druid",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "90 feet",
+    "castingTime": "1 хв",
+    "range": "90 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2035,32 +2702,74 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT",
+      "SMN"
+    ],
+    "page": 226,
+    "source": "PHB 2014"
   },
-  "conjure_woodland_beings": {
-    "id": "conjure_woodland_beings",
-    "name": "conjure woodland beings",
-    "ukr": "conjure woodland beings",
+  "conjureVolley": {
+    "id": "conjureVolley",
+    "name": "Conjure Volley",
+    "ukr": "Conjure Volley",
+    "level": 5,
+    "type": "spell",
+    "school": "conjuration",
+    "effectType": "save",
+    "classes": [
+      "ranger"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "150 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "one piece of ammunition or one thrown weapon",
+    "duration": "Миттєво",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 5,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "dexterity",
+    "damageType": "",
+    "areaTags": [
+      "Y"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 226,
+    "source": "PHB 2014"
+  },
+  "conjureWoodlandBeings": {
+    "id": "conjureWoodlandBeings",
+    "name": "Conjure Woodland Beings",
+    "ukr": "Conjure Woodland Beings",
     "level": 4,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "druid",
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "one holly berry per creature summoned",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2069,81 +2778,92 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT",
+      "SMN"
+    ],
+    "page": 226,
+    "source": "PHB 2014"
   },
-  "contact_other_plane": {
-    "id": "contact_other_plane",
-    "name": "contact other plane",
-    "ukr": "contact other plane",
+  "contactOtherPlane": {
+    "id": "contactOtherPlane",
+    "name": "Contact Other Plane",
+    "ukr": "Contact Other Plane",
     "level": 5,
     "type": "spell",
     "school": "divination",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "Self",
+    "castingTime": "1 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "1 minute",
+    "duration": "1 хв",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "intelligence",
+    "damageType": "psychic",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 226,
+    "source": "PHB 2014"
   },
   "contagion": {
     "id": "contagion",
-    "name": "contagion",
+    "name": "Contagion",
     "ukr": "contagion",
     "level": 5,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric",
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "7 days",
+    "duration": "7 дн",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "constitution",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 227,
+    "source": "PHB 2014"
   },
   "contingency": {
     "id": "contingency",
-    "name": "contingency",
+    "name": "Contingency",
     "ukr": "contingency",
     "level": 6,
     "type": "spell",
@@ -2153,15 +2873,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "Self",
+    "castingTime": "10 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "10 days",
+    "duration": "10 дн",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2170,14 +2890,16 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 227,
+    "source": "PHB 2014"
   },
-  "continual_flame": {
-    "id": "continual_flame",
-    "name": "continual flame",
-    "ukr": "continual flame",
+  "continualFlame": {
+    "id": "continualFlame",
+    "name": "Continual Flame",
+    "ukr": "Continual Flame",
     "level": 2,
     "type": "spell",
     "school": "evocation",
@@ -2187,15 +2909,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Until dispelled",
+    "duration": "Постійно",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2204,49 +2926,61 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "LGT",
+      "OBJ"
+    ],
+    "page": 227,
+    "source": "PHB 2014"
   },
-  "control_water": {
-    "id": "control_water",
-    "name": "control water",
-    "ukr": "control water",
+  "controlWater": {
+    "id": "controlWater",
+    "name": "Control Water",
+    "ukr": "Control Water",
     "level": 4,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric",
       "druid",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "300 feet",
+    "castingTime": "1 дія",
+    "range": "300 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "a drop of water and a pinch of dust",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 4,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "strength",
+    "damageType": "bludgeoning",
+    "areaTags": [
+      "C"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "FMV",
+      "OBJ"
+    ],
+    "page": 227,
+    "source": "PHB 2014"
   },
-  "control_weather": {
-    "id": "control_weather",
-    "name": "control weather",
-    "ukr": "control weather",
+  "controlWeather": {
+    "id": "controlWeather",
+    "name": "Control Weather",
+    "ukr": "Control Weather",
     "level": 8,
     "type": "spell",
     "school": "transmutation",
@@ -2257,15 +2991,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "Self",
+    "castingTime": "10 хв",
+    "range": "5 миль",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 8 hours",
+    "materialText": "burning incense and bits of earth and wood mixed in water",
+    "duration": "8 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2274,13 +3008,52 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 228,
+    "source": "PHB 2014"
+  },
+  "cordonOfArrows": {
+    "id": "cordonOfArrows",
+    "name": "Cordon of Arrows",
+    "ukr": "Cordon of Arrows",
+    "level": 2,
+    "type": "spell",
+    "school": "transmutation",
+    "effectType": "save",
+    "classes": [
+      "ranger"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "5 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "four or more arrows or bolts",
+    "duration": "8 год",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 2,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "dexterity",
+    "damageType": "piercing",
+    "areaTags": [
+      "S"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 228,
+    "source": "PHB 2014"
   },
   "counterspell": {
     "id": "counterspell",
-    "name": "counterspell",
+    "name": "Counterspell",
     "ukr": "counterspell",
     "level": 3,
     "type": "spell",
@@ -2292,15 +3065,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 reaction",
-    "range": "60 feet",
+    "castingTime": "1 реакція",
+    "range": "60 футів",
     "components": {
       "verbal": false,
-      "somatic": false,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2309,33 +3082,36 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 228,
+    "source": "PHB 2014"
   },
-  "create_food_and_water": {
-    "id": "create_food_and_water",
-    "name": "create food and water",
-    "ukr": "create food and water",
+  "createFoodAndWater": {
+    "id": "createFoodAndWater",
+    "name": "Create Food and Water",
+    "ukr": "Create Food and Water",
     "level": 3,
     "type": "spell",
     "school": "conjuration",
     "effectType": "utility",
     "classes": [
       "cleric",
-      "druid",
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2344,14 +3120,16 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 229,
+    "source": "PHB 2014"
   },
-  "create_or_destroy_water": {
-    "id": "create_or_destroy_water",
-    "name": "create or destroy water",
-    "ukr": "create or destroy water",
+  "createOrDestroyWater": {
+    "id": "createOrDestroyWater",
+    "name": "Create or Destroy Water",
+    "ukr": "Create or Destroy Water",
     "level": 1,
     "type": "spell",
     "school": "transmutation",
@@ -2361,31 +3139,37 @@ export const SPELLS = {
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "a drop of water if creating water or a few grains of sand if destroying it",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "You either create or destroy water. Create Water. You create up to 10 gallons of clean water within range in an open container. Alternatively, the water falls as rain in a 30-foot cube within range, extinguishing exposed flames in the area. Destroy Water. You destroy up to 10 gallons of water in an open container within range. Alternatively, you destroy fog in a 30-foot cube within range. At Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, you create or destroy 10 additional gallons of water, or the size of the cube increases by 5 feet, for each slot level above 1st.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "C"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM"
+    ],
+    "page": 229,
+    "source": "PHB 2014"
   },
-  "create_undead": {
-    "id": "create_undead",
-    "name": "create undead",
-    "ukr": "create undead",
+  "createUndead": {
+    "id": "createUndead",
+    "name": "Create Undead",
+    "ukr": "Create Undead",
     "level": 6,
     "type": "spell",
     "school": "necromancy",
@@ -2396,15 +3180,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "10 feet",
+    "castingTime": "1 хв",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2413,13 +3197,19 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM",
+      "SMN",
+      "UBA"
+    ],
+    "page": 229,
+    "source": "PHB 2014"
   },
   "creation": {
     "id": "creation",
-    "name": "creation",
+    "name": "Creation",
     "ukr": "creation",
     "level": 5,
     "type": "spell",
@@ -2430,15 +3220,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "30 feet",
+    "castingTime": "1 хв",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Special",
+    "materialText": "a tiny piece of matter of the same type of the item you plan to create",
+    "duration": "special",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2447,18 +3237,101 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 229,
+    "source": "PHB 2014"
   },
-  "cure_wounds": {
-    "id": "cure_wounds",
-    "name": "cure wounds",
-    "ukr": "cure wounds",
+  "crownOfMadness": {
+    "id": "crownOfMadness",
+    "name": "Crown of Madness",
+    "ukr": "Crown of Madness",
+    "level": 2,
+    "type": "spell",
+    "school": "enchantment",
+    "effectType": "save",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "120 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 2,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "wisdom",
+    "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 229,
+    "source": "PHB 2014"
+  },
+  "crusaderSMantle": {
+    "id": "crusaderSMantle",
+    "name": "Crusader's Mantle",
+    "ukr": "Crusader's Mantle",
+    "level": 3,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "attack",
+    "classes": [
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 3,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "radiant",
+    "areaTags": [
+      "S"
+    ],
+    "damage": null,
+    "miscTags": [
+      "AAD"
+    ],
+    "page": 230,
+    "source": "PHB 2014"
+  },
+  "cureWounds": {
+    "id": "cureWounds",
+    "name": "Cure Wounds",
+    "ukr": "Cure Wounds",
     "level": 1,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "bard",
       "cleric",
@@ -2467,31 +3340,37 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "A creature you touch regains a number of hit points equal to 1d8 + your spellcasting ability modifier. This spell has no effect on undead or constructs. At Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the healing increases by 1d8 for each slot level above 1st.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL"
+    ],
+    "page": 230,
+    "source": "PHB 2014"
   },
-  "dancing_lights": {
-    "id": "dancing_lights",
-    "name": "dancing lights",
-    "ukr": "dancing lights",
+  "dancingLights": {
+    "id": "dancingLights",
+    "name": "Dancing Lights",
+    "ukr": "Dancing Lights",
     "level": 0,
     "type": "cantrip",
     "school": "evocation",
@@ -2502,30 +3381,35 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Concentration, up to 1 minute",
+    "materialText": "a bit of phosphorus or wychwood, or a glowworm",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "You create up to four torch-sized lights within range, making them appear as torches, lanterns, or glowing orbs that hover in the air for the duration. You can also combine the four lights into one glowing vaguely humanoid form of Medium size. Whichever form you choose, each light sheds dim light in a 10-foot radius. As a bonus action on your turn, you can move the lights up to 60 feet to a new spot within range. A light must be within 20 feet of another light created by this spell, and a light winks out if it exceeds the spell’s range.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "LGT",
+      "UBA"
+    ],
+    "page": 230,
+    "source": "PHB 2014"
   },
   "darkness": {
     "id": "darkness",
-    "name": "darkness",
+    "name": "Darkness",
     "ukr": "darkness",
     "level": 2,
     "type": "spell",
@@ -2537,15 +3421,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
-      "material": false
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "bat fur and a drop of pitch or piece of coal",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2554,13 +3438,20 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "OBS"
+    ],
+    "page": 230,
+    "source": "PHB 2014"
   },
   "darkvision": {
     "id": "darkvision",
-    "name": "darkvision",
+    "name": "Darkvision",
     "ukr": "darkvision",
     "level": 2,
     "type": "spell",
@@ -2573,15 +3464,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "8 hours",
+    "materialText": "either a pinch of dried carrot or an agate",
+    "duration": "8 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2590,13 +3481,17 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 230,
+    "source": "PHB 2014"
   },
   "daylight": {
     "id": "daylight",
-    "name": "daylight",
+    "name": "Daylight",
     "ukr": "daylight",
     "level": 3,
     "type": "spell",
@@ -2610,15 +3505,15 @@ export const SPELLS = {
       "sorcerer"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2627,32 +3522,39 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "LGT",
+      "OBJ"
+    ],
+    "page": 230,
+    "source": "PHB 2014"
   },
-  "death_ward": {
-    "id": "death_ward",
-    "name": "death ward",
-    "ukr": "death ward",
+  "deathWard": {
+    "id": "deathWard",
+    "name": "Death Ward",
+    "ukr": "Death Ward",
     "level": 4,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "cleric",
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "8 hours",
+    "duration": "8 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2661,47 +3563,57 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 230,
+    "source": "PHB 2014"
   },
-  "delayed_blast_fireball": {
-    "id": "delayed_blast_fireball",
-    "name": "delayed blast fireball",
-    "ukr": "delayed blast fireball",
+  "delayedBlastFireball": {
+    "id": "delayedBlastFireball",
+    "name": "Delayed Blast Fireball",
+    "ukr": "Delayed Blast Fireball",
     "level": 7,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "150 feet",
+    "castingTime": "1 дія",
+    "range": "150 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a tiny ball of bat guano and sulfur",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 7,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "fire",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 230,
+    "source": "PHB 2014"
   },
   "demiplane": {
     "id": "demiplane",
-    "name": "demiplane",
+    "name": "Demiplane",
     "ukr": "demiplane",
     "level": 8,
     "type": "spell",
@@ -2712,15 +3624,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
       "verbal": false,
-      "somatic": false,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2729,14 +3641,58 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "PRM",
+      "SGT"
+    ],
+    "page": 231,
+    "source": "PHB 2014"
   },
-  "detect_evil_and_good": {
-    "id": "detect_evil_and_good",
-    "name": "detect evil and good",
-    "ukr": "detect evil and good",
+  "destructiveWave": {
+    "id": "destructiveWave",
+    "name": "Destructive Wave",
+    "ukr": "Destructive Wave",
+    "level": 5,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "save",
+    "classes": [
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "Миттєво",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 5,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "constitution",
+    "damageType": "necrotic, radiant, thunder",
+    "areaTags": [
+      "MT",
+      "S"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 231,
+    "source": "PHB 2014"
+  },
+  "detectEvilAndGood": {
+    "id": "detectEvilAndGood",
+    "name": "Detect Evil and Good",
+    "ukr": "Detect Evil and Good",
     "level": 1,
     "type": "spell",
     "school": "divination",
@@ -2746,31 +3702,33 @@ export const SPELLS = {
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Conc. Up to 10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "You sense the location of an aberration, celestial, elemental, fey, fiend, or undead if it is within 30 feet of you. If there is a place or object that has been magically consecrated or desecrated within 30 feet, you are also able to locate it. You are unable to sense these things through 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 231,
+    "source": "PHB 2014"
   },
-  "detect_magic": {
-    "id": "detect_magic",
-    "name": "detect magic",
-    "ukr": "detect magic",
+  "detectMagic": {
+    "id": "detectMagic",
+    "name": "Detect Magic",
+    "ukr": "Detect Magic",
     "level": 1,
     "type": "spell",
     "school": "divination",
@@ -2785,31 +3743,33 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Concentration, up to 10 minutes",
+    "duration": "10 хв",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "For the duration, you sense the presence of magic within 30 feet of you. If you sense magic in this way, you can use your action to see a faint aura around any visible creature or object in the area that bears magic, and you learn its school of magic, if any. The spell can penetrate most barriers, but it is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 231,
+    "source": "PHB 2014"
   },
-  "detect_poison_and_disease": {
-    "id": "detect_poison_and_disease",
-    "name": "detect poison and disease",
-    "ukr": "detect poison and disease",
+  "detectPoisonAndDisease": {
+    "id": "detectPoisonAndDisease",
+    "name": "Detect Poison and Disease",
+    "ukr": "Detect Poison and Disease",
     "level": 1,
     "type": "spell",
     "school": "divination",
@@ -2821,70 +3781,76 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action (Ritual)",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Conc. Up to 10 minutes",
+    "materialText": "a yew leaf",
+    "duration": "10 хв",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "If they exist or appear within 30 feet, you sense the presence of poisons, poisonous creatures, and diseases. Their location and type also become known to you. This spell is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 231,
+    "source": "PHB 2014"
   },
-  "detect_thoughts": {
-    "id": "detect_thoughts",
-    "name": "detect thoughts",
-    "ukr": "detect thoughts",
+  "detectThoughts": {
+    "id": "detectThoughts",
+    "name": "Detect Thoughts",
+    "ukr": "Detect Thoughts",
     "level": 2,
     "type": "spell",
     "school": "divination",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a copper piece",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 231,
+    "source": "PHB 2014"
   },
-  "dimension_door": {
-    "id": "dimension_door",
-    "name": "dimension door",
-    "ukr": "dimension door",
+  "dimensionDoor": {
+    "id": "dimensionDoor",
+    "name": "Dimension Door",
+    "ukr": "Dimension Door",
     "level": 4,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "bard",
       "sorcerer",
@@ -2892,15 +3858,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "500 feet",
+    "castingTime": "1 дія",
+    "range": "500 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -2908,15 +3874,19 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "force",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "TP"
+    ],
+    "page": 233,
+    "source": "PHB 2014"
   },
-  "disguise_self": {
-    "id": "disguise_self",
-    "name": "disguise self",
-    "ukr": "disguise self",
+  "disguiseSelf": {
+    "id": "disguiseSelf",
+    "name": "Disguise Self",
+    "ukr": "Disguise Self",
     "level": 1,
     "type": "spell",
     "school": "illusion",
@@ -2927,99 +3897,114 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "You make yourself—including your clothing, armor, weapons, and other belongings on your person—look different until the spell ends or until you use your action to dismiss it. You can seem 1 foot shorter or taller and can appear thin, fat, or in between. You can’t change your body type, so you must adopt a form that has the same basic arrangement of limbs. Otherwise, the extent of the illusion is up to you. The changes wrought by this spell fail to hold up to physical inspection. For example, if you use this spell to add a hat to your outfit, objects pass through the hat, and anyone who touches it would feel nothing or would feel your head and hair. If you use this spell to appear thinner than you are, the hand of someone who reaches out to touch you would bump into you while it was seemingly still in midair. To discern that you are disguised, a creature can use its action to inspect your appearance and must succeed on an Intelligence (Investigation) check against your spell save DC.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 233,
+    "source": "PHB 2014"
   },
   "disintegrate": {
     "id": "disintegrate",
-    "name": "disintegrate",
+    "name": "Disintegrate",
     "ukr": "disintegrate",
     "level": 6,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "a lodestone and a pinch of dust",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "force",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "SGT"
+    ],
+    "page": 233,
+    "source": "PHB 2014"
   },
-  "dispel_evil_and_good": {
-    "id": "dispel_evil_and_good",
-    "name": "dispel evil and good",
-    "ukr": "dispel evil and good",
+  "dispelEvilAndGood": {
+    "id": "dispelEvilAndGood",
+    "name": "Dispel Evil and Good",
+    "ukr": "Dispel Evil and Good",
     "level": 5,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric",
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "holy water or powdered silver and iron",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "charisma",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 233,
+    "source": "PHB 2014"
   },
-  "dispel_magic": {
-    "id": "dispel_magic",
-    "name": "dispel magic",
-    "ukr": "dispel magic",
+  "dispelMagic": {
+    "id": "dispelMagic",
+    "name": "Dispel Magic",
+    "ukr": "Dispel Magic",
     "level": 3,
     "type": "spell",
     "school": "abjuration",
@@ -3034,15 +4019,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -3051,151 +4036,212 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 234,
+    "source": "PHB 2014"
+  },
+  "dissonantWhispers": {
+    "id": "dissonantWhispers",
+    "name": "Dissonant Whispers",
+    "ukr": "Dissonant Whispers",
+    "level": 1,
+    "type": "spell",
+    "school": "enchantment",
+    "effectType": "save",
+    "classes": [
+      "bard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "60 футів",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "Миттєво",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 1,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "wisdom",
+    "damageType": "psychic",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 234,
+    "source": "PHB 2014"
   },
   "divination": {
     "id": "divination",
-    "name": "divination",
+    "name": "Divination",
     "ukr": "divination",
     "level": 4,
     "type": "spell",
     "school": "divination",
     "effectType": "utility",
     "classes": [
-      "druid"
+      "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 4,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 234,
+    "source": "PHB 2014"
   },
-  "divine_favor": {
-    "id": "divine_favor",
-    "name": "divine favor",
-    "ukr": "divine favor",
+  "divineFavor": {
+    "id": "divineFavor",
+    "name": "Divine Favor",
+    "ukr": "Divine Favor",
     "level": 1,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "Self",
+    "castingTime": "1 бонусна дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Conc. Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "Your weapon attacks deal an extra 1d4 radiant damage on a hit.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "radiant",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "AAD"
+    ],
+    "page": 234,
+    "source": "PHB 2014"
   },
-  "divine_word": {
-    "id": "divine_word",
-    "name": "divine word",
-    "ukr": "divine word",
+  "divineWord": {
+    "id": "divineWord",
+    "name": "Divine Word",
+    "ukr": "Divine Word",
     "level": 7,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "30 feet",
+    "castingTime": "1 бонусна дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 7,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "charisma",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 234,
+    "source": "PHB 2014"
   },
-  "dominate_beast": {
-    "id": "dominate_beast",
-    "name": "dominate beast",
-    "ukr": "dominate beast",
+  "dominateBeast": {
+    "id": "dominateBeast",
+    "name": "Dominate Beast",
+    "ukr": "Dominate Beast",
     "level": 4,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid",
       "sorcerer"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 4,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 234,
+    "source": "PHB 2014"
   },
-  "dominate_monster": {
-    "id": "dominate_monster",
-    "name": "dominate monster",
-    "ukr": "dominate monster",
+  "dominateMonster": {
+    "id": "dominateMonster",
+    "name": "Dominate Monster",
+    "ukr": "Dominate Monster",
     "level": 8,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "sorcerer",
@@ -3203,100 +4249,153 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 8,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 235,
+    "source": "PHB 2014"
   },
-  "dominate_person": {
-    "id": "dominate_person",
-    "name": "dominate person",
-    "ukr": "dominate person",
+  "dominatePerson": {
+    "id": "dominatePerson",
+    "name": "Dominate Person",
+    "ukr": "Dominate Person",
     "level": 5,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
+    "savingThrow": "wisdom",
+    "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 235,
+    "source": "PHB 2014"
+  },
+  "drawmijSInstantSummons": {
+    "id": "drawmijSInstantSummons",
+    "name": "Drawmij's Instant Summons",
+    "ukr": "Drawmij's Instant Summons",
+    "level": 6,
+    "type": "spell",
+    "school": "conjuration",
+    "effectType": "utility",
+    "classes": [
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 хв",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "",
+    "duration": "Постійно",
+    "concentration": false,
+    "ritual": true,
+    "requiresSlot": true,
+    "spellSlotLevel": 6,
+    "description": "",
+    "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 235,
+    "source": "PHB 2014"
   },
   "dream": {
     "id": "dream",
-    "name": "dream",
+    "name": "Dream",
     "ukr": "dream",
     "level": 5,
     "type": "spell",
     "school": "illusion",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "Special",
+    "castingTime": "1 хв",
+    "range": "special",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "8 hours",
+    "materialText": "a handful of sand, a dab of ink, and a writing quill plucked from a sleeping bird",
+    "duration": "8 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "wisdom",
+    "damageType": "psychic",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 236,
+    "source": "PHB 2014"
   },
   "druidcraft": {
     "id": "druidcraft",
-    "name": "druidcraft",
+    "name": "Druidcraft",
     "ukr": "druidcraft",
     "level": 0,
     "type": "cantrip",
@@ -3306,15 +4405,15 @@ export const SPELLS = {
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
@@ -3323,66 +4422,75 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 236,
+    "source": "PHB 2014"
   },
   "earthquake": {
     "id": "earthquake",
-    "name": "earthquake",
+    "name": "Earthquake",
     "ukr": "earthquake",
     "level": 8,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric",
       "druid",
       "sorcerer"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "500 feet",
+    "castingTime": "1 дія",
+    "range": "500 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a pinch of dirt, a piece of rock, and a lump of clay",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 8,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "constitution, dexterity",
+    "damageType": "bludgeoning",
+    "areaTags": [
+      "R"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "DFT",
+      "SGT"
+    ],
+    "page": 236,
+    "source": "PHB 2014"
   },
-  "eldritch_blast": {
-    "id": "eldritch_blast",
-    "name": "eldritch blast",
-    "ukr": "eldritch blast",
+  "eldritchBlast": {
+    "id": "eldritchBlast",
+    "name": "Eldritch Blast",
+    "ukr": "Eldritch Blast",
     "level": 0,
     "type": "cantrip",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "warlock"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
@@ -3390,15 +4498,59 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "force",
+    "areaTags": [
+      "MT",
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCL"
+    ],
+    "page": 237,
+    "source": "PHB 2014"
   },
-  "enhance_ability": {
-    "id": "enhance_ability",
-    "name": "enhance ability",
-    "ukr": "enhance ability",
+  "elementalWeapon": {
+    "id": "elementalWeapon",
+    "name": "Elemental Weapon",
+    "ukr": "Elemental Weapon",
+    "level": 3,
+    "type": "spell",
+    "school": "transmutation",
+    "effectType": "attack",
+    "classes": [
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 год",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 3,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "acid, cold, fire, lightning, thunder",
+    "areaTags": [],
+    "damage": null,
+    "miscTags": [
+      "AAD"
+    ],
+    "page": 237,
+    "source": "PHB 2014"
+  },
+  "enhanceAbility": {
+    "id": "enhanceAbility",
+    "name": "Enhance Ability",
+    "ukr": "Enhance Ability",
     "level": 2,
     "type": "spell",
     "school": "transmutation",
@@ -3410,15 +4562,15 @@ export const SPELLS = {
       "sorcerer"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "fur or a feather from a beast",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -3427,119 +4579,180 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV",
+      "SCT",
+      "THP"
+    ],
+    "page": 237,
+    "source": "PHB 2014"
   },
-  "enlarge_reduce": {
-    "id": "enlarge_reduce",
-    "name": "enlarge/reduce",
-    "ukr": "enlarge/reduce",
+  "enlargeReduce": {
+    "id": "enlargeReduce",
+    "name": "Enlarge/Reduce",
+    "ukr": "Enlarge/Reduce",
     "level": 2,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a pinch of powdered iron",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "constitution",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV",
+      "OBJ",
+      "SGT"
+    ],
+    "page": 237,
+    "source": "PHB 2014"
   },
-  "entangle": {
-    "id": "entangle",
-    "name": "entangle",
-    "ukr": "entangle",
+  "ensnaringStrike": {
+    "id": "ensnaringStrike",
+    "name": "Ensnaring Strike",
+    "ukr": "Ensnaring Strike",
     "level": 1,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
-      "druid"
+      "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "90 feet",
+    "castingTime": "1 бонусна дія",
+    "range": "point",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Conc. Up to 1 minute",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 1,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "strength",
+    "damageType": "piercing",
+    "areaTags": [],
+    "damage": null,
+    "miscTags": [],
+    "page": 237,
+    "source": "PHB 2014"
+  },
+  "entangle": {
+    "id": "entangle",
+    "name": "Entangle",
+    "ukr": "entangle",
+    "level": 1,
+    "type": "spell",
+    "school": "conjuration",
+    "effectType": "save",
+    "classes": [
+      "druid"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "90 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
     "description": "Plants that grab and entwine fill a 20-foot square with a point of origin that you choose. The area becomes difficult terrain. When the spell ends, the plants wilt away.If a creature is standing in the area when you cast the spell it must pass a Strength save or be restrained. A restrained creature can release itself by using its action to attempt another Strength save, being freed on a success.",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "strength",
     "damageType": "",
+    "areaTags": [
+      "Q"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 238,
+    "source": "PHB 2014"
   },
   "enthrall": {
     "id": "enthrall",
-    "name": "enthrall",
+    "name": "Enthrall",
     "ukr": "enthrall",
     "level": 2,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "warlock"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 238,
+    "source": "PHB 2014"
   },
   "etherealness": {
     "id": "etherealness",
-    "name": "etherealness",
+    "name": "Etherealness",
     "ukr": "etherealness",
     "level": 7,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "bard",
       "cleric",
@@ -3548,15 +4761,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "8 hours",
+    "duration": "8 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -3564,15 +4777,59 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "force",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PS",
+      "SCT"
+    ],
+    "page": 238,
+    "source": "PHB 2014"
   },
-  "expeditious_retreat": {
-    "id": "expeditious_retreat",
-    "name": "expeditious retreat",
-    "ukr": "expeditious retreat",
+  "evardSBlackTentacles": {
+    "id": "evardSBlackTentacles",
+    "name": "Evard's Black Tentacles",
+    "ukr": "Evard's Black Tentacles",
+    "level": 4,
+    "type": "spell",
+    "school": "conjuration",
+    "effectType": "save",
+    "classes": [
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "90 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a piece of tentacle from a giant octopus or a giant squid",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 4,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "dexterity",
+    "damageType": "bludgeoning",
+    "areaTags": [
+      "Q"
+    ],
+    "damage": null,
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 238,
+    "source": "PHB 2014"
+  },
+  "expeditiousRetreat": {
+    "id": "expeditiousRetreat",
+    "name": "Expeditious Retreat",
+    "ukr": "Expeditious Retreat",
     "level": 1,
     "type": "spell",
     "school": "transmutation",
@@ -3583,35 +4840,39 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "Self",
+    "castingTime": "1 бонусна дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Conc. Up to 10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "When you cast this spell, and as a bonus action on your turns, you can take the Dash action.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "UBA"
+    ],
+    "page": 238,
+    "source": "PHB 2014"
   },
   "eyebite": {
     "id": "eyebite",
-    "name": "eyebite",
+    "name": "Eyebite",
     "ukr": "eyebite",
     "level": 6,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "sorcerer",
@@ -3619,30 +4880,36 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 238,
+    "source": "PHB 2014"
   },
   "fabricate": {
     "id": "fabricate",
-    "name": "fabricate",
+    "name": "Fabricate",
     "ukr": "fabricate",
     "level": 4,
     "type": "spell",
@@ -3652,15 +4919,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "120 feet",
+    "castingTime": "10 хв",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -3669,118 +4936,103 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "PRM",
+      "SGT"
+    ],
+    "page": 239,
+    "source": "PHB 2014"
   },
-  "faerie_fire": {
-    "id": "faerie_fire",
-    "name": "faerie fire",
-    "ukr": "faerie fire",
+  "faerieFire": {
+    "id": "faerieFire",
+    "name": "Faerie Fire",
+    "ukr": "Faerie Fire",
     "level": 1,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
+      "bard",
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Concentration, up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "Each object in a 20-foot cube within range is outlined in blue, green, or violet light (your choice). Any creature in the area when the spell is cast is also outlined in light if it fails a Dexterity saving throw. For the duration, objects and affected creatures shed dim light in a 10-foot radius. Any attack roll against an affected creature or object has advantage if the attacker can see it, and the affected creature or object can’t benefit from being invisible.",
-    "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
-  },
-  "faithful_hound": {
-    "id": "faithful_hound",
-    "name": "faithful hound",
-    "ukr": "faithful hound",
-    "level": 4,
-    "type": "spell",
-    "school": "conjuration",
-    "effectType": "utility",
-    "classes": [
-      "wizard"
-    ],
-    "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
-    "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
-    },
-    "materialText": "",
-    "duration": "8 hours",
-    "concentration": false,
-    "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 4,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "dexterity",
     "damageType": "",
+    "areaTags": [
+      "C"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV",
+      "LGT"
+    ],
+    "page": 239,
+    "source": "PHB 2014"
   },
-  "false_life": {
-    "id": "false_life",
-    "name": "false life",
-    "ukr": "false life",
+  "falseLife": {
+    "id": "falseLife",
+    "name": "False Life",
+    "ukr": "False Life",
     "level": 1,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 hour",
+    "materialText": "a small amount of alcohol or distilled spirits",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "You gain 1d4 + 4 temporary hit points for the duration.At Higher Levels: You gain 5 additional temporary hit points for each slot level above 1st.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "THP"
+    ],
+    "page": 239,
+    "source": "PHB 2014"
   },
   "fear": {
     "id": "fear",
-    "name": "fear",
+    "name": "Fear",
     "ukr": "fear",
     "level": 3,
     "type": "spell",
     "school": "illusion",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "sorcerer",
@@ -3788,31 +5040,35 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a white feather or the heart of a hen",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "N"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 239,
+    "source": "PHB 2014"
   },
-  "feather_fall": {
-    "id": "feather_fall",
-    "name": "feather fall",
-    "ukr": "feather fall",
+  "featherFall": {
+    "id": "featherFall",
+    "name": "Feather Fall",
+    "ukr": "Feather Fall",
     "level": 1,
     "type": "spell",
     "school": "transmutation",
@@ -3823,35 +5079,39 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 reaction",
-    "range": "60 feet",
+    "castingTime": "1 реакція",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
-      "material": false
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 minute",
+    "materialText": "a small feather or a piece of down",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "Choose up to five falling creatures. Its descent slows to 60 feet per round until the spell ends. If the creature lands before the spell ends, it takes no falling damage and can land on its feet, and the spell ends for it.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 239,
+    "source": "PHB 2014"
   },
   "feeblemind": {
     "id": "feeblemind",
-    "name": "feeblemind",
+    "name": "Feeblemind",
     "ukr": "feeblemind",
     "level": 8,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "druid",
@@ -3859,81 +5119,132 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "150 feet",
+    "castingTime": "1 дія",
+    "range": "150 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "a handful of clay, crystal, glass, or mineral spheres",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 8,
     "description": "",
     "higherLevel": "",
+    "savingThrow": "intelligence",
+    "damageType": "psychic",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 239,
+    "source": "PHB 2014"
+  },
+  "feignDeath": {
+    "id": "feignDeath",
+    "name": "Feign Death",
+    "ukr": "Feign Death",
+    "level": 3,
+    "type": "spell",
+    "school": "necromancy",
+    "effectType": "utility",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a pinch of graveyard dirt",
+    "duration": "1 год",
+    "concentration": false,
+    "ritual": true,
+    "requiresSlot": true,
+    "spellSlotLevel": 3,
+    "description": "",
+    "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 240,
+    "source": "PHB 2014"
   },
-  "find_familiar": {
-    "id": "find_familiar",
-    "name": "find familiar",
-    "ukr": "find familiar",
+  "findFamiliar": {
+    "id": "findFamiliar",
+    "name": "Find Familiar",
+    "ukr": "Find Familiar",
     "level": 1,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 hour",
-    "range": "10 feet",
+    "castingTime": "1 год",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 1,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM",
+      "SMN"
+    ],
+    "page": 240,
+    "source": "PHB 2014"
   },
-  "find_steed": {
-    "id": "find_steed",
-    "name": "find steed",
-    "ukr": "find steed",
+  "findSteed": {
+    "id": "findSteed",
+    "name": "Find Steed",
+    "ukr": "Find Steed",
     "level": 2,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "30 feet",
+    "castingTime": "10 хв",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -3942,14 +5253,19 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM",
+      "SMN"
+    ],
+    "page": 240,
+    "source": "PHB 2014"
   },
-  "find_the_path": {
-    "id": "find_the_path",
-    "name": "find the path",
-    "ukr": "find the path",
+  "findThePath": {
+    "id": "findThePath",
+    "name": "Find the Path",
+    "ukr": "Find the Path",
     "level": 6,
     "type": "spell",
     "school": "divination",
@@ -3960,15 +5276,15 @@ export const SPELLS = {
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "Self",
+    "castingTime": "1 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Up to 24 hours",
+    "duration": "1 дн",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -3977,14 +5293,16 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 240,
+    "source": "PHB 2014"
   },
-  "find_traps": {
-    "id": "find_traps",
-    "name": "find traps",
-    "ukr": "find traps",
+  "findTraps": {
+    "id": "findTraps",
+    "name": "Find Traps",
+    "ukr": "Find Traps",
     "level": 2,
     "type": "spell",
     "school": "divination",
@@ -3995,15 +5313,15 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -4012,100 +5330,127 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 241,
+    "source": "PHB 2014"
   },
-  "finger_of_death": {
-    "id": "finger_of_death",
-    "name": "finger of death",
-    "ukr": "finger of death",
+  "fingerOfDeath": {
+    "id": "fingerOfDeath",
+    "name": "Finger of Death",
+    "ukr": "Finger of Death",
     "level": 7,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 7,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "constitution",
+    "damageType": "necrotic",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM",
+      "SGT",
+      "SMN"
+    ],
+    "page": 241,
+    "source": "PHB 2014"
   },
-  "fire_bolt": {
-    "id": "fire_bolt",
-    "name": "fire bolt",
-    "ukr": "fire bolt",
+  "fireBolt": {
+    "id": "fireBolt",
+    "name": "Fire Bolt",
+    "ukr": "Fire Bolt",
     "level": 0,
     "type": "cantrip",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. A flammable object hit by this spell ignites if it isn’t being worn or carried. This spell’s damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level(4d10).",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "damageType": "fire",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": {
+      "label": "fire damage",
+      "scaling": {
+        "1": "1d10",
+        "5": "2d10",
+        "11": "3d10",
+        "17": "4d10"
+      }
+    },
+    "miscTags": [
+      "OBJ",
+      "SCL"
+    ],
+    "page": 242,
+    "source": "PHB 2014"
   },
-  "fire_shield": {
-    "id": "fire_shield",
-    "name": "fire shield",
-    "ukr": "fire shield",
+  "fireShield": {
+    "id": "fireShield",
+    "name": "Fire Shield",
+    "ukr": "Fire Shield",
     "level": 4,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "10 minutes",
+    "materialText": "a bit of phosphorus or a firefly",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -4113,101 +5458,117 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "cold, fire",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "LGT"
+    ],
+    "page": 242,
+    "source": "PHB 2014"
   },
-  "fire_storm": {
-    "id": "fire_storm",
-    "name": "fire storm",
-    "ukr": "fire storm",
+  "fireStorm": {
+    "id": "fireStorm",
+    "name": "Fire Storm",
+    "ukr": "Fire Storm",
     "level": 7,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric",
       "druid",
       "sorcerer"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "150 feet",
+    "castingTime": "1 дія",
+    "range": "150 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 7,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "fire",
+    "areaTags": [
+      "C"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 242,
+    "source": "PHB 2014"
   },
   "fireball": {
     "id": "fireball",
-    "name": "fireball",
+    "name": "Fireball",
     "ukr": "fireball",
     "level": 3,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "150 feet",
+    "castingTime": "1 дія",
+    "range": "150 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "a tiny ball of bat guano and sulfur",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "fire",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 241,
+    "source": "PHB 2014"
   },
-  "flame_blade": {
-    "id": "flame_blade",
-    "name": "flame blade",
-    "ukr": "flame blade",
+  "flameBlade": {
+    "id": "flameBlade",
+    "name": "Flame Blade",
+    "ukr": "Flame Blade",
     "level": 2,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "Self",
+    "castingTime": "1 бонусна дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "leaf of sumac",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -4215,148 +5576,141 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "fire",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "LGT",
+      "UBA"
+    ],
+    "page": 242,
+    "source": "PHB 2014"
   },
-  "flame_strike": {
-    "id": "flame_strike",
-    "name": "flame strike",
-    "ukr": "flame strike",
+  "flameStrike": {
+    "id": "flameStrike",
+    "name": "Flame Strike",
+    "ukr": "Flame Strike",
     "level": 5,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "pinch of sulfur",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "fire, radiant",
+    "areaTags": [
+      "Y"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 242,
+    "source": "PHB 2014"
   },
-  "flaming_sphere": {
-    "id": "flaming_sphere",
-    "name": "flaming sphere",
-    "ukr": "flaming sphere",
+  "flamingSphere": {
+    "id": "flamingSphere",
+    "name": "Flaming Sphere",
+    "ukr": "Flaming Sphere",
     "level": 2,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a bit of tallow, a pinch of brimstone, and a dusting of powdered iron",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "fire",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "LGT",
+      "OBJ",
+      "UBA"
+    ],
+    "page": 242,
+    "source": "PHB 2014"
   },
-  "flesh_to_stone": {
-    "id": "flesh_to_stone",
-    "name": "flesh to stone",
-    "ukr": "flesh to stone",
+  "fleshToStone": {
+    "id": "fleshToStone",
+    "name": "Flesh to Stone",
+    "ukr": "Flesh to Stone",
     "level": 6,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a pinch of lime, water, and earth",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "constitution",
     "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
-  },
-  "floating_disk": {
-    "id": "floating_disk",
-    "name": "floating disk",
-    "ukr": "floating disk",
-    "level": 1,
-    "type": "spell",
-    "school": "conjuration",
-    "effectType": "utility",
-    "classes": [
-      "wizard"
+    "areaTags": [
+      "ST"
     ],
-    "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
-    "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
-    },
-    "materialText": "",
-    "duration": "1 hour",
-    "concentration": false,
-    "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 1,
-    "description": "This spell creates a circular, horizontal plane of force, 3 feet in diameter and 1 inch thick, that floats 3 feet above the ground in an unoccupied space of your choice that you can see within range. The disk remains for the duration, and can hold up to 500 pounds. If more weight is placed on it, the spell ends, and everything on the disk falls to the ground.The disk is immobile while you are within 20 feet of it. If you move more than 20 feet away from it, the disk follows you so that it remains with in 20 feet of you. It can move across uneven terrain, up or down stairs, slopes and the like, but it can’t cross an elevation change of 10 feet or more. For example, the disk can’t move across a 10-foot-deep pit, nor could it leave such a pit if it was created at the bottom.If you move more than 100 feet from the disk (typically because it can’t move around an obstacle to follow you), the spell ends.",
-    "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM",
+      "SGT"
+    ],
+    "page": 243,
+    "source": "PHB 2014"
   },
   "fly": {
     "id": "fly",
-    "name": "fly",
+    "name": "Fly",
     "ukr": "fly",
     "level": 3,
     "type": "spell",
@@ -4368,15 +5722,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "a wing feather from any bird",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -4385,14 +5739,20 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCT"
+    ],
+    "page": 243,
+    "source": "PHB 2014"
   },
-  "fog_cloud": {
-    "id": "fog_cloud",
-    "name": "fog cloud",
-    "ukr": "fog cloud",
+  "fogCloud": {
+    "id": "fogCloud",
+    "name": "Fog Cloud",
+    "ukr": "Fog Cloud",
     "level": 1,
     "type": "spell",
     "school": "conjuration",
@@ -4404,98 +5764,113 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Conc. Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "A 20-foot-radius sphere of fog appears within range of you until a wind of at least 10 miles per hour blows it away, or until the spell ends. The fog is centered on a point you choose, spreading around corners and heavily obscuring the area it fills.At Higher Levels: The fog becomes larger by 20 feet for each spell level you cast this spell above the first.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBS"
+    ],
+    "page": 243,
+    "source": "PHB 2014"
   },
   "forbiddance": {
     "id": "forbiddance",
-    "name": "forbiddance",
+    "name": "Forbiddance",
     "ukr": "forbiddance",
     "level": 6,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "Touch",
+    "castingTime": "10 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "24 hours",
+    "duration": "1 дн",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "necrotic, radiant",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PIR",
+      "PRM"
+    ],
+    "page": 243,
+    "source": "PHB 2014"
   },
   "forcecage": {
     "id": "forcecage",
-    "name": "forcecage",
+    "name": "Forcecage",
     "ukr": "forcecage",
     "level": 7,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "100 feet",
+    "castingTime": "1 дія",
+    "range": "100 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 7,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "charisma",
     "damageType": "",
+    "areaTags": [
+      "C"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 243,
+    "source": "PHB 2014"
   },
   "foresight": {
     "id": "foresight",
-    "name": "foresight",
+    "name": "Foresight",
     "ukr": "foresight",
     "level": 9,
     "type": "spell",
@@ -4508,15 +5883,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "Touch",
+    "castingTime": "1 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "8 hours",
+    "materialText": "a hummingbird feather",
+    "duration": "8 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -4525,14 +5900,20 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV"
+    ],
+    "page": 244,
+    "source": "PHB 2014"
   },
-  "freedom_of_movement": {
-    "id": "freedom_of_movement",
-    "name": "freedom of movement",
-    "ukr": "freedom of movement",
+  "freedomOfMovement": {
+    "id": "freedomOfMovement",
+    "name": "Freedom of Movement",
+    "ukr": "Freedom of Movement",
     "level": 4,
     "type": "spell",
     "school": "abjuration",
@@ -4544,15 +5925,15 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 hour",
+    "materialText": "a leather strap, bound around the arm or a similar appendage",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -4561,66 +5942,79 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 244,
+    "source": "PHB 2014"
   },
-  "freezing_sphere": {
-    "id": "freezing_sphere",
-    "name": "freezing sphere",
-    "ukr": "freezing sphere",
-    "level": 6,
-    "type": "spell",
-    "school": "evocation",
+  "friends": {
+    "id": "friends",
+    "name": "Friends",
+    "ukr": "Friends",
+    "level": 0,
+    "type": "cantrip",
+    "school": "enchantment",
     "effectType": "utility",
     "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "300 feet",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
       "verbal": false,
-      "somatic": false,
-      "material": false
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "a small amount of makeup applied to the face as this spell is cast",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 6,
+    "requiresSlot": false,
+    "spellSlotLevel": 0,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV"
+    ],
+    "page": 244,
+    "source": "PHB 2014"
   },
-  "gaseous_form": {
-    "id": "gaseous_form",
-    "name": "gaseous form",
-    "ukr": "gaseous form",
+  "gaseousForm": {
+    "id": "gaseousForm",
+    "name": "Gaseous Form",
+    "ukr": "Gaseous Form",
     "level": 3,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "sorcerer",
       "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "a bit of gauze and a wisp of smoke",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -4629,13 +6023,19 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV"
+    ],
+    "page": 244,
+    "source": "PHB 2014"
   },
   "gate": {
     "id": "gate",
-    "name": "gate",
+    "name": "Gate",
     "ukr": "gate",
     "level": 9,
     "type": "spell",
@@ -4647,15 +6047,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -4664,18 +6064,24 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PS",
+      "SGT",
+      "TP"
+    ],
+    "page": 244,
+    "source": "PHB 2014"
   },
   "geas": {
     "id": "geas",
-    "name": "geas",
+    "name": "Geas",
     "ukr": "geas",
     "level": 5,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "cleric",
@@ -4684,31 +6090,38 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "60 feet",
+    "castingTime": "1 хв",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "30 days",
+    "duration": "30 дн",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "wisdom",
+    "damageType": "psychic",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM",
+      "SGT"
+    ],
+    "page": 244,
+    "source": "PHB 2014"
   },
-  "gentle_repose": {
-    "id": "gentle_repose",
-    "name": "gentle repose",
-    "ukr": "gentle repose",
+  "gentleRepose": {
+    "id": "gentleRepose",
+    "name": "Gentle Repose",
+    "ukr": "Gentle Repose",
     "level": 2,
     "type": "spell",
     "school": "necromancy",
@@ -4718,48 +6131,50 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "10 days",
+    "materialText": "a pinch of salt and one copper piece placed on each of the corpse's eyes, which must remain there for the duration",
+    "duration": "10 дн",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 245,
+    "source": "PHB 2014"
   },
-  "giant_insect": {
-    "id": "giant_insect",
-    "name": "giant insect",
-    "ukr": "giant insect",
+  "giantInsect": {
+    "id": "giantInsect",
+    "name": "Giant Insect",
+    "ukr": "Giant Insect",
     "level": 4,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -4768,13 +6183,19 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SMN"
+    ],
+    "page": 245,
+    "source": "PHB 2014"
   },
   "glibness": {
     "id": "glibness",
-    "name": "glibness",
+    "name": "Glibness",
     "ukr": "glibness",
     "level": 8,
     "type": "spell",
@@ -4785,15 +6206,15 @@ export const SPELLS = {
       "warlock"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -4802,14 +6223,16 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 245,
+    "source": "PHB 2014"
   },
-  "globe_of_invulnerability": {
-    "id": "globe_of_invulnerability",
-    "name": "globe of invulnerability",
-    "ukr": "globe of invulnerability",
+  "globeOfInvulnerability": {
+    "id": "globeOfInvulnerability",
+    "name": "Globe of Invulnerability",
+    "ukr": "Globe of Invulnerability",
     "level": 6,
     "type": "spell",
     "school": "abjuration",
@@ -4819,15 +6242,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -4836,48 +6259,56 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 245,
+    "source": "PHB 2014"
   },
-  "glyph_of_warding": {
-    "id": "glyph_of_warding",
-    "name": "glyph of warding",
-    "ukr": "glyph of warding",
+  "glyphOfWarding": {
+    "id": "glyphOfWarding",
+    "name": "Glyph of Warding",
+    "ukr": "Glyph of Warding",
     "level": 3,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "cleric",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 hour",
-    "range": "Touch",
+    "castingTime": "1 год",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Until dispelled",
+    "duration": "Постійно",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "acid, cold, fire, lightning, thunder",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 245,
+    "source": "PHB 2014"
   },
   "goodberry": {
     "id": "goodberry",
-    "name": "goodberry",
+    "name": "Goodberry",
     "ukr": "goodberry",
     "level": 1,
     "type": "spell",
@@ -4888,15 +6319,15 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "a sprig of mistletoe",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -4905,47 +6336,99 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL"
+    ],
+    "page": 246,
+    "source": "PHB 2014"
+  },
+  "graspingVine": {
+    "id": "graspingVine",
+    "name": "Grasping Vine",
+    "ukr": "Grasping Vine",
+    "level": 4,
+    "type": "spell",
+    "school": "conjuration",
+    "effectType": "save",
+    "classes": [
+      "druid",
+      "ranger"
+    ],
+    "subclasses": [],
+    "castingTime": "1 бонусна дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 4,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "dexterity",
+    "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [
+      "FMV",
+      "SGT",
+      "UBA"
+    ],
+    "page": 246,
+    "source": "PHB 2014"
   },
   "grease": {
     "id": "grease",
-    "name": "grease",
+    "name": "Grease",
     "ukr": "grease",
     "level": 1,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 minute",
+    "materialText": "a bit of pork rind or butter",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
     "description": "Grease covers the ground in a 10-foot square within range. It's difficult terrain for the duration. When the grease appears, each creature standing in its area must pass a Dexterity save or fall prone. A creature that enters the area or ends its turn there must also make this save.",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "dexterity",
     "damageType": "",
+    "areaTags": [
+      "Q"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "DFT"
+    ],
+    "page": 246,
+    "source": "PHB 2014"
   },
-  "greater_invisibility": {
-    "id": "greater_invisibility",
-    "name": "greater invisibility",
-    "ukr": "greater invisibility",
+  "greaterInvisibility": {
+    "id": "greaterInvisibility",
+    "name": "Greater Invisibility",
+    "ukr": "Greater Invisibility",
     "level": 4,
     "type": "spell",
     "school": "illusion",
@@ -4956,15 +6439,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -4973,14 +6456,18 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 246,
+    "source": "PHB 2014"
   },
-  "greater_restoration": {
-    "id": "greater_restoration",
-    "name": "greater restoration",
-    "ukr": "greater restoration",
+  "greaterRestoration": {
+    "id": "greaterRestoration",
+    "name": "Greater Restoration",
+    "ukr": "Greater Restoration",
     "level": 5,
     "type": "spell",
     "school": "abjuration",
@@ -4991,15 +6478,15 @@ export const SPELLS = {
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -5008,47 +6495,55 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 246,
+    "source": "PHB 2014"
   },
-  "guardian_of_faith": {
-    "id": "guardian_of_faith",
-    "name": "guardian of faith",
-    "ukr": "guardian of faith",
+  "guardianOfFaith": {
+    "id": "guardianOfFaith",
+    "name": "Guardian of Faith",
+    "ukr": "Guardian of Faith",
     "level": 4,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "8 hours",
+    "duration": "8 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 4,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "radiant",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 246,
+    "source": "PHB 2014"
   },
-  "guards_and_wards": {
-    "id": "guards_and_wards",
-    "name": "guards and wards",
-    "ukr": "guards and wards",
+  "guardsAndWards": {
+    "id": "guardsAndWards",
+    "name": "Guards and Wards",
+    "ukr": "Guards and Wards",
     "level": 6,
     "type": "spell",
     "school": "abjuration",
@@ -5058,15 +6553,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "Touch",
+    "castingTime": "10 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "24 hours",
+    "duration": "24 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -5075,13 +6570,21 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "Q"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBS",
+      "PIR",
+      "PRM"
+    ],
+    "page": 248,
+    "source": "PHB 2014"
   },
   "guidance": {
     "id": "guidance",
-    "name": "guidance",
+    "name": "Guidance",
     "ukr": "guidance",
     "level": 0,
     "type": "cantrip",
@@ -5092,15 +6595,15 @@ export const SPELLS = {
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Concentration, up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
@@ -5109,115 +6612,174 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 248,
+    "source": "PHB 2014"
   },
-  "guiding_bolt": {
-    "id": "guiding_bolt",
-    "name": "guiding bolt",
-    "ukr": "guiding bolt",
+  "guidingBolt": {
+    "id": "guidingBolt",
+    "name": "Guiding Bolt",
+    "ukr": "Guiding Bolt",
     "level": 1,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 round",
+    "duration": "1 раунд",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "A flash of light streaks toward a creature of your choice within range. Make a ranged spell attack against the target. On a hit, the target takes 4d6 radiant damage, and the next attack roll made against this target before the end of your next turn has advantage, thanks to the mystical dim light glittering on the target until then. At Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "radiant",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV"
+    ],
+    "page": 248,
+    "source": "PHB 2014"
   },
-  "gust_of_wind": {
-    "id": "gust_of_wind",
-    "name": "gust of wind",
-    "ukr": "gust of wind",
+  "gustOfWind": {
+    "id": "gustOfWind",
+    "name": "Gust of Wind",
+    "ukr": "Gust of Wind",
     "level": 2,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a legume seed",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "strength",
     "damageType": "",
+    "areaTags": [
+      "L"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "FMV",
+      "UBA"
+    ],
+    "page": 248,
+    "source": "PHB 2014"
   },
-  "hallow": {
-    "id": "hallow",
-    "name": "hallow",
-    "ukr": "hallow",
-    "level": 5,
+  "hailOfThorns": {
+    "id": "hailOfThorns",
+    "name": "Hail of Thorns",
+    "ukr": "Hail of Thorns",
+    "level": 1,
     "type": "spell",
-    "school": "evocation",
-    "effectType": "utility",
+    "school": "conjuration",
+    "effectType": "save",
     "classes": [
-      "cleric"
+      "ranger"
     ],
     "subclasses": [],
-    "castingTime": "24 hours",
-    "range": "Touch",
+    "castingTime": "1 бонусна дія",
+    "range": "point",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Until dispelled",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 1,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "dexterity",
+    "damageType": "piercing",
+    "areaTags": [
+      "S"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 249,
+    "source": "PHB 2014"
+  },
+  "hallow": {
+    "id": "hallow",
+    "name": "Hallow",
+    "ukr": "hallow",
+    "level": 5,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "save",
+    "classes": [
+      "cleric"
+    ],
+    "subclasses": [],
+    "castingTime": "24 год",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "",
+    "duration": "Постійно",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "charisma",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "LGT",
+      "OBS"
+    ],
+    "page": 249,
+    "source": "PHB 2014"
   },
-  "hallucinatory_terrain": {
-    "id": "hallucinatory_terrain",
-    "name": "hallucinatory terrain",
-    "ukr": "hallucinatory terrain",
+  "hallucinatoryTerrain": {
+    "id": "hallucinatoryTerrain",
+    "name": "Hallucinatory Terrain",
+    "ukr": "Hallucinatory Terrain",
     "level": 4,
     "type": "spell",
     "school": "illusion",
@@ -5229,15 +6791,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "300 feet",
+    "castingTime": "10 хв",
+    "range": "300 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "24 hours",
+    "materialText": "a stone, a twig, and a bit of green plant",
+    "duration": "24 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -5246,46 +6808,56 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "C"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 249,
+    "source": "PHB 2014"
   },
   "harm": {
     "id": "harm",
-    "name": "harm",
+    "name": "Harm",
     "ukr": "harm",
     "level": 6,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "constitution",
+    "damageType": "necrotic",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 249,
+    "source": "PHB 2014"
   },
   "haste": {
     "id": "haste",
-    "name": "haste",
+    "name": "Haste",
     "ukr": "haste",
     "level": 3,
     "type": "spell",
@@ -5296,15 +6868,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a shaving of licorice root",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -5313,32 +6885,40 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV",
+      "MAC",
+      "SGT"
+    ],
+    "page": 250,
+    "source": "PHB 2014"
   },
   "heal": {
     "id": "heal",
-    "name": "heal",
+    "name": "Heal",
     "ukr": "heal",
     "level": 6,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "cleric",
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -5347,134 +6927,162 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL",
+      "SGT"
+    ],
+    "page": 250,
+    "source": "PHB 2014"
   },
-  "healing_word": {
-    "id": "healing_word",
-    "name": "healing word",
-    "ukr": "healing word",
+  "healingWord": {
+    "id": "healingWord",
+    "name": "Healing Word",
+    "ukr": "Healing Word",
     "level": 1,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "bard",
       "cleric",
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "60 feet",
+    "castingTime": "1 бонусна дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "A creature of your choice that you can see within range regains hit points equal to 1d4 + your spellcasting ability modifier. This spell has no effect on undead or constructs. At Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the healing increases by 1d4 for each slot level above 1st.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL",
+      "SGT"
+    ],
+    "page": 250,
+    "source": "PHB 2014"
   },
-  "heat_metal": {
-    "id": "heat_metal",
-    "name": "heat metal",
-    "ukr": "heat metal",
+  "heatMetal": {
+    "id": "heatMetal",
+    "name": "Heat Metal",
+    "ukr": "Heat Metal",
     "level": 2,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a piece of iron and a flame",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "constitution",
+    "damageType": "fire",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "SGT",
+      "UBA"
+    ],
+    "page": 250,
+    "source": "PHB 2014"
   },
-  "hellish_rebuke": {
-    "id": "hellish_rebuke",
-    "name": "hellish rebuke",
-    "ukr": "hellish rebuke",
+  "hellishRebuke": {
+    "id": "hellishRebuke",
+    "name": "Hellish Rebuke",
+    "ukr": "Hellish Rebuke",
     "level": 1,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "warlock"
     ],
     "subclasses": [],
-    "castingTime": "1 reaction",
-    "range": "60 feet",
+    "castingTime": "1 реакція",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "fire",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 250,
+    "source": "PHB 2014"
   },
-  "heroes_feast": {
-    "id": "heroes_feast",
-    "name": "heroes' feast",
-    "ukr": "heroes' feast",
+  "heroesFeast": {
+    "id": "heroesFeast",
+    "name": "Heroes' Feast",
+    "ukr": "Heroes' Feast",
     "level": 6,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "cleric",
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "30 feet",
+    "castingTime": "10 хв",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -5483,32 +7091,39 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV",
+      "HL"
+    ],
+    "page": 250,
+    "source": "PHB 2014"
   },
   "heroism": {
     "id": "heroism",
-    "name": "heroism",
+    "name": "Heroism",
     "ukr": "heroism",
     "level": 1,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "bard",
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Conc. Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -5517,52 +7132,65 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCT",
+      "THP"
+    ],
+    "page": 250,
+    "source": "PHB 2014"
   },
-  "hideous_laughter": {
-    "id": "hideous_laughter",
-    "name": "hideous laughter",
-    "ukr": "hideous laughter",
+  "hex": {
+    "id": "hex",
+    "name": "Hex",
+    "ukr": "Hex",
     "level": 1,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
-      "bard",
-      "wizard"
+      "warlock"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 бонусна дія",
+    "range": "90 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Conc, up to 1 minute",
+    "materialText": "the petrified eye of a newt",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "A creature of your choice that you can see within range perceives everything as hilariously funny and falls into fits of laughter if this spell affects it. The target must succeed on a Wisdom saving throw or fall prone, becoming incapacitated and unable to stand up for the duration. A creature with an Intelligence score of 4 or less isn’t affected. At the end of each of its turns, and each time it takes damage, the target can make another Wisdom saving throw. The target has advantage on the saving throw if it’s triggered by damage. On a success, the spell ends.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "necrotic",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT",
+      "UBA"
+    ],
+    "page": 251,
+    "source": "PHB 2014"
   },
-  "hold_monster": {
-    "id": "hold_monster",
-    "name": "hold monster",
-    "ukr": "hold monster",
+  "holdMonster": {
+    "id": "holdMonster",
+    "name": "Hold Monster",
+    "ukr": "Hold Monster",
     "level": 5,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "sorcerer",
@@ -5570,35 +7198,42 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "90 feet",
+    "castingTime": "1 дія",
+    "range": "90 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a small, straight piece of iron",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCT",
+      "SGT"
+    ],
+    "page": 251,
+    "source": "PHB 2014"
   },
-  "hold_person": {
-    "id": "hold_person",
-    "name": "hold person",
-    "ukr": "hold person",
+  "holdPerson": {
+    "id": "holdPerson",
+    "name": "Hold Person",
+    "ukr": "Hold Person",
     "level": 2,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "cleric",
@@ -5608,81 +7243,135 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a small, straight piece of iron",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCT",
+      "SGT"
+    ],
+    "page": 251,
+    "source": "PHB 2014"
   },
-  "holy_aura": {
-    "id": "holy_aura",
-    "name": "holy aura",
-    "ukr": "holy aura",
+  "holyAura": {
+    "id": "holyAura",
+    "name": "Holy Aura",
+    "ukr": "Holy Aura",
     "level": 8,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 8,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "constitution",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV",
+      "LGT"
+    ],
+    "page": 251,
+    "source": "PHB 2014"
   },
-  "hunters_mark": {
-    "id": "hunters_mark",
-    "name": "hunter's mark",
-    "ukr": "hunter's mark",
+  "hungerOfHadar": {
+    "id": "hungerOfHadar",
+    "name": "Hunger of Hadar",
+    "ukr": "Hunger of Hadar",
+    "level": 3,
+    "type": "spell",
+    "school": "conjuration",
+    "effectType": "save",
+    "classes": [
+      "warlock"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "150 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a pickled octopus tentacle",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 3,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "dexterity",
+    "damageType": "acid, cold",
+    "areaTags": [
+      "S"
+    ],
+    "damage": null,
+    "miscTags": [
+      "DFT",
+      "OBS"
+    ],
+    "page": 251,
+    "source": "PHB 2014"
+  },
+  "hunterSMark": {
+    "id": "hunterSMark",
+    "name": "Hunter's Mark",
+    "ukr": "Hunter's Mark",
     "level": 1,
     "type": "spell",
     "school": "divination",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "90 feet",
+    "castingTime": "1 бонусна дія",
+    "range": "90 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -5691,18 +7380,27 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "AAD",
+      "ADV",
+      "SGT",
+      "UBA"
+    ],
+    "page": 251,
+    "source": "PHB 2014"
   },
-  "hypnotic_pattern": {
-    "id": "hypnotic_pattern",
-    "name": "hypnotic pattern",
-    "ukr": "hypnotic pattern",
+  "hypnoticPattern": {
+    "id": "hypnoticPattern",
+    "name": "Hypnotic Pattern",
+    "ukr": "Hypnotic Pattern",
     "level": 3,
     "type": "spell",
     "school": "illusion",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "sorcerer",
@@ -5710,65 +7408,73 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
       "verbal": false,
-      "somatic": false,
-      "material": false
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a glowing stick of incense or a crystal vial filled with phosphorescent material",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "C"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 252,
+    "source": "PHB 2014"
   },
-  "ice_storm": {
-    "id": "ice_storm",
-    "name": "ice storm",
-    "ukr": "ice storm",
+  "iceStorm": {
+    "id": "iceStorm",
+    "name": "Ice Storm",
+    "ukr": "Ice Storm",
     "level": 4,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "300 feet",
+    "castingTime": "1 дія",
+    "range": "300 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "a pinch of dust and a few drops of water",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 4,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "bludgeoning, cold",
+    "areaTags": [
+      "Y"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 252,
+    "source": "PHB 2014"
   },
   "identify": {
     "id": "identify",
-    "name": "identify",
+    "name": "Identify",
     "ukr": "identify",
     "level": 1,
     "type": "spell",
@@ -5779,31 +7485,37 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "Touch",
+    "castingTime": "1 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 1,
     "description": "You choose one object that you must touch throughout the casting of the spell. If it is a magic item or some other magic-imbued object, you learn its properties and how to use them, whether it requires attunement to use, and how many charges it has, if any. You learn whether any spells are affecting the item and what they are. If the item was created by a spell, you learn which spell created it. If you instead touch a creature throughout the casting, you learn what spells, if any, are currently affecting it.",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 252,
+    "source": "PHB 2014"
   },
-  "illusory_script": {
-    "id": "illusory_script",
-    "name": "illusory script",
-    "ukr": "illusory script",
+  "illusoryScript": {
+    "id": "illusoryScript",
+    "name": "Illusory Script",
+    "ukr": "Illusory Script",
     "level": 1,
     "type": "spell",
     "school": "illusion",
@@ -5814,199 +7526,191 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute (Ritual)",
-    "range": "Touch",
+    "castingTime": "1 хв",
+    "range": "point",
     "components": {
       "verbal": false,
-      "somatic": false,
-      "material": false
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "10 days",
+    "duration": "10 дн",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "You write on suitable writing material and imbue it with an illusion that lasts for the duration. To you and any creatures you designate when you cast the spell, the writing appears normal, written in your hand, and conveys whatever meaning you intended when you wrote the text. To all others, the writing is unintelligible. Alternatively, you can cause the writing to appear to be an entirely different message, written in a different hand and language, though the language must be one you know. If the spell is dispelled, the original script and the illusion disappear. A creature with truesight can read the hidden message.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 252,
+    "source": "PHB 2014"
   },
   "imprisonment": {
     "id": "imprisonment",
-    "name": "imprisonment",
+    "name": "Imprisonment",
     "ukr": "imprisonment",
     "level": 9,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "30 feet",
+    "castingTime": "1 хв",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Until dispelled",
+    "duration": "Постійно",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 9,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 252,
+    "source": "PHB 2014"
   },
-  "incendiary_cloud": {
-    "id": "incendiary_cloud",
-    "name": "incendiary cloud",
-    "ukr": "incendiary cloud",
+  "incendiaryCloud": {
+    "id": "incendiaryCloud",
+    "name": "Incendiary Cloud",
+    "ukr": "Incendiary Cloud",
     "level": 8,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "150 feet",
+    "castingTime": "1 дія",
+    "range": "150 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 8,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "fire",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBS"
+    ],
+    "page": 253,
+    "source": "PHB 2014"
   },
-  "inflict_wounds": {
-    "id": "inflict_wounds",
-    "name": "inflict wounds",
-    "ukr": "inflict wounds",
+  "inflictWounds": {
+    "id": "inflictWounds",
+    "name": "Inflict Wounds",
+    "ukr": "Inflict Wounds",
     "level": 1,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "Make a melee spell attack against a creature you can reach. On a hit, the target takes 3d10 necrotic damage. At Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d10 for each slot level above 1st.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "necrotic",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 253,
+    "source": "PHB 2014"
   },
-  "insect_plague": {
-    "id": "insect_plague",
-    "name": "insect plague",
-    "ukr": "insect plague",
+  "insectPlague": {
+    "id": "insectPlague",
+    "name": "Insect Plague",
+    "ukr": "Insect Plague",
     "level": 5,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric",
       "druid",
       "sorcerer"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "300 feet",
+    "castingTime": "1 дія",
+    "range": "300 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "a few grains of sugar, some kernels of grain, and a smear of fat",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
-  },
-  "instant_summons": {
-    "id": "instant_summons",
-    "name": "instant summons",
-    "ukr": "instant summons",
-    "level": 6,
-    "type": "spell",
-    "school": "conjuration",
-    "effectType": "utility",
-    "classes": [
-      "wizard"
+    "savingThrow": "constitution",
+    "damageType": "piercing",
+    "areaTags": [
+      "S"
     ],
-    "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "Touch",
-    "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
-    },
-    "materialText": "",
-    "duration": "Until dispelled",
-    "concentration": false,
-    "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 6,
-    "description": "",
-    "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "DFT",
+      "OBS"
+    ],
+    "page": 254,
+    "source": "PHB 2014"
   },
   "invisibility": {
     "id": "invisibility",
-    "name": "invisibility",
+    "name": "Invisibility",
     "ukr": "invisibility",
     "level": 2,
     "type": "spell",
@@ -6019,15 +7723,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "an eyelash encased in gum arabic",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6036,47 +7740,19 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
-  },
-  "irresistible_dance": {
-    "id": "irresistible_dance",
-    "name": "irresistible dance",
-    "ukr": "irresistible dance",
-    "level": 6,
-    "type": "spell",
-    "school": "enchantment",
-    "effectType": "utility",
-    "classes": [
-      "bard",
-      "wizard"
+    "areaTags": [
+      "ST"
     ],
-    "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
-    "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
-    },
-    "materialText": "",
-    "duration": "Up to 1 minute",
-    "concentration": false,
-    "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 6,
-    "description": "",
-    "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCT"
+    ],
+    "page": 254,
+    "source": "PHB 2014"
   },
   "jump": {
     "id": "jump",
-    "name": "jump",
+    "name": "Jump",
     "ukr": "jump",
     "level": 1,
     "type": "spell",
@@ -6089,15 +7765,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 minute",
+    "materialText": "a grasshopper's hind leg",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6106,13 +7782,17 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 254,
+    "source": "PHB 2014"
   },
   "knock": {
     "id": "knock",
-    "name": "knock",
+    "name": "Knock",
     "ukr": "knock",
     "level": 2,
     "type": "spell",
@@ -6124,15 +7804,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6141,14 +7821,19 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "SGT"
+    ],
+    "page": 254,
+    "source": "PHB 2014"
   },
-  "legend_lore": {
-    "id": "legend_lore",
-    "name": "legend lore",
-    "ukr": "legend lore",
+  "legendLore": {
+    "id": "legendLore",
+    "name": "Legend Lore",
+    "ukr": "Legend Lore",
     "level": 5,
     "type": "spell",
     "school": "divination",
@@ -6159,15 +7844,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "Self",
+    "castingTime": "10 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6176,14 +7861,94 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 254,
+    "source": "PHB 2014"
   },
-  "lesser_restoration": {
-    "id": "lesser_restoration",
-    "name": "lesser restoration",
-    "ukr": "lesser restoration",
+  "leomundSSecretChest": {
+    "id": "leomundSSecretChest",
+    "name": "Leomund's Secret Chest",
+    "ukr": "Leomund's Secret Chest",
+    "level": 4,
+    "type": "spell",
+    "school": "conjuration",
+    "effectType": "utility",
+    "classes": [
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "",
+    "duration": "Миттєво",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 4,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "",
+    "areaTags": [],
+    "damage": null,
+    "miscTags": [
+      "OBJ",
+      "PRM"
+    ],
+    "page": 254,
+    "source": "PHB 2014"
+  },
+  "leomundSTinyHut": {
+    "id": "leomundSTinyHut",
+    "name": "Leomund's Tiny Hut",
+    "ukr": "Leomund's Tiny Hut",
+    "level": 3,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "utility",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 хв",
+    "range": "10 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a small crystal bead",
+    "duration": "8 год",
+    "concentration": false,
+    "ritual": true,
+    "requiresSlot": true,
+    "spellSlotLevel": 3,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "",
+    "areaTags": [
+      "H"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 255,
+    "source": "PHB 2014"
+  },
+  "lesserRestoration": {
+    "id": "lesserRestoration",
+    "name": "Lesser Restoration",
+    "ukr": "Lesser Restoration",
     "level": 2,
     "type": "spell",
     "school": "abjuration",
@@ -6196,15 +7961,15 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6213,52 +7978,63 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 255,
+    "source": "PHB 2014"
   },
   "levitate": {
     "id": "levitate",
-    "name": "levitate",
+    "name": "Levitate",
     "ukr": "levitate",
     "level": 2,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "either a small leather loop or a piece of golden wire bent into a cup shape with a long shank on one end",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "constitution",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "SGT"
+    ],
+    "page": 255,
+    "source": "PHB 2014"
   },
   "light": {
     "id": "light",
-    "name": "light",
+    "name": "Light",
     "ukr": "light",
     "level": 0,
     "type": "cantrip",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "cleric",
@@ -6266,65 +8042,113 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
-      "material": false
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 hour",
+    "materialText": "a firefly or phosphorescent moss",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
     "description": "You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action. If you target an object held or worn by a hostile creature, that creature must succeed on a Dexterity saving throw to a void the spell.",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "dexterity",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "LGT",
+      "OBJ"
+    ],
+    "page": 255,
+    "source": "PHB 2014"
   },
-  "lightning_bolt": {
-    "id": "lightning_bolt",
-    "name": "lightning bolt",
-    "ukr": "lightning bolt",
+  "lightningArrow": {
+    "id": "lightningArrow",
+    "name": "Lightning Arrow",
+    "ukr": "Lightning Arrow",
     "level": 3,
     "type": "spell",
-    "school": "evocation",
-    "effectType": "utility",
+    "school": "transmutation",
+    "effectType": "save",
     "classes": [
-      "sorcerer",
-      "wizard"
+      "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 бонусна дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "lightning",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 255,
+    "source": "PHB 2014"
   },
-  "locate_animals_or_plants": {
-    "id": "locate_animals_or_plants",
-    "name": "locate animals or plants",
-    "ukr": "locate animals or plants",
+  "lightningBolt": {
+    "id": "lightningBolt",
+    "name": "Lightning Bolt",
+    "ukr": "Lightning Bolt",
+    "level": 3,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "save",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "100 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a bit of fur and a rod of amber, crystal, or glass",
+    "duration": "Миттєво",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 3,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "dexterity",
+    "damageType": "lightning",
+    "areaTags": [
+      "L"
+    ],
+    "damage": null,
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 255,
+    "source": "PHB 2014"
+  },
+  "locateAnimalsOrPlants": {
+    "id": "locateAnimalsOrPlants",
+    "name": "Locate Animals or Plants",
+    "ukr": "Locate Animals or Plants",
     "level": 2,
     "type": "spell",
     "school": "divination",
@@ -6335,31 +8159,33 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "a bit of fur from a bloodhound",
+    "duration": "Миттєво",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 256,
+    "source": "PHB 2014"
   },
-  "locate_creature": {
-    "id": "locate_creature",
-    "name": "locate creature",
-    "ukr": "locate creature",
+  "locateCreature": {
+    "id": "locateCreature",
+    "name": "Locate Creature",
+    "ukr": "Locate Creature",
     "level": 4,
     "type": "spell",
     "school": "divination",
@@ -6373,15 +8199,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "a bit of fur from a bloodhound",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6390,14 +8216,16 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 256,
+    "source": "PHB 2014"
   },
-  "locate_object": {
-    "id": "locate_object",
-    "name": "locate object",
-    "ukr": "locate object",
+  "locateObject": {
+    "id": "locateObject",
+    "name": "Locate Object",
+    "ukr": "Locate Object",
     "level": 2,
     "type": "spell",
     "school": "divination",
@@ -6411,15 +8239,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "a forked twig",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6428,13 +8256,17 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 256,
+    "source": "PHB 2014"
   },
   "longstrider": {
     "id": "longstrider",
-    "name": "longstrider",
+    "name": "Longstrider",
     "ukr": "longstrider",
     "level": 1,
     "type": "spell",
@@ -6447,15 +8279,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 hour",
+    "materialText": "a pinch of dirt",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6464,14 +8296,20 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SCT"
+    ],
+    "page": 256,
+    "source": "PHB 2014"
   },
-  "mage_armor": {
-    "id": "mage_armor",
-    "name": "mage armor",
-    "ukr": "mage armor",
+  "mageArmor": {
+    "id": "mageArmor",
+    "name": "Mage Armor",
+    "ukr": "Mage Armor",
     "level": 1,
     "type": "spell",
     "school": "abjuration",
@@ -6481,31 +8319,37 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "8 hours",
+    "materialText": "a piece of cured leather",
+    "duration": "8 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "You touch a willing creature who isn’t wearing armor, and a protective magical force surrounds it until the spell ends. The target’s base AC becomes 13 + its Dexterity modifier. The spell ends if the target dons armor or if you dismiss the spell as an action.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "MAC"
+    ],
+    "page": 256,
+    "source": "PHB 2014"
   },
-  "mage_hand": {
-    "id": "mage_hand",
-    "name": "mage hand",
-    "ukr": "mage hand",
+  "mageHand": {
+    "id": "mageHand",
+    "name": "Mage Hand",
+    "ukr": "Mage Hand",
     "level": 0,
     "type": "cantrip",
     "school": "conjuration",
@@ -6517,35 +8361,39 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "A spectral, floating hand appears at a point you choose within range. The hand lasts for the duration or until you dismiss it as an action. The hand vanishes if it is ever more than 30 feet away from you or if you cast this spell again. You can use your action to control the hand. You can use the hand to manipulate an object, open an unlocked door or container, stow or retrieve an item from an open container, or pour the contents out of a vial. You can move the hand up to 30 feet each time you use it. The hand can’t attack, activate magic items, or carry more than 10 pounds.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 256,
+    "source": "PHB 2014"
   },
-  "magic_circle": {
-    "id": "magic_circle",
-    "name": "magic circle",
-    "ukr": "magic circle",
+  "magicCircle": {
+    "id": "magicCircle",
+    "name": "Magic Circle",
+    "ukr": "Magic Circle",
     "level": 3,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric",
       "paladin",
@@ -6553,98 +8401,115 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "10 feet",
+    "castingTime": "1 хв",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "charisma",
     "damageType": "",
+    "areaTags": [
+      "Y"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 256,
+    "source": "PHB 2014"
   },
-  "magic_jar": {
-    "id": "magic_jar",
-    "name": "magic jar",
-    "ukr": "magic jar",
+  "magicJar": {
+    "id": "magicJar",
+    "name": "Magic Jar",
+    "ukr": "Magic Jar",
     "level": 6,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "Self",
+    "castingTime": "1 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Until dispelled",
+    "duration": "Постійно",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "charisma",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 257,
+    "source": "PHB 2014"
   },
-  "magic_missile": {
-    "id": "magic_missile",
-    "name": "magic missile",
-    "ukr": "magic missile",
+  "magicMissile": {
+    "id": "magicMissile",
+    "name": "Magic Missile",
+    "ukr": "Magic Missile",
     "level": 1,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "You create three glowing darts of magical force. Each dart hits a creature of your choice that you can see within range. A dart deals 1d4 + 1 force damage to its target. The darts all strike simultaneously, and you can direct them to hit one creature or several. At Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the spell creates one more dart for each slot level above 1st.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "force",
+    "areaTags": [
+      "MT",
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 257,
+    "source": "PHB 2014"
   },
-  "magic_mouth": {
-    "id": "magic_mouth",
-    "name": "magic mouth",
-    "ukr": "magic mouth",
+  "magicMouth": {
+    "id": "magicMouth",
+    "name": "Magic Mouth",
+    "ukr": "Magic Mouth",
     "level": 2,
     "type": "spell",
     "school": "illusion",
@@ -6654,31 +8519,36 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "30 feet",
+    "castingTime": "1 хв",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Until dispelled",
+    "duration": "Постійно",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "SGT"
+    ],
+    "page": 257,
+    "source": "PHB 2014"
   },
-  "magic_weapon": {
-    "id": "magic_weapon",
-    "name": "magic weapon",
-    "ukr": "magic weapon",
+  "magicWeapon": {
+    "id": "magicWeapon",
+    "name": "Magic Weapon",
+    "ukr": "Magic Weapon",
     "level": 2,
     "type": "spell",
     "school": "transmutation",
@@ -6688,15 +8558,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "Touch",
+    "castingTime": "1 бонусна дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6705,48 +8575,16 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 257,
+    "source": "PHB 2014"
   },
-  "magnificent_mansion": {
-    "id": "magnificent_mansion",
-    "name": "magnificent mansion",
-    "ukr": "magnificent mansion",
-    "level": 7,
-    "type": "spell",
-    "school": "conjuration",
-    "effectType": "utility",
-    "classes": [
-      "bard",
-      "wizard"
-    ],
-    "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "300 feet",
-    "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
-    },
-    "materialText": "",
-    "duration": "24 hours",
-    "concentration": false,
-    "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 7,
-    "description": "",
-    "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
-  },
-  "major_image": {
-    "id": "major_image",
-    "name": "major image",
-    "ukr": "major image",
+  "majorImage": {
+    "id": "majorImage",
+    "name": "Major Image",
+    "ukr": "Major Image",
     "level": 3,
     "type": "spell",
     "school": "illusion",
@@ -6758,15 +8596,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "a bit of fleece",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6775,33 +8613,38 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM",
+      "SGT"
+    ],
+    "page": 258,
+    "source": "PHB 2014"
   },
-  "mass_cure_wounds": {
-    "id": "mass_cure_wounds",
-    "name": "mass cure wounds",
-    "ukr": "mass cure wounds",
+  "massCureWounds": {
+    "id": "massCureWounds",
+    "name": "Mass Cure Wounds",
+    "ukr": "Mass Cure Wounds",
     "level": 5,
     "type": "spell",
-    "school": "conjuration",
-    "effectType": "utility",
+    "school": "evocation",
+    "effectType": "healing",
     "classes": [
       "bard",
       "cleric",
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6810,31 +8653,38 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT",
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL"
+    ],
+    "page": 258,
+    "source": "PHB 2014"
   },
-  "mass_heal": {
-    "id": "mass_heal",
-    "name": "mass heal",
-    "ukr": "mass heal",
+  "massHeal": {
+    "id": "massHeal",
+    "name": "Mass Heal",
+    "ukr": "Mass Heal",
     "level": 9,
     "type": "spell",
-    "school": "conjuration",
-    "effectType": "utility",
+    "school": "evocation",
+    "effectType": "healing",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6843,31 +8693,38 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL",
+      "SGT"
+    ],
+    "page": 258,
+    "source": "PHB 2014"
   },
-  "mass_healing_word": {
-    "id": "mass_healing_word",
-    "name": "mass healing word",
-    "ukr": "mass healing word",
+  "massHealingWord": {
+    "id": "massHealingWord",
+    "name": "Mass Healing Word",
+    "ukr": "Mass Healing Word",
     "level": 3,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "60 feet",
+    "castingTime": "1 бонусна дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6876,18 +8733,25 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL",
+      "SGT"
+    ],
+    "page": 258,
+    "source": "PHB 2014"
   },
-  "mass_suggestion": {
-    "id": "mass_suggestion",
-    "name": "mass suggestion",
-    "ukr": "mass suggestion",
+  "massSuggestion": {
+    "id": "massSuggestion",
+    "name": "Mass Suggestion",
+    "ukr": "Mass Suggestion",
     "level": 6,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "sorcerer",
@@ -6895,30 +8759,36 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
-      "material": false
+      "material": true
     },
-    "materialText": "",
-    "duration": "24 hours",
+    "materialText": "a snake's tongue and either a bit of honeycomb or a drop of sweet oil",
+    "duration": "24 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 258,
+    "source": "PHB 2014"
   },
   "maze": {
     "id": "maze",
-    "name": "maze",
+    "name": "Maze",
     "ukr": "maze",
     "level": 8,
     "type": "spell",
@@ -6928,15 +8798,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -6945,68 +8815,114 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 258,
+    "source": "PHB 2014"
   },
-  "meld_into_stone": {
-    "id": "meld_into_stone",
-    "name": "meld into stone",
-    "ukr": "meld into stone",
+  "meldIntoStone": {
+    "id": "meldIntoStone",
+    "name": "Meld into Stone",
+    "ukr": "Meld into Stone",
     "level": 3,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
-      "cleric"
+      "cleric",
+      "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "8 hours",
+    "duration": "8 год",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "bludgeoning",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 259,
+    "source": "PHB 2014"
+  },
+  "melfSAcidArrow": {
+    "id": "melfSAcidArrow",
+    "name": "Melf's Acid Arrow",
+    "ukr": "Melf's Acid Arrow",
+    "level": 2,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "attack",
+    "classes": [
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "90 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "powdered rhubarb leaf and an adder's stomach",
+    "duration": "Миттєво",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 2,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "acid",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 259,
+    "source": "PHB 2014"
   },
   "mending": {
     "id": "mending",
-    "name": "mending",
+    "name": "Mending",
     "ukr": "mending",
     "level": 0,
     "type": "cantrip",
     "school": "transmutation",
     "effectType": "utility",
     "classes": [
-      "cleric",
       "bard",
+      "cleric",
       "druid",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 Minute",
-    "range": "Touch",
+    "castingTime": "1 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "two lodestones",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
@@ -7015,13 +8931,17 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 259,
+    "source": "PHB 2014"
   },
   "message": {
     "id": "message",
-    "name": "message",
+    "name": "Message",
     "ukr": "message",
     "level": 0,
     "type": "cantrip",
@@ -7033,15 +8953,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 round",
+    "materialText": "a short piece of copper wire",
+    "duration": "1 раунд",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
@@ -7050,48 +8970,59 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 259,
+    "source": "PHB 2014"
   },
-  "meteor_swarm": {
-    "id": "meteor_swarm",
-    "name": "meteor swarm",
-    "ukr": "meteor swarm",
+  "meteorSwarm": {
+    "id": "meteorSwarm",
+    "name": "Meteor Swarm",
+    "ukr": "Meteor Swarm",
     "level": 9,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "1 mile",
+    "castingTime": "1 дія",
+    "range": "1 миль",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 9,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "bludgeoning, fire",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "SGT"
+    ],
+    "page": 259,
+    "source": "PHB 2014"
   },
-  "mind_blank": {
-    "id": "mind_blank",
-    "name": "mind blank",
-    "ukr": "mind blank",
+  "mindBlank": {
+    "id": "mindBlank",
+    "name": "Mind Blank",
+    "ukr": "Mind Blank",
     "level": 8,
     "type": "spell",
     "school": "abjuration",
@@ -7101,15 +9032,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "24 hours",
+    "duration": "24 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -7118,14 +9049,18 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 259,
+    "source": "PHB 2014"
   },
-  "minor_illusion": {
-    "id": "minor_illusion",
-    "name": "minor illusion",
-    "ukr": "minor illusion",
+  "minorIllusion": {
+    "id": "minorIllusion",
+    "name": "Minor Illusion",
+    "ukr": "Minor Illusion",
     "level": 0,
     "type": "cantrip",
     "school": "illusion",
@@ -7137,31 +9072,33 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
       "verbal": false,
-      "somatic": false,
-      "material": false
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 minute",
+    "materialText": "a bit of fleece",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "You create a sound or an image of an object within range that lasts for the duration. The illusion also ends if you dismiss it as an action or cast this spell again. If you create a sound, its volume can range from a whisper to a scream. It can be your voice, someone else’s voice, a lion’s roar, a beating of drums, or any other sound you choose. The sound continues unabated throughout the duration, or you can make discrete sounds at different times before the spell ends. If you create an image of an object—such as a chair, muddy footprints, or a small chest—it must be no larger than a 5-foot cube. The image can’t create sound, light, smell, or any other sensory effect. Physical interaction with the image reveals it to be an illusion, because things can pass through it. If a creature uses its action to examine the sound or image, the creature can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the illusion becomes faint to the creature.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 260,
+    "source": "PHB 2014"
   },
-  "mirage_arcane": {
-    "id": "mirage_arcane",
-    "name": "mirage arcane",
-    "ukr": "mirage arcane",
+  "mirageArcane": {
+    "id": "mirageArcane",
+    "name": "Mirage Arcane",
+    "ukr": "Mirage Arcane",
     "level": 7,
     "type": "spell",
     "school": "illusion",
@@ -7172,15 +9109,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "Sight",
+    "castingTime": "10 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "10 days",
+    "duration": "10 дн",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -7189,14 +9126,16 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 260,
+    "source": "PHB 2014"
   },
-  "mirror_image": {
-    "id": "mirror_image",
-    "name": "mirror image",
-    "ukr": "mirror image",
+  "mirrorImage": {
+    "id": "mirrorImage",
+    "name": "Mirror Image",
+    "ukr": "Mirror Image",
     "level": 2,
     "type": "spell",
     "school": "illusion",
@@ -7207,15 +9146,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -7224,13 +9163,15 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 260,
+    "source": "PHB 2014"
   },
   "mislead": {
     "id": "mislead",
-    "name": "mislead",
+    "name": "Mislead",
     "ukr": "mislead",
     "level": 5,
     "type": "spell",
@@ -7241,15 +9182,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
       "verbal": false,
-      "somatic": false,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -7258,14 +9199,19 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT",
+      "UBA"
+    ],
+    "page": 260,
+    "source": "PHB 2014"
   },
-  "misty_step": {
-    "id": "misty_step",
-    "name": "misty step",
-    "ukr": "misty step",
+  "mistyStep": {
+    "id": "mistyStep",
+    "name": "Misty Step",
+    "ukr": "Misty Step",
     "level": 2,
     "type": "spell",
     "school": "conjuration",
@@ -7276,15 +9222,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "Self",
+    "castingTime": "1 бонусна дія",
+    "range": "point",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -7293,81 +9239,255 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT",
+      "TP"
+    ],
+    "page": 260,
+    "source": "PHB 2014"
   },
-  "modify_memory": {
-    "id": "modify_memory",
-    "name": "modify memory",
-    "ukr": "modify memory",
+  "modifyMemory": {
+    "id": "modifyMemory",
+    "name": "Modify Memory",
+    "ukr": "Modify Memory",
     "level": 5,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM",
+      "SGT"
+    ],
+    "page": 261,
+    "source": "PHB 2014"
   },
   "moonbeam": {
     "id": "moonbeam",
-    "name": "moonbeam",
+    "name": "Moonbeam",
     "ukr": "moonbeam",
     "level": 2,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "several seeds of any moonseed plant and a piece of opalescent feldspar",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
+    "savingThrow": "constitution",
+    "damageType": "radiant",
+    "areaTags": [
+      "Y"
+    ],
+    "damage": null,
+    "miscTags": [
+      "LGT"
+    ],
+    "page": 261,
+    "source": "PHB 2014"
+  },
+  "mordenkainenSFaithfulHound": {
+    "id": "mordenkainenSFaithfulHound",
+    "name": "Mordenkainen's Faithful Hound",
+    "ukr": "Mordenkainen's Faithful Hound",
+    "level": 4,
+    "type": "spell",
+    "school": "conjuration",
+    "effectType": "attack",
+    "classes": [
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a tiny silver whistle, a piece of bone, and a thread",
+    "duration": "8 год",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 4,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "piercing",
+    "areaTags": [],
+    "damage": null,
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 261,
+    "source": "PHB 2014"
+  },
+  "mordenkainenSMagnificentMansion": {
+    "id": "mordenkainenSMagnificentMansion",
+    "name": "Mordenkainen's Magnificent Mansion",
+    "ukr": "Mordenkainen's Magnificent Mansion",
+    "level": 7,
+    "type": "spell",
+    "school": "conjuration",
+    "effectType": "utility",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 хв",
+    "range": "300 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "",
+    "duration": "24 год",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 7,
+    "description": "",
+    "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 261,
+    "source": "PHB 2014"
   },
-  "move_earth": {
-    "id": "move_earth",
-    "name": "move earth",
-    "ukr": "move earth",
+  "mordenkainenSPrivateSanctum": {
+    "id": "mordenkainenSPrivateSanctum",
+    "name": "Mordenkainen's Private Sanctum",
+    "ukr": "Mordenkainen's Private Sanctum",
+    "level": 4,
+    "type": "spell",
+    "school": "abjuration",
+    "effectType": "utility",
+    "classes": [
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "10 хв",
+    "range": "120 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a thin sheet of lead, a piece of opaque glass, a wad of cotton or cloth, and powdered chrysolite",
+    "duration": "24 год",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 4,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "",
+    "areaTags": [
+      "C"
+    ],
+    "damage": null,
+    "miscTags": [
+      "PIR",
+      "PRM"
+    ],
+    "page": 262,
+    "source": "PHB 2014"
+  },
+  "mordenkainenSSword": {
+    "id": "mordenkainenSSword",
+    "name": "Mordenkainen's Sword",
+    "ukr": "Mordenkainen's Sword",
+    "level": 7,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "attack",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "60 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 7,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "force",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [
+      "SGT",
+      "UBA"
+    ],
+    "page": 262,
+    "source": "PHB 2014"
+  },
+  "moveEarth": {
+    "id": "moveEarth",
+    "name": "Move Earth",
+    "ukr": "Move Earth",
     "level": 6,
     "type": "spell",
     "school": "transmutation",
@@ -7378,15 +9498,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 2 hours",
+    "materialText": "an iron blade and a small bag containing a mixture of soils—clay, loam, and sand",
+    "duration": "2 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -7395,13 +9515,17 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "Q"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 263,
+    "source": "PHB 2014"
   },
   "nondetection": {
     "id": "nondetection",
-    "name": "nondetection",
+    "name": "Nondetection",
     "ukr": "nondetection",
     "level": 3,
     "type": "spell",
@@ -7413,15 +9537,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "8 hours",
+    "duration": "8 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -7430,14 +9554,177 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 263,
+    "source": "PHB 2014"
   },
-  "pass_without_trace": {
-    "id": "pass_without_trace",
-    "name": "pass without trace",
-    "ukr": "pass without trace",
+  "nystulSMagicAura": {
+    "id": "nystulSMagicAura",
+    "name": "Nystul's Magic Aura",
+    "ukr": "Nystul's Magic Aura",
+    "level": 2,
+    "type": "spell",
+    "school": "illusion",
+    "effectType": "utility",
+    "classes": [
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a small square of silk",
+    "duration": "24 год",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 2,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [
+      "OBJ",
+      "PIR",
+      "PRM"
+    ],
+    "page": 263,
+    "source": "PHB 2014"
+  },
+  "otilukeSFreezingSphere": {
+    "id": "otilukeSFreezingSphere",
+    "name": "Otiluke's Freezing Sphere",
+    "ukr": "Otiluke's Freezing Sphere",
+    "level": 6,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "save",
+    "classes": [
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "300 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a small crystal sphere",
+    "duration": "Миттєво",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 6,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "constitution",
+    "damageType": "cold",
+    "areaTags": [
+      "S"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 263,
+    "source": "PHB 2014"
+  },
+  "otilukeSResilientSphere": {
+    "id": "otilukeSResilientSphere",
+    "name": "Otiluke's Resilient Sphere",
+    "ukr": "Otiluke's Resilient Sphere",
+    "level": 4,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "save",
+    "classes": [
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a hemispherical piece of clear crystal and a matching hemispherical piece of gum arabic",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 4,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "dexterity",
+    "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 264,
+    "source": "PHB 2014"
+  },
+  "ottoSIrresistibleDance": {
+    "id": "ottoSIrresistibleDance",
+    "name": "Otto's Irresistible Dance",
+    "ukr": "Otto's Irresistible Dance",
+    "level": 6,
+    "type": "spell",
+    "school": "enchantment",
+    "effectType": "save",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 6,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "wisdom",
+    "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 264,
+    "source": "PHB 2014"
+  },
+  "passWithoutTrace": {
+    "id": "passWithoutTrace",
+    "name": "Pass without Trace",
+    "ukr": "Pass without Trace",
     "level": 2,
     "type": "spell",
     "school": "abjuration",
@@ -7447,15 +9734,15 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "ashes from a burned leaf of mistletoe and a sprig of spruce",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -7464,13 +9751,17 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 264,
+    "source": "PHB 2014"
   },
   "passwall": {
     "id": "passwall",
-    "name": "passwall",
+    "name": "Passwall",
     "ukr": "passwall",
     "level": 5,
     "type": "spell",
@@ -7480,15 +9771,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 hour",
+    "materialText": "a pinch of sesame seeds",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -7497,47 +9788,97 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "SGT"
+    ],
+    "page": 264,
+    "source": "PHB 2014"
   },
-  "phantasmal_killer": {
-    "id": "phantasmal_killer",
-    "name": "phantasmal killer",
-    "ukr": "phantasmal killer",
+  "phantasmalForce": {
+    "id": "phantasmalForce",
+    "name": "Phantasmal Force",
+    "ukr": "Phantasmal Force",
+    "level": 2,
+    "type": "spell",
+    "school": "illusion",
+    "effectType": "save",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "60 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a bit of fleece",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 2,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "intelligence",
+    "damageType": "psychic",
+    "areaTags": [],
+    "damage": null,
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 264,
+    "source": "PHB 2014"
+  },
+  "phantasmalKiller": {
+    "id": "phantasmalKiller",
+    "name": "Phantasmal Killer",
+    "ukr": "Phantasmal Killer",
     "level": 4,
     "type": "spell",
     "school": "illusion",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 4,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "wisdom",
+    "damageType": "psychic",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 265,
+    "source": "PHB 2014"
   },
-  "phantom_steed": {
-    "id": "phantom_steed",
-    "name": "phantom steed",
-    "ukr": "phantom steed",
+  "phantomSteed": {
+    "id": "phantomSteed",
+    "name": "Phantom Steed",
+    "ukr": "Phantom Steed",
     "level": 3,
     "type": "spell",
     "school": "illusion",
@@ -7546,31 +9887,35 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "30 feet",
+    "castingTime": "1 хв",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 hour",
+    "duration": "1 год",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SMN"
+    ],
+    "page": 265,
+    "source": "PHB 2014"
   },
-  "planar_ally": {
-    "id": "planar_ally",
-    "name": "planar ally",
-    "ukr": "planar ally",
+  "planarAlly": {
+    "id": "planarAlly",
+    "name": "Planar Ally",
+    "ukr": "Planar Ally",
     "level": 6,
     "type": "spell",
     "school": "conjuration",
@@ -7579,15 +9924,15 @@ export const SPELLS = {
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "60 feet",
+    "castingTime": "10 хв",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -7596,18 +9941,22 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SMN"
+    ],
+    "page": 265,
+    "source": "PHB 2014"
   },
-  "planar_binding": {
-    "id": "planar_binding",
-    "name": "planar binding",
-    "ukr": "planar binding",
+  "planarBinding": {
+    "id": "planarBinding",
+    "name": "Planar Binding",
+    "ukr": "Planar Binding",
     "level": 5,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "cleric",
@@ -7615,35 +9964,41 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 hour",
-    "range": "60 feet",
+    "castingTime": "1 год",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "24 hours",
+    "duration": "24 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "charisma",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SMN"
+    ],
+    "page": 265,
+    "source": "PHB 2014"
   },
-  "plane_shift": {
-    "id": "plane_shift",
-    "name": "plane shift",
-    "ukr": "plane shift",
+  "planeShift": {
+    "id": "planeShift",
+    "name": "Plane Shift",
+    "ukr": "Plane Shift",
     "level": 7,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric",
       "druid",
@@ -7652,31 +10007,39 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 7,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "charisma",
     "damageType": "",
+    "areaTags": [
+      "MT",
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PS",
+      "TP"
+    ],
+    "page": 266,
+    "source": "PHB 2014"
   },
-  "plant_growth": {
-    "id": "plant_growth",
-    "name": "plant growth",
-    "ukr": "plant growth",
+  "plantGrowth": {
+    "id": "plantGrowth",
+    "name": "Plant Growth",
+    "ukr": "Plant Growth",
     "level": 3,
     "type": "spell",
     "school": "transmutation",
@@ -7687,15 +10050,15 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "150 feet",
+    "castingTime": "1 дія, 8 год",
+    "range": "150 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -7704,54 +10067,73 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "DFT"
+    ],
+    "page": 266,
+    "source": "PHB 2014"
   },
-  "poison_spray": {
-    "id": "poison_spray",
-    "name": "poison spray",
-    "ukr": "poison spray",
+  "poisonSpray": {
+    "id": "poisonSpray",
+    "name": "Poison Spray",
+    "ukr": "Poison Spray",
     "level": 0,
     "type": "cantrip",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
+      "druid",
       "sorcerer",
       "warlock",
-      "wizard",
-      "druid"
+      "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "10 feet",
+    "castingTime": "1 дія",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "You extend your hand toward a creature you can see within range and project a puff of noxious gas from your palm. The creature must succeed on a Constitution saving throw or take 1d12 poison damage. This spell’s damage increases by 1d12 when you reach 5th level (2d12), 11th level (3d12), and 17th level (4d12).",
+    "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "savingThrow": "constitution",
+    "damageType": "poison",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": {
+      "label": "poison damage",
+      "scaling": {
+        "1": "1d12",
+        "5": "2d12",
+        "11": "3d12",
+        "17": "4d12"
+      }
+    },
+    "miscTags": [
+      "SCL",
+      "SGT"
+    ],
+    "page": 266,
+    "source": "PHB 2014"
   },
   "polymorph": {
     "id": "polymorph",
-    "name": "polymorph",
+    "name": "Polymorph",
     "ukr": "polymorph",
     "level": 4,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "druid",
@@ -7759,51 +10141,54 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "a caterpillar cocoon",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 4,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 266,
+    "source": "PHB 2014"
   },
-  "power_word_kill": {
-    "id": "power_word_kill",
-    "name": "power word kill",
-    "ukr": "power word kill",
+  "powerWordHeal": {
+    "id": "powerWordHeal",
+    "name": "Power Word Heal",
+    "ukr": "Power Word Heal",
     "level": 9,
     "type": "spell",
-    "school": "enchantment",
-    "effectType": "utility",
+    "school": "evocation",
+    "effectType": "healing",
     "classes": [
-      "bard",
-      "sorcerer",
-      "warlock",
-      "wizard"
+      "bard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -7812,18 +10197,24 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL"
+    ],
+    "page": 266,
+    "source": "PHB 2014"
   },
-  "power_word_stun": {
-    "id": "power_word_stun",
-    "name": "power word stun",
-    "ukr": "power word stun",
-    "level": 8,
+  "powerWordKill": {
+    "id": "powerWordKill",
+    "name": "Power Word Kill",
+    "ukr": "Power Word Kill",
+    "level": 9,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "bard",
       "sorcerer",
@@ -7831,48 +10222,96 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 9,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 266,
+    "source": "PHB 2014"
+  },
+  "powerWordStun": {
+    "id": "powerWordStun",
+    "name": "Power Word Stun",
+    "ukr": "Power Word Stun",
+    "level": 8,
+    "type": "spell",
+    "school": "enchantment",
+    "effectType": "save",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "60 футів",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 8,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "constitution",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 267,
+    "source": "PHB 2014"
   },
-  "prayer_of_healing": {
-    "id": "prayer_of_healing",
-    "name": "prayer of healing",
-    "ukr": "prayer of healing",
+  "prayerOfHealing": {
+    "id": "prayerOfHealing",
+    "name": "Prayer of Healing",
+    "ukr": "Prayer of Healing",
     "level": 2,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "30 feet",
+    "castingTime": "10 хв",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -7881,13 +10320,20 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL",
+      "SGT"
+    ],
+    "page": 267,
+    "source": "PHB 2014"
   },
   "prestidigitation": {
     "id": "prestidigitation",
-    "name": "prestidigitation",
+    "name": "Prestidigitation",
     "ukr": "prestidigitation",
     "level": 0,
     "type": "cantrip",
@@ -7900,15 +10346,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "10 feet",
+    "castingTime": "1 дія",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
@@ -7917,147 +10363,147 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 267,
+    "source": "PHB 2014"
   },
-  "prismatic_spray": {
-    "id": "prismatic_spray",
-    "name": "prismatic spray",
-    "ukr": "prismatic spray",
+  "prismaticSpray": {
+    "id": "prismaticSpray",
+    "name": "Prismatic Spray",
+    "ukr": "Prismatic Spray",
     "level": 7,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 7,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity, constitution, wisdom",
+    "damageType": "acid, cold, fire, lightning, poison",
+    "areaTags": [
+      "N"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PRM"
+    ],
+    "page": 267,
+    "source": "PHB 2014"
   },
-  "prismatic_wall": {
-    "id": "prismatic_wall",
-    "name": "prismatic wall",
-    "ukr": "prismatic wall",
+  "prismaticWall": {
+    "id": "prismaticWall",
+    "name": "Prismatic Wall",
+    "ukr": "Prismatic Wall",
     "level": 9,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 9,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
-  },
-  "private_sanctum": {
-    "id": "private_sanctum",
-    "name": "private sanctum",
-    "ukr": "private sanctum",
-    "level": 4,
-    "type": "spell",
-    "school": "abjuration",
-    "effectType": "utility",
-    "classes": [
-      "wizard"
+    "savingThrow": "constitution, dexterity, wisdom",
+    "damageType": "acid, cold, fire, force, lightning, poison",
+    "areaTags": [
+      "W"
     ],
-    "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "120 feet",
-    "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
-    },
-    "materialText": "",
-    "duration": "24 hours",
-    "concentration": false,
-    "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 4,
-    "description": "",
-    "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "LGT",
+      "PRM",
+      "SGT"
+    ],
+    "page": 267,
+    "source": "PHB 2014"
   },
-  "produce_flame": {
-    "id": "produce_flame",
-    "name": "produce flame",
-    "ukr": "produce flame",
+  "produceFlame": {
+    "id": "produceFlame",
+    "name": "Produce Flame",
+    "ukr": "Produce Flame",
     "level": 0,
     "type": "cantrip",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "A flame appears in your hand, harming neither you or your equipment. It sheds bright light in a 10-foot radius and dim light for an additional 10 feet. The spell ends if you dismiss it as an action or if you cast it again.You can hurl the flame at a creature within 30 feet of you. Make a ranged spell attack. On a hit, the target takes 1d8 fire damage. The spell then ends.The damage increases by 1d8 when you reach 5th, 11th, and 17th level.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "damageType": "fire",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": {
+      "label": "fire damage",
+      "scaling": {
+        "1": "1d8",
+        "5": "2d8",
+        "11": "3d8",
+        "17": "4d8"
+      }
+    },
+    "miscTags": [
+      "LGT",
+      "SCL"
+    ],
+    "page": 269,
+    "source": "PHB 2014"
   },
-  "programmed_illusion": {
-    "id": "programmed_illusion",
-    "name": "programmed illusion",
-    "ukr": "programmed illusion",
+  "programmedIllusion": {
+    "id": "programmedIllusion",
+    "name": "Programmed Illusion",
+    "ukr": "Programmed Illusion",
     "level": 6,
     "type": "spell",
     "school": "illusion",
@@ -8067,15 +10513,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Until dispelled",
+    "duration": "Постійно",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8084,14 +10530,16 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 269,
+    "source": "PHB 2014"
   },
-  "project_image": {
-    "id": "project_image",
-    "name": "project image",
-    "ukr": "project image",
+  "projectImage": {
+    "id": "projectImage",
+    "name": "Project Image",
+    "ukr": "Project Image",
     "level": 7,
     "type": "spell",
     "school": "illusion",
@@ -8101,15 +10549,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "500 miles",
+    "castingTime": "1 дія",
+    "range": "500 миль",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Up to 24 hours",
+    "duration": "1 дн",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8118,14 +10566,19 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT",
+      "UBA"
+    ],
+    "page": 270,
+    "source": "PHB 2014"
   },
-  "protection_from_energy": {
-    "id": "protection_from_energy",
-    "name": "protection from energy",
-    "ukr": "protection from energy",
+  "protectionFromEnergy": {
+    "id": "protectionFromEnergy",
+    "name": "Protection from Energy",
+    "ukr": "Protection from Energy",
     "level": 3,
     "type": "spell",
     "school": "abjuration",
@@ -8138,15 +10591,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8155,14 +10608,18 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 270,
+    "source": "PHB 2014"
   },
-  "protection_from_evil_and_good": {
-    "id": "protection_from_evil_and_good",
-    "name": "protection from evil and good",
-    "ukr": "protection from evil and good",
+  "protectionFromEvilAndGood": {
+    "id": "protectionFromEvilAndGood",
+    "name": "Protection from Evil and Good",
+    "ukr": "Protection from Evil and Good",
     "level": 1,
     "type": "spell",
     "school": "abjuration",
@@ -8174,31 +10631,37 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Conc. Up to 10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "One willing creature you touch is protected against aberrations, celestials, elementals, fey, fiends, and undead. Creatures of those types have disadvantage on attack rolls against the target. The target also can't be charmed, frightened, or possessed by them. If the target already has such an effect by one of them, the target has advantage on any new saving throw against it.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV"
+    ],
+    "page": 270,
+    "source": "PHB 2014"
   },
-  "protection_from_poison": {
-    "id": "protection_from_poison",
-    "name": "protection from poison",
-    "ukr": "protection from poison",
+  "protectionFromPoison": {
+    "id": "protectionFromPoison",
+    "name": "Protection from Poison",
+    "ukr": "Protection from Poison",
     "level": 2,
     "type": "spell",
     "school": "abjuration",
@@ -8210,15 +10673,15 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8227,14 +10690,20 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV"
+    ],
+    "page": 270,
+    "source": "PHB 2014"
   },
-  "purify_food_and_drink": {
-    "id": "purify_food_and_drink",
-    "name": "purify food and drink",
-    "ukr": "purify food and drink",
+  "purifyFoodAndDrink": {
+    "id": "purifyFoodAndDrink",
+    "name": "Purify Food and Drink",
+    "ukr": "Purify Food and Drink",
     "level": 1,
     "type": "spell",
     "school": "transmutation",
@@ -8245,31 +10714,35 @@ export const SPELLS = {
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 action (Ritual)",
-    "range": "10 feet",
+    "castingTime": "1 дія",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "Non-magical food and drink within a 5-foot-radius sphere centered on a point is rendered free of poison and disease.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 270,
+    "source": "PHB 2014"
   },
-  "raise_dead": {
-    "id": "raise_dead",
-    "name": "raise dead",
-    "ukr": "raise dead",
+  "raiseDead": {
+    "id": "raiseDead",
+    "name": "Raise Dead",
+    "ukr": "Raise Dead",
     "level": 5,
     "type": "spell",
     "school": "necromancy",
@@ -8280,15 +10753,15 @@ export const SPELLS = {
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 hour",
-    "range": "Touch",
+    "castingTime": "1 год",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8297,101 +10770,198 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL"
+    ],
+    "page": 270,
+    "source": "PHB 2014"
   },
-  "ray_of_enfeeblement": {
-    "id": "ray_of_enfeeblement",
-    "name": "ray of enfeeblement",
-    "ukr": "ray of enfeeblement",
+  "rarySTelepathicBond": {
+    "id": "rarySTelepathicBond",
+    "name": "Rary's Telepathic Bond",
+    "ukr": "Rary's Telepathic Bond",
+    "level": 5,
+    "type": "spell",
+    "school": "divination",
+    "effectType": "utility",
+    "classes": [
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "pieces of eggshell from two different kinds of creatures",
+    "duration": "1 год",
+    "concentration": false,
+    "ritual": true,
+    "requiresSlot": true,
+    "spellSlotLevel": 5,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 270,
+    "source": "PHB 2014"
+  },
+  "rayOfEnfeeblement": {
+    "id": "rayOfEnfeeblement",
+    "name": "Ray of Enfeeblement",
+    "ukr": "Ray of Enfeeblement",
     "level": 2,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "constitution",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 271,
+    "source": "PHB 2014"
   },
-  "ray_of_frost": {
-    "id": "ray_of_frost",
-    "name": "ray of frost",
-    "ukr": "ray of frost",
+  "rayOfFrost": {
+    "id": "rayOfFrost",
+    "name": "Ray of Frost",
+    "ukr": "Ray of Frost",
     "level": 0,
     "type": "cantrip",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "A frigid beam of blue-white light streaks toward a creature within range. Make a ranged spell attack against the target. On a hit, it takes 1d8 cold damage, and its speed is reduced by 10 feet until the start of your next turn. The spell’s damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "cold",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": {
+      "label": "cold damage",
+      "scaling": {
+        "1": "1d8",
+        "5": "2d8",
+        "11": "3d8",
+        "17": "4d8"
+      }
+    },
+    "miscTags": [
+      "SCL"
+    ],
+    "page": 271,
+    "source": "PHB 2014"
+  },
+  "rayOfSickness": {
+    "id": "rayOfSickness",
+    "name": "Ray of Sickness",
+    "ukr": "Ray of Sickness",
+    "level": 1,
+    "type": "spell",
+    "school": "necromancy",
+    "effectType": "save",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "60 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "Миттєво",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 1,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "constitution",
+    "damageType": "poison",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 271,
+    "source": "PHB 2014"
   },
   "regenerate": {
     "id": "regenerate",
-    "name": "regenerate",
+    "name": "Regenerate",
     "ukr": "regenerate",
     "level": 7,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "bard",
       "cleric",
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "Touch",
+    "castingTime": "1 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 hour",
+    "materialText": "a prayer wheel and holy water",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8400,13 +10970,19 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL"
+    ],
+    "page": 271,
+    "source": "PHB 2014"
   },
   "reincarnate": {
     "id": "reincarnate",
-    "name": "reincarnate",
+    "name": "Reincarnate",
     "ukr": "reincarnate",
     "level": 5,
     "type": "spell",
@@ -8416,15 +10992,15 @@ export const SPELLS = {
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 hour",
-    "range": "Touch",
+    "castingTime": "1 год",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8433,14 +11009,19 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL",
+      "RO"
+    ],
+    "page": 271,
+    "source": "PHB 2014"
   },
-  "remove_curse": {
-    "id": "remove_curse",
-    "name": "remove curse",
-    "ukr": "remove curse",
+  "removeCurse": {
+    "id": "removeCurse",
+    "name": "Remove Curse",
+    "ukr": "Remove Curse",
     "level": 3,
     "type": "spell",
     "school": "abjuration",
@@ -8452,15 +11033,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8469,46 +11050,19 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
-  },
-  "resilient_sphere": {
-    "id": "resilient_sphere",
-    "name": "resilient sphere",
-    "ukr": "resilient sphere",
-    "level": 4,
-    "type": "spell",
-    "school": "evocation",
-    "effectType": "utility",
-    "classes": [
-      "wizard"
+    "areaTags": [
+      "ST"
     ],
-    "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
-    "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
-    },
-    "materialText": "",
-    "duration": "Up to 1 minute",
-    "concentration": false,
-    "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 4,
-    "description": "",
-    "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 271,
+    "source": "PHB 2014"
   },
   "resistance": {
     "id": "resistance",
-    "name": "resistance",
+    "name": "Resistance",
     "ukr": "resistance",
     "level": 0,
     "type": "cantrip",
@@ -8519,15 +11073,15 @@ export const SPELLS = {
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Concentration, up to 1 minute",
+    "materialText": "a miniature cloak",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
@@ -8536,32 +11090,36 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 272,
+    "source": "PHB 2014"
   },
   "resurrection": {
     "id": "resurrection",
-    "name": "resurrection",
+    "name": "Resurrection",
     "ukr": "resurrection",
     "level": 7,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "bard",
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 hour",
-    "range": "Touch",
+    "castingTime": "1 год",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8570,67 +11128,77 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL"
+    ],
+    "page": 272,
+    "source": "PHB 2014"
   },
-  "reverse_gravity": {
-    "id": "reverse_gravity",
-    "name": "reverse gravity",
-    "ukr": "reverse gravity",
+  "reverseGravity": {
+    "id": "reverseGravity",
+    "name": "Reverse Gravity",
+    "ukr": "Reverse Gravity",
     "level": 7,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "100 feet",
+    "castingTime": "1 дія",
+    "range": "100 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a lodestone and iron filings",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 7,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "dexterity",
     "damageType": "",
+    "areaTags": [
+      "Y"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 272,
+    "source": "PHB 2014"
   },
   "revivify": {
     "id": "revivify",
-    "name": "revivify",
+    "name": "Revivify",
     "ukr": "revivify",
     "level": 3,
     "type": "spell",
-    "school": "conjuration",
+    "school": "necromancy",
     "effectType": "utility",
     "classes": [
       "cleric",
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8639,14 +11207,20 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL"
+    ],
+    "page": 272,
+    "source": "PHB 2014"
   },
-  "rope_trick": {
-    "id": "rope_trick",
-    "name": "rope trick",
-    "ukr": "rope trick",
+  "ropeTrick": {
+    "id": "ropeTrick",
+    "name": "Rope Trick",
+    "ukr": "Rope Trick",
     "level": 2,
     "type": "spell",
     "school": "transmutation",
@@ -8655,15 +11229,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 hour",
+    "materialText": "powdered corn extract and a twisted loop of parchment",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8672,98 +11246,119 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 272,
+    "source": "PHB 2014"
   },
-  "sacred_flame": {
-    "id": "sacred_flame",
-    "name": "sacred flame",
-    "ukr": "sacred flame",
+  "sacredFlame": {
+    "id": "sacredFlame",
+    "name": "Sacred Flame",
+    "ukr": "Sacred Flame",
     "level": 0,
     "type": "cantrip",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "Flame-like radiance descends on a creature that you can see within range. The target must succeed on a Dexterity saving throw or take 1d8 radiant damage. The target gains no benefit from cover for this saving throw. The spell’s damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).",
+    "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "savingThrow": "dexterity",
+    "damageType": "radiant",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": {
+      "label": "radiant damage",
+      "scaling": {
+        "1": "1d8",
+        "5": "2d8",
+        "11": "3d8",
+        "17": "4d8"
+      }
+    },
+    "miscTags": [
+      "SCL",
+      "SGT"
+    ],
+    "page": 272,
+    "source": "PHB 2014"
   },
   "sanctuary": {
     "id": "sanctuary",
-    "name": "sanctuary",
+    "name": "Sanctuary",
     "ukr": "sanctuary",
     "level": 1,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "30 feet",
+    "castingTime": "1 бонусна дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 minute",
+    "materialText": "a small silver mirror",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
     "description": "You ward a creature within range against attack. Until the spell ends, any creature who targets the warded creature with an attack or a harmful spell must first make a Wisdom saving throw. On a failed save, the creature must choose a new target or lose the attack or spell. This spell doesn’t protect the warded creature from area effects, such as the explosion of a fireball. If the warded creature makes an attack or casts a spell that affects an enemy creature, this spell ends.",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 272,
+    "source": "PHB 2014"
   },
-  "scorching_ray": {
-    "id": "scorching_ray",
-    "name": "scorching ray",
-    "ukr": "scorching ray",
+  "scorchingRay": {
+    "id": "scorchingRay",
+    "name": "Scorching Ray",
+    "ukr": "Scorching Ray",
     "level": 2,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8771,19 +11366,24 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "fire",
+    "areaTags": [
+      "MT",
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 273,
+    "source": "PHB 2014"
   },
   "scrying": {
     "id": "scrying",
-    "name": "scrying",
+    "name": "Scrying",
     "ukr": "scrying",
     "level": 5,
     "type": "spell",
     "school": "divination",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "cleric",
@@ -8792,64 +11392,70 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "10 minutes",
-    "range": "Self",
+    "castingTime": "10 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Up to 10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 273,
+    "source": "PHB 2014"
   },
-  "secret_chest": {
-    "id": "secret_chest",
-    "name": "secret chest",
-    "ukr": "secret chest",
-    "level": 4,
+  "searingSmite": {
+    "id": "searingSmite",
+    "name": "Searing Smite",
+    "ukr": "Searing Smite",
+    "level": 1,
     "type": "spell",
-    "school": "conjuration",
-    "effectType": "utility",
+    "school": "evocation",
+    "effectType": "save",
     "classes": [
-      "wizard"
+      "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 бонусна дія",
+    "range": "point",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
-    "spellSlotLevel": 4,
+    "spellSlotLevel": 1,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "constitution",
+    "damageType": "fire",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "AAD"
+    ],
+    "page": 274,
+    "source": "PHB 2014"
   },
-  "see_invisibility": {
-    "id": "see_invisibility",
-    "name": "see invisibility",
-    "ukr": "see invisibility",
+  "seeInvisibility": {
+    "id": "seeInvisibility",
+    "name": "See Invisibility",
+    "ukr": "See Invisibility",
     "level": 2,
     "type": "spell",
     "school": "divination",
@@ -8860,15 +11466,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 hour",
+    "materialText": "a pinch of talc and a small sprinkling of powdered silver",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8877,48 +11483,56 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 274,
+    "source": "PHB 2014"
   },
   "seeming": {
     "id": "seeming",
-    "name": "seeming",
+    "name": "Seeming",
     "ukr": "seeming",
     "level": 5,
     "type": "spell",
     "school": "illusion",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "8 hours",
+    "duration": "8 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "charisma",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 274,
+    "source": "PHB 2014"
   },
   "sending": {
     "id": "sending",
-    "name": "sending",
+    "name": "Sending",
     "ukr": "sending",
     "level": 3,
     "type": "spell",
@@ -8930,15 +11544,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Unlimited",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 round",
+    "materialText": "a short piece of fine copper wire",
+    "duration": "1 раунд",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8947,13 +11561,15 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 274,
+    "source": "PHB 2014"
   },
   "sequester": {
     "id": "sequester",
-    "name": "sequester",
+    "name": "Sequester",
     "ukr": "sequester",
     "level": 7,
     "type": "spell",
@@ -8963,15 +11579,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Until dispelled",
+    "duration": "Постійно",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -8980,32 +11596,38 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 274,
+    "source": "PHB 2014"
   },
   "shapechange": {
     "id": "shapechange",
-    "name": "shapechange",
+    "name": "Shapechange",
     "ukr": "shapechange",
     "level": 9,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "druid",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -9014,18 +11636,20 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 274,
+    "source": "PHB 2014"
   },
   "shatter": {
     "id": "shatter",
-    "name": "shatter",
+    "name": "Shatter",
     "ukr": "shatter",
     "level": 2,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "sorcerer",
@@ -9033,64 +11657,36 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "a chip of mica",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
-  },
-  "shield_of_faith": {
-    "id": "shield_of_faith",
-    "name": "shield of faith",
-    "ukr": "shield of faith",
-    "level": 1,
-    "type": "spell",
-    "school": "abjuration",
-    "effectType": "utility",
-    "classes": [
-      "cleric",
-      "paladin"
+    "savingThrow": "constitution",
+    "damageType": "thunder",
+    "areaTags": [
+      "S"
     ],
-    "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "60 feet",
-    "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
-    },
-    "materialText": "",
-    "duration": "Concentration, up to 10 minutes",
-    "concentration": false,
-    "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 1,
-    "description": "A shimmering field appears and surrounds a creature of your choice within range, granting it a +2 bonus to AC for the duration.",
-    "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 275,
+    "source": "PHB 2014"
   },
   "shield": {
     "id": "shield",
-    "name": "shield",
+    "name": "Shield",
     "ukr": "shield",
     "level": 1,
     "type": "spell",
@@ -9101,15 +11697,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 reaction, which you take when you are hit by an attack or targeted by the magic missile spell",
-    "range": "Self",
+    "castingTime": "1 реакція",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 round",
+    "duration": "1 раунд",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -9118,13 +11714,57 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "MAC"
+    ],
+    "page": 275,
+    "source": "PHB 2014"
+  },
+  "shieldOfFaith": {
+    "id": "shieldOfFaith",
+    "name": "Shield of Faith",
+    "ukr": "Shield of Faith",
+    "level": 1,
+    "type": "spell",
+    "school": "abjuration",
+    "effectType": "utility",
+    "classes": [
+      "cleric",
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 бонусна дія",
+    "range": "60 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a small parchment with a bit of holy text written on it",
+    "duration": "10 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 1,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [
+      "MAC"
+    ],
+    "page": 275,
+    "source": "PHB 2014"
   },
   "shillelagh": {
     "id": "shillelagh",
-    "name": "shillelagh",
+    "name": "Shillelagh",
     "ukr": "shillelagh",
     "level": 0,
     "type": "cantrip",
@@ -9134,15 +11774,15 @@ export const SPELLS = {
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "Touch",
+    "castingTime": "1 бонусна дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 minute",
+    "materialText": "mistletoe, a shamrock leaf, and a club or quarterstaff",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
@@ -9151,47 +11791,65 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "AAD"
+    ],
+    "page": 275,
+    "source": "PHB 2014"
   },
-  "shocking_grasp": {
-    "id": "shocking_grasp",
-    "name": "shocking grasp",
-    "ukr": "shocking grasp",
+  "shockingGrasp": {
+    "id": "shockingGrasp",
+    "name": "Shocking Grasp",
+    "ukr": "Shocking Grasp",
     "level": 0,
     "type": "cantrip",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "Lightning springs from your hand to deliver a shock to a creature you try to touch. Make a melee spell attack against the target. You have advantage on the attack roll if the target is wearing armor made of metal. On a hit, the target takes 1d8 lightning damage, and it can’t take reactions until the start of its next turn. The spell’s damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "damageType": "lightning",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": {
+      "label": "lightning damage",
+      "scaling": {
+        "1": "1d8",
+        "5": "2d8",
+        "11": "3d8",
+        "17": "4d8"
+      }
+    },
+    "miscTags": [
+      "SCL"
+    ],
+    "page": 275,
+    "source": "PHB 2014"
   },
   "silence": {
     "id": "silence",
-    "name": "silence",
+    "name": "Silence",
     "ukr": "silence",
     "level": 2,
     "type": "spell",
@@ -9203,31 +11861,37 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 10 minutes",
+    "duration": "10 хв",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 275,
+    "source": "PHB 2014"
   },
-  "silent_image": {
-    "id": "silent_image",
-    "name": "silent image",
-    "ukr": "silent image",
+  "silentImage": {
+    "id": "silentImage",
+    "name": "Silent Image",
+    "ukr": "Silent Image",
     "level": 1,
     "type": "spell",
     "school": "illusion",
@@ -9238,48 +11902,50 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Concentration, up to 10 minutes",
+    "materialText": "a bit of fleece",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "You create the image of an object, a creature, or some other visible phenomenon that is no larger than a 15-foot cube. The image appears at a spot within range and lasts for the duration. The image is purely visual; it isn’t accompanied by sound, smell, or other sensory effects. You can use your action to cause the image to move to any spot within range. As the image changes location, you can alter its appearance so that its movements appear natural for the image. For example, if you create an image of a creature and move it, you can alter the image so that it appears to be walking. Physical interaction with the image reveals it to be an illusion, because things can pass through it. A creature that uses its action to examine the image can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the creature can see through the image.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 276,
+    "source": "PHB 2014"
   },
   "simulacrum": {
     "id": "simulacrum",
-    "name": "simulacrum",
+    "name": "Simulacrum",
     "ukr": "simulacrum",
     "level": 7,
     "type": "spell",
     "school": "illusion",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "12 hours",
-    "range": "Touch",
+    "castingTime": "12 год",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Until dispelled",
+    "duration": "Постійно",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -9288,33 +11954,37 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 276,
+    "source": "PHB 2014"
   },
   "sleep": {
     "id": "sleep",
-    "name": "sleep",
+    "name": "Sleep",
     "ukr": "sleep",
     "level": 1,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "bard",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "90 feet",
+    "castingTime": "1 дія",
+    "range": "90 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 minute",
+    "materialText": "a pinch of fine sand, rose petals, or a cricket",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -9323,116 +11993,138 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 276,
+    "source": "PHB 2014"
   },
-  "sleet_storm": {
-    "id": "sleet_storm",
-    "name": "sleet storm",
-    "ukr": "sleet storm",
+  "sleetStorm": {
+    "id": "sleetStorm",
+    "name": "Sleet Storm",
+    "ukr": "Sleet Storm",
     "level": 3,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "150 feet",
+    "castingTime": "1 дія",
+    "range": "150 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a pinch of dust and a few drops of water",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "dexterity, constitution",
     "damageType": "",
+    "areaTags": [
+      "Y"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "DFT",
+      "OBS"
+    ],
+    "page": 276,
+    "source": "PHB 2014"
   },
   "slow": {
     "id": "slow",
-    "name": "slow",
+    "name": "Slow",
     "ukr": "slow",
     "level": 3,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a drop of molasses",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "C",
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "MAC"
+    ],
+    "page": 277,
+    "source": "PHB 2014"
   },
-  "spare_the_dying": {
-    "id": "spare_the_dying",
-    "name": "spare the dying",
-    "ukr": "spare the dying",
+  "spareTheDying": {
+    "id": "spareTheDying",
+    "name": "Spare the Dying",
+    "ukr": "Spare the Dying",
     "level": 0,
     "type": "cantrip",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "You touch a living creature that has 0 hit points. The creature becomes stable. This spell has no effect on undead or constructs.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 277,
+    "source": "PHB 2014"
   },
-  "speak_with_animals": {
-    "id": "speak_with_animals",
-    "name": "speak with animals",
-    "ukr": "speak with animals",
+  "speakWithAnimals": {
+    "id": "speakWithAnimals",
+    "name": "Speak with Animals",
+    "ukr": "Speak with Animals",
     "level": 1,
     "type": "spell",
     "school": "divination",
@@ -9443,31 +12135,33 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action (Ritual)",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "10 minutes",
+    "duration": "10 хв",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "Although limited by the intelligence of the beast, you can understand and speak with beasts. You learn about the beast's experiences over the last day, as well as local places and creatures.If your DM allows, the beast may also complete a small task for you, if you can successfully convince it to do so.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 277,
+    "source": "PHB 2014"
   },
-  "speak_with_dead": {
-    "id": "speak_with_dead",
-    "name": "speak with dead",
-    "ukr": "speak with dead",
+  "speakWithDead": {
+    "id": "speakWithDead",
+    "name": "Speak with Dead",
+    "ukr": "Speak with Dead",
     "level": 3,
     "type": "spell",
     "school": "necromancy",
@@ -9477,15 +12171,15 @@ export const SPELLS = {
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "10 feet",
+    "castingTime": "1 дія",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "10 minutes",
+    "materialText": "burning incense",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -9494,14 +12188,16 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 277,
+    "source": "PHB 2014"
   },
-  "speak_with_plants": {
-    "id": "speak_with_plants",
-    "name": "speak with plants",
-    "ukr": "speak with plants",
+  "speakWithPlants": {
+    "id": "speakWithPlants",
+    "name": "Speak with Plants",
+    "ukr": "Speak with Plants",
     "level": 3,
     "type": "spell",
     "school": "transmutation",
@@ -9512,15 +12208,15 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -9529,14 +12225,16 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 277,
+    "source": "PHB 2014"
   },
-  "spider_climb": {
-    "id": "spider_climb",
-    "name": "spider climb",
-    "ukr": "spider climb",
+  "spiderClimb": {
+    "id": "spiderClimb",
+    "name": "Spider Climb",
+    "ukr": "Spider Climb",
     "level": 2,
     "type": "spell",
     "school": "transmutation",
@@ -9547,15 +12245,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "a drop of bitumen and a spider",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -9564,32 +12262,34 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 277,
+    "source": "PHB 2014"
   },
-  "spike_growth": {
-    "id": "spike_growth",
-    "name": "spike growth",
-    "ukr": "spike growth",
+  "spikeGrowth": {
+    "id": "spikeGrowth",
+    "name": "Spike Growth",
+    "ukr": "Spike Growth",
     "level": 2,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "druid",
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "150 feet",
+    "castingTime": "1 дія",
+    "range": "150 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "seven sharp thorns or seven small twigs, each sharpened to a point",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -9597,65 +12297,77 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "piercing",
+    "areaTags": [
+      "R"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "DFT"
+    ],
+    "page": 277,
+    "source": "PHB 2014"
   },
-  "spirit_guardians": {
-    "id": "spirit_guardians",
-    "name": "spirit guardians",
-    "ukr": "spirit guardians",
+  "spiritGuardians": {
+    "id": "spiritGuardians",
+    "name": "Spirit Guardians",
+    "ukr": "Spirit Guardians",
     "level": 3,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "15 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "a holy symbol",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "wisdom",
+    "damageType": "necrotic, radiant",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 278,
+    "source": "PHB 2014"
   },
-  "spiritual_weapon": {
-    "id": "spiritual_weapon",
-    "name": "spiritual weapon",
-    "ukr": "spiritual weapon",
+  "spiritualWeapon": {
+    "id": "spiritualWeapon",
+    "name": "Spiritual Weapon",
+    "ukr": "Spiritual Weapon",
     "level": 2,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 bonus action",
-    "range": "60 feet",
+    "castingTime": "1 бонусна дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -9663,50 +12375,99 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "force",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "UBA"
+    ],
+    "page": 278,
+    "source": "PHB 2014"
   },
-  "stinking_cloud": {
-    "id": "stinking_cloud",
-    "name": "stinking cloud",
-    "ukr": "stinking cloud",
+  "staggeringSmite": {
+    "id": "staggeringSmite",
+    "name": "Staggering Smite",
+    "ukr": "Staggering Smite",
+    "level": 4,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "save",
+    "classes": [
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 бонусна дія",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 4,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "wisdom",
+    "damageType": "psychic",
+    "areaTags": [],
+    "damage": null,
+    "miscTags": [
+      "AAD"
+    ],
+    "page": 278,
+    "source": "PHB 2014"
+  },
+  "stinkingCloud": {
+    "id": "stinkingCloud",
+    "name": "Stinking Cloud",
+    "ukr": "Stinking Cloud",
     "level": 3,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "90 feet",
+    "castingTime": "1 дія",
+    "range": "90 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a rotten egg or several skunk cabbage leaves",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "constitution",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBS"
+    ],
+    "page": 278,
+    "source": "PHB 2014"
   },
-  "stone_shape": {
-    "id": "stone_shape",
-    "name": "stone shape",
-    "ukr": "stone shape",
+  "stoneShape": {
+    "id": "stoneShape",
+    "name": "Stone Shape",
+    "ukr": "Stone Shape",
     "level": 4,
     "type": "spell",
     "school": "transmutation",
@@ -9717,15 +12478,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "soft clay, which must be worked into roughly the desired shape of the stone object",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -9734,13 +12495,17 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ"
+    ],
+    "page": 278,
+    "source": "PHB 2014"
   },
   "stoneskin": {
     "id": "stoneskin",
-    "name": "stoneskin",
+    "name": "Stoneskin",
     "ukr": "stoneskin",
     "level": 4,
     "type": "spell",
@@ -9753,15 +12518,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Up to 1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -9770,51 +12535,64 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 278,
+    "source": "PHB 2014"
   },
-  "storm_of_vengeance": {
-    "id": "storm_of_vengeance",
-    "name": "storm of vengeance",
-    "ukr": "storm of vengeance",
+  "stormOfVengeance": {
+    "id": "stormOfVengeance",
+    "name": "Storm of Vengeance",
+    "ukr": "Storm of Vengeance",
     "level": 9,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Sight",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 9,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "constitution, dexterity",
+    "damageType": "acid, bludgeoning, cold, lightning, thunder",
+    "areaTags": [
+      "Y"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "DFT",
+      "OBJ",
+      "OBS",
+      "SGT"
+    ],
+    "page": 279,
+    "source": "PHB 2014"
   },
   "suggestion": {
     "id": "suggestion",
-    "name": "suggestion",
+    "name": "Suggestion",
     "ukr": "suggestion",
     "level": 2,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "sorcerer",
@@ -9822,169 +12600,238 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
-      "material": false
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 8 hours",
+    "materialText": "a snake's tongue and either a bit of honeycomb or a drop of sweet oil",
+    "duration": "8 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 279,
+    "source": "PHB 2014"
   },
   "sunbeam": {
     "id": "sunbeam",
-    "name": "sunbeam",
+    "name": "Sunbeam",
     "ukr": "sunbeam",
     "level": 6,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a magnifying glass",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "constitution",
+    "damageType": "radiant",
+    "areaTags": [
+      "L"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "LGTS"
+    ],
+    "page": 279,
+    "source": "PHB 2014"
   },
   "sunburst": {
     "id": "sunburst",
-    "name": "sunburst",
+    "name": "Sunburst",
     "ukr": "sunburst",
     "level": 8,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "150 feet",
+    "castingTime": "1 дія",
+    "range": "150 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "fire and a piece of sunstone",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 8,
     "description": "",
     "higherLevel": "",
+    "savingThrow": "constitution",
+    "damageType": "radiant",
+    "areaTags": [
+      "S"
+    ],
+    "damage": null,
+    "miscTags": [
+      "LGT",
+      "LGTS"
+    ],
+    "page": 279,
+    "source": "PHB 2014"
+  },
+  "swiftQuiver": {
+    "id": "swiftQuiver",
+    "name": "Swift Quiver",
+    "ukr": "Swift Quiver",
+    "level": 5,
+    "type": "spell",
+    "school": "transmutation",
+    "effectType": "utility",
+    "classes": [
+      "ranger"
+    ],
+    "subclasses": [],
+    "castingTime": "1 бонусна дія",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a quiver containing at least one piece of ammunition",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 5,
+    "description": "",
+    "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "UBA"
+    ],
+    "page": 279,
+    "source": "PHB 2014"
   },
   "symbol": {
     "id": "symbol",
-    "name": "symbol",
+    "name": "Symbol",
     "ukr": "symbol",
     "level": 7,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "cleric",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "Touch",
+    "castingTime": "1 хв",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Until dispelled",
+    "duration": "Постійно",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 7,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "constitution, wisdom, charisma, intelligence",
+    "damageType": "necrotic",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "LGT",
+      "OBJ"
+    ],
+    "page": 280,
+    "source": "PHB 2014"
   },
-  "tashas_caustic_brew": {
-    "id": "tashas_caustic_brew",
-    "name": "tasha's caustic brew",
-    "ukr": "tasha's caustic brew",
+  "tashaSHideousLaughter": {
+    "id": "tashaSHideousLaughter",
+    "name": "Tasha's Hideous Laughter",
+    "ukr": "Tasha's Hideous Laughter",
     "level": 1,
     "type": "spell",
-    "school": "evocation",
-    "effectType": "utility",
+    "school": "enchantment",
+    "effectType": "save",
     "classes": [
-      "sorcerer",
+      "bard",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self (30-foot line)",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "tiny tarts and a feather that is waved in the air",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 280,
+    "source": "PHB 2014"
   },
   "telekinesis": {
     "id": "telekinesis",
-    "name": "telekinesis",
+    "name": "Telekinesis",
     "ukr": "telekinesis",
     "level": 5,
     "type": "spell",
@@ -9995,15 +12842,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -10012,66 +12859,78 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "FMV",
+      "OBJ",
+      "SGT"
+    ],
+    "page": 280,
+    "source": "PHB 2014"
   },
-  "telepathic_bond": {
-    "id": "telepathic_bond",
-    "name": "telepathic bond",
-    "ukr": "telepathic bond",
-    "level": 5,
+  "telepathy": {
+    "id": "telepathy",
+    "name": "Telepathy",
+    "ukr": "Telepathy",
+    "level": 8,
     "type": "spell",
-    "school": "divination",
+    "school": "evocation",
     "effectType": "utility",
     "classes": [
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 hour",
+    "materialText": "a pair of linked silver rings",
+    "duration": "24 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
-    "spellSlotLevel": 5,
+    "spellSlotLevel": 8,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 281,
+    "source": "PHB 2014"
   },
   "teleport": {
     "id": "teleport",
-    "name": "teleport",
+    "name": "Teleport",
     "ukr": "teleport",
     "level": 7,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "bard",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "10 feet",
+    "castingTime": "1 дія",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -10079,15 +12938,24 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "force",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "RO",
+      "SGT",
+      "TP"
+    ],
+    "page": 281,
+    "source": "PHB 2014"
   },
-  "teleportation_circle": {
-    "id": "teleportation_circle",
-    "name": "teleportation circle",
-    "ukr": "teleportation circle",
+  "teleportationCircle": {
+    "id": "teleportationCircle",
+    "name": "Teleportation Circle",
+    "ukr": "Teleportation Circle",
     "level": 5,
     "type": "spell",
     "school": "conjuration",
@@ -10098,15 +12966,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "10 feet",
+    "castingTime": "1 хв",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
-      "material": false
+      "material": true
     },
     "materialText": "",
-    "duration": "1 round",
+    "duration": "1 раунд",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -10115,13 +12983,56 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PIR",
+      "PRM",
+      "TP"
+    ],
+    "page": 282,
+    "source": "PHB 2014"
+  },
+  "tenserSFloatingDisk": {
+    "id": "tenserSFloatingDisk",
+    "name": "Tenser's Floating Disk",
+    "ukr": "Tenser's Floating Disk",
+    "level": 1,
+    "type": "spell",
+    "school": "conjuration",
+    "effectType": "utility",
+    "classes": [
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a drop of mercury",
+    "duration": "1 год",
+    "concentration": false,
+    "ritual": true,
+    "requiresSlot": true,
+    "spellSlotLevel": 1,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "",
+    "areaTags": [],
+    "damage": null,
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 282,
+    "source": "PHB 2014"
   },
   "thaumaturgy": {
     "id": "thaumaturgy",
-    "name": "thaumaturgy",
+    "name": "Thaumaturgy",
     "ukr": "thaumaturgy",
     "level": 0,
     "type": "cantrip",
@@ -10131,15 +13042,15 @@ export const SPELLS = {
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
@@ -10148,31 +13059,33 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 282,
+    "source": "PHB 2014"
   },
-  "thorn_whip": {
-    "id": "thorn_whip",
-    "name": "thorn whip",
-    "ukr": "thorn whip",
+  "thornWhip": {
+    "id": "thornWhip",
+    "name": "Thorn Whip",
+    "ukr": "Thorn Whip",
     "level": 0,
     "type": "cantrip",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Instantaneous",
+    "materialText": "the stem of a plant with thorns",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
@@ -10180,19 +13093,72 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "piercing",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": {
+      "label": "piercing damage",
+      "scaling": {
+        "1": "1d6",
+        "5": "2d6",
+        "11": "3d6",
+        "17": "4d6"
+      }
+    },
+    "miscTags": [
+      "FMV",
+      "SCL"
+    ],
+    "page": 282,
+    "source": "PHB 2014"
+  },
+  "thunderousSmite": {
+    "id": "thunderousSmite",
+    "name": "Thunderous Smite",
+    "ukr": "Thunderous Smite",
+    "level": 1,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "save",
+    "classes": [
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 бонусна дія",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 1,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "strength",
+    "damageType": "thunder",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "AAD",
+      "FMV"
+    ],
+    "page": 282,
+    "source": "PHB 2014"
   },
   "thunderwave": {
     "id": "thunderwave",
-    "name": "thunderwave",
+    "name": "Thunderwave",
     "ukr": "thunderwave",
     "level": 1,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "druid",
@@ -10200,31 +13166,38 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self (15-foot cube)",
+    "castingTime": "1 дія",
+    "range": "15 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 1,
     "description": "A wave of thunderous force sweeps out from you. Each creature in a 15-foot cube originating from you must make a Constitution saving throw. On a failed save, a creature takes 2d8 thunder damage and is pushed 10 feet away from you. On a successful save, the creature takes half as much damage and isn’t pushed. In addition, unsecured objects that are completely within the area of effect are automatically pushed 10 feet away from you by the spell’s effect, and the spell emits a thunderous boom audible out to 300 feet. At Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "constitution",
+    "damageType": "thunder",
+    "areaTags": [
+      "C"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "FMV",
+      "OBJ"
+    ],
+    "page": 282,
+    "source": "PHB 2014"
   },
-  "time_stop": {
-    "id": "time_stop",
-    "name": "time stop",
-    "ukr": "time stop",
+  "timeStop": {
+    "id": "timeStop",
+    "name": "Time Stop",
+    "ukr": "Time Stop",
     "level": 9,
     "type": "spell",
     "school": "transmutation",
@@ -10234,15 +13207,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -10251,47 +13224,15 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
-  },
-  "tiny_hut": {
-    "id": "tiny_hut",
-    "name": "tiny hut",
-    "ukr": "tiny hut",
-    "level": 3,
-    "type": "spell",
-    "school": "evocation",
-    "effectType": "utility",
-    "classes": [
-      "bard",
-      "wizard"
-    ],
-    "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "Self",
-    "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
-    },
-    "materialText": "",
-    "duration": "8 hours",
-    "concentration": false,
-    "ritual": false,
-    "requiresSlot": true,
-    "spellSlotLevel": 3,
-    "description": "",
-    "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 283,
+    "source": "PHB 2014"
   },
   "tongues": {
     "id": "tongues",
-    "name": "tongues",
+    "name": "Tongues",
     "ukr": "tongues",
     "level": 3,
     "type": "spell",
@@ -10305,15 +13246,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
-      "material": false
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 hour",
+    "materialText": "a small clay model of a ziggurat",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -10322,14 +13263,18 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 283,
+    "source": "PHB 2014"
   },
-  "transport_via_plants": {
-    "id": "transport_via_plants",
-    "name": "transport via plants",
-    "ukr": "transport via plants",
+  "transportViaPlants": {
+    "id": "transportViaPlants",
+    "name": "Transport via Plants",
+    "ukr": "Transport via Plants",
     "level": 6,
     "type": "spell",
     "school": "conjuration",
@@ -10338,15 +13283,15 @@ export const SPELLS = {
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "10 feet",
+    "castingTime": "1 дія",
+    "range": "10 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "1 round",
+    "duration": "1 раунд",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -10355,14 +13300,18 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "TP"
+    ],
+    "page": 283,
+    "source": "PHB 2014"
   },
-  "tree_stride": {
-    "id": "tree_stride",
-    "name": "tree stride",
-    "ukr": "tree stride",
+  "treeStride": {
+    "id": "treeStride",
+    "name": "Tree Stride",
+    "ukr": "Tree Stride",
     "level": 5,
     "type": "spell",
     "school": "conjuration",
@@ -10372,15 +13321,15 @@ export const SPELLS = {
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -10389,67 +13338,80 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "TP"
+    ],
+    "page": 283,
+    "source": "PHB 2014"
   },
-  "true_polymorph": {
-    "id": "true_polymorph",
-    "name": "true polymorph",
-    "ukr": "true polymorph",
+  "truePolymorph": {
+    "id": "truePolymorph",
+    "name": "True Polymorph",
+    "ukr": "True Polymorph",
     "level": 9,
     "type": "spell",
     "school": "transmutation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "a drop of mercury, a dollop of gum arabic, and a wisp of smoke",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 9,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "wisdom",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "PRM",
+      "SGT",
+      "SMN"
+    ],
+    "page": 283,
+    "source": "PHB 2014"
   },
-  "true_resurrection": {
-    "id": "true_resurrection",
-    "name": "true resurrection",
-    "ukr": "true resurrection",
+  "trueResurrection": {
+    "id": "trueResurrection",
+    "name": "True Resurrection",
+    "ukr": "True Resurrection",
     "level": 9,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "cleric",
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 hour",
-    "range": "Touch",
+    "castingTime": "1 год",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -10458,14 +13420,20 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL"
+    ],
+    "page": 284,
+    "source": "PHB 2014"
   },
-  "true_seeing": {
-    "id": "true_seeing",
-    "name": "true seeing",
-    "ukr": "true seeing",
+  "trueSeeing": {
+    "id": "trueSeeing",
+    "name": "True Seeing",
+    "ukr": "True Seeing",
     "level": 6,
     "type": "spell",
     "school": "divination",
@@ -10478,15 +13446,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -10495,14 +13463,16 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 284,
+    "source": "PHB 2014"
   },
-  "true_strike": {
-    "id": "true_strike",
-    "name": "true strike",
-    "ukr": "true strike",
+  "trueStrike": {
+    "id": "trueStrike",
+    "name": "True Strike",
+    "ukr": "True Strike",
     "level": 0,
     "type": "cantrip",
     "school": "divination",
@@ -10514,84 +13484,132 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
       "verbal": false,
-      "somatic": false,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Concentration, Up to 1 round",
+    "duration": "1 раунд",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "You extend your hand and point a finger at a target in range. Your magic grants you a brief insight into the target’s defenses. On your next turn, you gain advantage on your first attack roll against the target, provided that this spell hasn’t ended.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV"
+    ],
+    "page": 284,
+    "source": "PHB 2014"
   },
-  "unseen_servant": {
-    "id": "unseen_servant",
-    "name": "unseen servant",
-    "ukr": "unseen servant",
+  "tsunami": {
+    "id": "tsunami",
+    "name": "Tsunami",
+    "ukr": "Tsunami",
+    "level": 8,
+    "type": "spell",
+    "school": "conjuration",
+    "effectType": "save",
+    "classes": [
+      "druid"
+    ],
+    "subclasses": [],
+    "castingTime": "1 хв",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "6 раунд",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 8,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "strength",
+    "damageType": "bludgeoning",
+    "areaTags": [
+      "W"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 284,
+    "source": "PHB 2014"
+  },
+  "unseenServant": {
+    "id": "unseenServant",
+    "name": "Unseen Servant",
+    "ukr": "Unseen Servant",
     "level": 1,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "bard",
       "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action (Ritual)",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 hour",
+    "materialText": "a piece of string and a bit of wood",
+    "duration": "1 год",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 1,
-    "description": "This spell creates an invisible, mindless, shapeless force that performs simple tasks at your command until the spell ends. The servant springs into existence in an unoccupied space on the ground within range. It has AC 10, 1 hit point, and a Strength of 2, and it can’t attack. If it drops to 0 hit points, the spell ends. Once on each of your turns as a bonus action, you can mentally command the servant to move up to 15 feet and interact with an object. The servant can perform simple tasks that a human servant could do, such as fetching things, cleaning, mending, folding clothes, lighting fires, serving food, and pouring wine. Once you give the command, the servant performs the task to the best of its ability until it completes the task, then waits for your next command. If you command the servant to perform a task that would move it more than 60 feet away from you, the spell ends.",
+    "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SMN",
+      "UBA"
+    ],
+    "page": 284,
+    "source": "PHB 2014"
   },
-  "vampiric_touch": {
-    "id": "vampiric_touch",
-    "name": "vampiric touch",
-    "ukr": "vampiric touch",
+  "vampiricTouch": {
+    "id": "vampiricTouch",
+    "name": "Vampiric Touch",
+    "ukr": "Vampiric Touch",
     "level": 3,
     "type": "spell",
     "school": "necromancy",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "warlock",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -10599,83 +13617,108 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "necrotic",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "HL"
+    ],
+    "page": 285,
+    "source": "PHB 2014"
   },
-  "vicious_mockery": {
-    "id": "vicious_mockery",
-    "name": "vicious mockery",
-    "ukr": "vicious mockery",
+  "viciousMockery": {
+    "id": "viciousMockery",
+    "name": "Vicious Mockery",
+    "ukr": "Vicious Mockery",
     "level": 0,
     "type": "cantrip",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": false,
     "spellSlotLevel": 0,
-    "description": "You unleash a string of insults laced with subtle enchantments at a creature you can see with in range. If the target can hear you (though it need not understand you), it must succeed on a Wisdom saving throw or take 1d4 psychic damage and have disadvantage on the next attack roll it makes before the end of its next turn.",
+    "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
-    "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "savingThrow": "wisdom",
+    "damageType": "psychic",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": {
+      "label": "psychic damage",
+      "scaling": {
+        "1": "1d4",
+        "5": "2d4",
+        "11": "3d4",
+        "17": "4d4"
+      }
+    },
+    "miscTags": [
+      "SCL",
+      "SGT"
+    ],
+    "page": 285,
+    "source": "PHB 2014"
   },
-  "wall_of_fire": {
-    "id": "wall_of_fire",
-    "name": "wall of fire",
-    "ukr": "wall of fire",
+  "wallOfFire": {
+    "id": "wallOfFire",
+    "name": "Wall of Fire",
+    "ukr": "Wall of Fire",
     "level": 4,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a small piece of phosphorus",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 4,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "fire",
+    "areaTags": [
+      "W"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 285,
+    "source": "PHB 2014"
   },
-  "wall_of_force": {
-    "id": "wall_of_force",
-    "name": "wall of force",
-    "ukr": "wall of force",
+  "wallOfForce": {
+    "id": "wallOfForce",
+    "name": "Wall of Force",
+    "ukr": "Wall of Force",
     "level": 5,
     "type": "spell",
     "school": "evocation",
@@ -10684,15 +13727,15 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "a pinch of powder made by crushing a clear gemstone",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -10701,132 +13744,151 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "W"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 285,
+    "source": "PHB 2014"
   },
-  "wall_of_ice": {
-    "id": "wall_of_ice",
-    "name": "wall of ice",
-    "ukr": "wall of ice",
+  "wallOfIce": {
+    "id": "wallOfIce",
+    "name": "Wall of Ice",
+    "ukr": "Wall of Ice",
     "level": 6,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "a small piece of quartz",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity, constitution",
+    "damageType": "cold",
+    "areaTags": [
+      "W"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 285,
+    "source": "PHB 2014"
   },
-  "wall_of_stone": {
-    "id": "wall_of_stone",
-    "name": "wall of stone",
-    "ukr": "wall of stone",
+  "wallOfStone": {
+    "id": "wallOfStone",
+    "name": "Wall of Stone",
+    "ukr": "Wall of Stone",
     "level": 5,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid",
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "a small block of granite",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 5,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "dexterity",
     "damageType": "",
+    "areaTags": [
+      "W"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "OBJ",
+      "PRM"
+    ],
+    "page": 287,
+    "source": "PHB 2014"
   },
-  "wall_of_thorns": {
-    "id": "wall_of_thorns",
-    "name": "wall of thorns",
-    "ukr": "wall of thorns",
+  "wallOfThorns": {
+    "id": "wallOfThorns",
+    "name": "Wall of Thorns",
+    "ukr": "Wall of Thorns",
     "level": 6,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 10 minutes",
+    "materialText": "a handful of thorns",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 6,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "piercing, slashing",
+    "areaTags": [
+      "W"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 287,
+    "source": "PHB 2014"
   },
-  "warding_bond": {
-    "id": "warding_bond",
-    "name": "warding bond",
-    "ukr": "warding bond",
+  "wardingBond": {
+    "id": "wardingBond",
+    "name": "Warding Bond",
+    "ukr": "Warding Bond",
     "level": 2,
     "type": "spell",
     "school": "abjuration",
-    "effectType": "utility",
+    "effectType": "healing",
     "classes": [
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Touch",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
     "materialText": "",
-    "duration": "1 hour",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -10835,14 +13897,20 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "ST"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "MAC"
+    ],
+    "page": 287,
+    "source": "PHB 2014"
   },
-  "water_breathing": {
-    "id": "water_breathing",
-    "name": "water breathing",
-    "ukr": "water breathing",
+  "waterBreathing": {
+    "id": "waterBreathing",
+    "name": "Water Breathing",
+    "ukr": "Water Breathing",
     "level": 3,
     "type": "spell",
     "school": "transmutation",
@@ -10854,31 +13922,37 @@ export const SPELLS = {
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "24 hours",
+    "materialText": "a short reed or piece of straw",
+    "duration": "24 год",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 287,
+    "source": "PHB 2014"
   },
-  "water_walk": {
-    "id": "water_walk",
-    "name": "water walk",
-    "ukr": "water walk",
+  "waterWalk": {
+    "id": "waterWalk",
+    "name": "Water Walk",
+    "ukr": "Water Walk",
     "level": 3,
     "type": "spell",
     "school": "transmutation",
@@ -10890,98 +13964,114 @@ export const SPELLS = {
       "sorcerer"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "30 feet",
+    "castingTime": "1 дія",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "1 hour",
+    "materialText": "a piece of cork",
+    "duration": "1 год",
     "concentration": false,
-    "ritual": false,
+    "ritual": true,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 287,
+    "source": "PHB 2014"
   },
   "web": {
     "id": "web",
-    "name": "web",
+    "name": "Web",
     "ukr": "web",
     "level": 2,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 hour",
+    "materialText": "a bit of spiderweb",
+    "duration": "1 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "dexterity",
+    "damageType": "fire",
+    "areaTags": [
+      "C"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "DFT"
+    ],
+    "page": 287,
+    "source": "PHB 2014"
   },
   "weird": {
     "id": "weird",
-    "name": "weird",
+    "name": "Weird",
     "ukr": "weird",
     "level": 9,
     "type": "spell",
     "school": "illusion",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "Up to 1 minute",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 9,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "wisdom",
+    "damageType": "psychic",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 288,
+    "source": "PHB 2014"
   },
-  "wind_walk": {
-    "id": "wind_walk",
-    "name": "wind walk",
-    "ukr": "wind walk",
+  "windWalk": {
+    "id": "windWalk",
+    "name": "Wind Walk",
+    "ukr": "Wind Walk",
     "level": 6,
     "type": "spell",
     "school": "transmutation",
@@ -10990,15 +14080,15 @@ export const SPELLS = {
       "druid"
     ],
     "subclasses": [],
-    "castingTime": "1 minute",
-    "range": "30 feet",
+    "castingTime": "1 хв",
+    "range": "30 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "8 hours",
+    "materialText": "fire and holy water",
+    "duration": "8 год",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -11007,66 +14097,76 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [
+      "MT"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "SGT"
+    ],
+    "page": 288,
+    "source": "PHB 2014"
   },
-  "wind_wall": {
-    "id": "wind_wall",
-    "name": "wind wall",
-    "ukr": "wind wall",
+  "windWall": {
+    "id": "windWall",
+    "name": "Wind Wall",
+    "ukr": "Wind Wall",
     "level": 3,
     "type": "spell",
     "school": "evocation",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "druid",
       "ranger"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "120 feet",
+    "castingTime": "1 дія",
+    "range": "120 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
-      "material": false
+      "verbal": true,
+      "somatic": true,
+      "material": true
     },
-    "materialText": "",
-    "duration": "Up to 1 minute",
+    "materialText": "a tiny fan and a feather of exotic origin",
+    "duration": "1 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 3,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
-    "damageType": "",
+    "savingThrow": "strength",
+    "damageType": "bludgeoning",
+    "areaTags": [
+      "W"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 288,
+    "source": "PHB 2014"
   },
   "wish": {
     "id": "wish",
-    "name": "wish",
+    "name": "Wish",
     "ukr": "wish",
     "level": 9,
     "type": "spell",
     "school": "conjuration",
-    "effectType": "utility",
+    "effectType": "attack",
     "classes": [
       "sorcerer",
       "wizard"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "Self",
+    "castingTime": "1 дія",
+    "range": "point",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -11074,15 +14174,60 @@ export const SPELLS = {
     "description": "",
     "higherLevel": "",
     "savingThrow": "",
-    "damageType": "",
+    "damageType": "necrotic",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "ADV",
+      "HL",
+      "SGT"
+    ],
+    "page": 288,
+    "source": "PHB 2014"
   },
-  "word_of_recall": {
-    "id": "word_of_recall",
-    "name": "word of recall",
-    "ukr": "word of recall",
+  "witchBolt": {
+    "id": "witchBolt",
+    "name": "Witch Bolt",
+    "ukr": "Witch Bolt",
+    "level": 1,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "attack",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "subclasses": [],
+    "castingTime": "1 дія",
+    "range": "30 футів",
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "materialText": "a twig from a tree that has been struck by lightning",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 1,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "",
+    "damageType": "lightning",
+    "areaTags": [
+      "ST"
+    ],
+    "damage": null,
+    "miscTags": [],
+    "page": 289,
+    "source": "PHB 2014"
+  },
+  "wordOfRecall": {
+    "id": "wordOfRecall",
+    "name": "Word of Recall",
+    "ukr": "Word of Recall",
     "level": 6,
     "type": "spell",
     "school": "conjuration",
@@ -11091,15 +14236,15 @@ export const SPELLS = {
       "cleric"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "5 feet",
+    "castingTime": "1 дія",
+    "range": "5 футів",
     "components": {
-      "verbal": false,
+      "verbal": true,
       "somatic": false,
       "material": false
     },
     "materialText": "",
-    "duration": "Instantaneous",
+    "duration": "Миттєво",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
@@ -11108,44 +14253,90 @@ export const SPELLS = {
     "higherLevel": "",
     "savingThrow": "",
     "damageType": "",
+    "areaTags": [],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [
+      "PS",
+      "TP"
+    ],
+    "page": 289,
+    "source": "PHB 2014"
   },
-  "zone_of_truth": {
-    "id": "zone_of_truth",
-    "name": "zone of truth",
-    "ukr": "zone of truth",
+  "wrathfulSmite": {
+    "id": "wrathfulSmite",
+    "name": "Wrathful Smite",
+    "ukr": "Wrathful Smite",
+    "level": 1,
+    "type": "spell",
+    "school": "evocation",
+    "effectType": "save",
+    "classes": [
+      "paladin"
+    ],
+    "subclasses": [],
+    "castingTime": "1 бонусна дія",
+    "range": "point",
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "materialText": "",
+    "duration": "1 хв",
+    "concentration": false,
+    "ritual": false,
+    "requiresSlot": true,
+    "spellSlotLevel": 1,
+    "description": "",
+    "higherLevel": "",
+    "savingThrow": "wisdom",
+    "damageType": "psychic",
+    "areaTags": [],
+    "damage": null,
+    "miscTags": [
+      "AAD"
+    ],
+    "page": 289,
+    "source": "PHB 2014"
+  },
+  "zoneOfTruth": {
+    "id": "zoneOfTruth",
+    "name": "Zone of Truth",
+    "ukr": "Zone of Truth",
     "level": 2,
     "type": "spell",
     "school": "enchantment",
-    "effectType": "utility",
+    "effectType": "save",
     "classes": [
       "bard",
       "cleric",
       "paladin"
     ],
     "subclasses": [],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "castingTime": "1 дія",
+    "range": "60 футів",
     "components": {
-      "verbal": false,
-      "somatic": false,
+      "verbal": true,
+      "somatic": true,
       "material": false
     },
     "materialText": "",
-    "duration": "10 minutes",
+    "duration": "10 хв",
     "concentration": false,
     "ritual": false,
     "requiresSlot": true,
     "spellSlotLevel": 2,
     "description": "",
     "higherLevel": "",
-    "savingThrow": "",
+    "savingThrow": "charisma",
     "damageType": "",
+    "areaTags": [
+      "S"
+    ],
     "damage": null,
-    "areaOfEffect": null,
-    "source": "SRD 2014"
+    "miscTags": [],
+    "page": 289,
+    "source": "PHB 2014"
   }
 };
 
