@@ -684,15 +684,6 @@ export function removeSpellFromCharacter(character, spellId) {
     };
   }
 
-  const entry = character.magic.spells[index];
-
-  if (entry.autoKnown) {
-    return {
-      ok: false,
-      message: "Це заклинання автоматично відоме класу й не може бути видалене."
-    };
-  }
-
   character.magic.spells.splice(index, 1);
   return { ok: true };
 }
