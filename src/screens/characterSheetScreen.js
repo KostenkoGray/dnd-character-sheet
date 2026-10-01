@@ -21,6 +21,7 @@ import { equipmentCard } from "../components/equipmentCard.js";
 import { preparedSpellsBlock } from "../components/preparedSpells.js";
 import { spellSlotsCounter } from "../components/spellSlotsCounter.js";
 import { wallet } from "../components/wallet.js";
+import { getSelectedHitDicePool } from "../services/hitDiceService.js";
 import {
   getInventoryFeatureEntries,
   getEffectiveAbilityScore,
@@ -52,16 +53,9 @@ function formatModifier(value) {
 }
 
 function getHitDieLabel(character) {
-  const primaryClass = (character.classes ?? []).reduce((best, current) => {
-    if (!best || current.level > best.level) return current;
-    return best;
-  }, null);
-
-  return primaryClass
-    ? `d${CLASSES[primaryClass.classId]?.hitDie ?? "—"}`
-    : "—";
+  const pool = getSelectedHitDicePool(character);
+  return pool ? `d${pool.hitDie}` : "—";
 }
-
 function renderCompactSavesAndSkills(character) {
   return Object.entries(STATS).map(([statKey, stat]) => {
     const saveBonus = getSaveBonus(character, statKey);
@@ -564,11 +558,13 @@ export function characterSheetScreen(character, collapseState = {}) {
           </section>
 
           <section class="combat-hit-dice">
-            <button type="button" id="sheet-hit-dice-plus" class="hit-dice-plus" aria-label="Збільшити Hit Dice">+</button>
-            <h2>Hit Dice</h2>
-            <span class="hit-die-label">${getHitDieLabel(character)}</span>
-            <strong class="hit-dice-value">${currentHitDice}/${hitDiceTotal}</strong>
-            <button type="button" id="sheet-hit-dice-minus" class="hit-dice-minus" aria-label="Зменшити Hit Dice">−</button>
+            <button type="button" class="hit-die-select-button" data-hit-die-cycle="-1" aria-label="Попередня кістка">‹</button>
+            <div class="hit-die-display">
+              <h2>Hit Dice</h2>
+              <span class="hit-die-label">${getHitDieLabel(character)}</span>
+              <strong class="hit-dice-value">${getSelectedHitDicePool(character)?.current ?? 0}/${getSelectedHitDicePool(character)?.max ?? 0}</strong>
+            </div>
+            <button type="button" class="hit-die-select-button" data-hit-die-cycle="1" aria-label="Наступна кістка">›</button>
           </section>
         </section>
 
