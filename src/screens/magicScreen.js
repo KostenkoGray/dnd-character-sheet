@@ -50,7 +50,7 @@ function renderFavoriteButton(spell) {
 }
 
 function renderSpellActions(spell) {
-  const deleteButton = spell.autoKnown
+  const deleteButton = spell.autoKnown || spell.racial
     ? ""
     : `
       <button
@@ -125,6 +125,7 @@ function renderSpellCard(spell) {
 
       <div class="magic-spell-flags">
         ${spell.prepared ? '<span class="inventory-equipped-badge">Підготовлено</span>' : ""}
+        ${spell.racial ? '<span>Расове</span>' : ""}
         ${spell.concentration ? "<span>Концентрація</span>" : ""}
         ${spell.ritual ? "<span>Ритуал</span>" : ""}
       </div>
@@ -215,7 +216,30 @@ export function renderMagicSpellsLists(
 ) {
   const limits = getSpellLimits(character);
 
-  return getSpellcastingSources(character).map(source => {
+  const racialKnown = getKnownSpellsForSource(character, "racial");
+  const racialSection = racialKnown.length
+    ? `
+      <section class="combat-section magic-known-source-section">
+        <div class="magic-title-row">
+          <div>
+            <h2>Расові закляття</h2>
+            <span>Надаються расою</span>
+          </div>
+        </div>
+
+        <div class="magic-spells-sections">
+          ${renderMagicSpellsList(
+            character,
+            filter,
+            collapsedLevels,
+            "racial"
+          )}
+        </div>
+      </section>
+    `
+    : "";
+
+  return racialSection + getSpellcastingSources(character).map(source => {
     const sourceId = source.classEntry.classId;
     const known = getKnownSpellsForSource(character, sourceId);
     const limit = limits.find(item => item.classId === sourceId);
