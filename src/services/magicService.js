@@ -29,6 +29,28 @@ function getValueAtLevel(table, level) {
   return levels.length ? table[levels[levels.length - 1]] : null;
 }
 
+function normalizeLookupId(value) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[\\s_-]+/g, "");
+}
+
+function getSubclassData(classData, subclassId) {
+  if (!subclassId) return null;
+
+  const exact = classData.subclasses?.[subclassId];
+  if (exact) return exact;
+
+  const normalizedId = normalizeLookupId(subclassId);
+
+  return Object.values(classData.subclasses ?? {}).find(subclass =>
+    normalizeLookupId(subclass.id) === normalizedId ||
+    normalizeLookupId(subclass.name) === normalizedId ||
+    normalizeLookupId(subclass.ukr) === normalizedId
+  ) ?? null;
+}
+
 function getSpellcastingData(classEntry) {
   const classData = CLASSES[classEntry.classId];
   if (!classData) return null;
@@ -38,13 +60,12 @@ function getSpellcastingData(classEntry) {
       classEntry,
       classData,
       spellcasting: classData.spellcasting,
-      subclassData: null
+      subclassData: null,
+      displayName: classData.ukr
     };
   }
 
-  const subclassData = classEntry.subclassId
-    ? classData.subclasses?.[classEntry.subclassId]
-    : null;
+  const subclassData = getSubclassData(classData, classEntry.subclassId);
 
   if (!subclassData?.spellcasting) return null;
 
@@ -52,7 +73,8 @@ function getSpellcastingData(classEntry) {
     classEntry,
     classData,
     spellcasting: subclassData.spellcasting,
-    subclassData
+    subclassData,
+    displayName: subclassData.ukr ?? subclassData.name ?? classData.ukr
   };
 }
 
@@ -329,7 +351,7 @@ function countKnownForSource(character, sourceClassId, level = null) {
 export function getSpellLimits(character) {
   return getSpellcastingSources(character).map(source => ({
     classId: source.classEntry.classId,
-    className: source.classData.ukr,
+    className: source.displayName ?? source.classData.ukr,
     level: source.classEntry.level,
     preparation: source.spellcasting.preparation,
     known: countKnownForSource(character, source.classEntry.classId)
