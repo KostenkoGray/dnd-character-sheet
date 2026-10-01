@@ -167,72 +167,102 @@ export function ensureMagicState(character) {
     character.magic.spells = [];
   }
 
-  const sources = getSpellcastingSources(character);
   const normalized = character.magic.spells
     .map(rawEntry => {
-      const entry = (
+      const raw =
         rawEntry &&
         typeof rawEntry === "object" &&
         !Array.isArray(rawEntry)
-      )
-        ? { ...rawEntry }
-        : {
-            spellId: typeof rawEntry === "string" ? rawEntry : "",
-            sourceClassId: "",
-            prepared: false
-          };
+          ? rawEntry
+          : {
+              spellId: typeof rawEntry === "string" ? rawEntry : "",
+              sourceClassId: "",
+              prepared: false
+            };
 
-      entry.spellId = entry.spellId ?? "";
-      entry.sourceClassId = entry.sourceClassId ?? "";
-      entry.prepared = Boolean(entry.prepared);
+      const sourceClassIds = Array.from(new Set([
+        ...(Array.isArray(raw.sourceClassIds) ? raw.sourceClassIds : []),
+        raw.sourceClassId
+      ].filter(Boolean)));
 
-      return entry;
+      const preparedSourceClassIds = Array.from(new Set([
+        ...(Array.isArray(raw.preparedSourceClassIds)
+          ? raw.preparedSourceClassIds
+          : []),
+        ...(raw.prepared ? sourceClassIds : [])
+      ].filter(Boolean)));
+
+      return {
+        spellId: raw.spellId ?? "",
+        sourceClassIds,
+        preparedSourceClassIds
+      };
     })
     .filter(entry => Boolean(getSpellById(entry.spellId)));
 
-  // Один spell зберігається один раз, навіть якщо його дають
-  // кілька класів. Зберігаємо перший source і не губимо prepared.
+  // Один spell = одна картка. Класи-джерела об'єднуються без дублювання.
   const unique = new Map();
 
   for (const entry of normalized) {
     const existing = unique.get(entry.spellId);
 
     if (!existing) {
-      unique.set(entry.spellId, entry);
+      unique.set(entry.spellId, {
+        ...entry,
+        sourceClassIds: [...entry.sourceClassIds],
+        preparedSourceClassIds: [...entry.preparedSourceClassIds]
+      });
       continue;
     }
 
-    existing.prepared = existing.prepared || entry.prepared;
+    existing.sourceClassIds = Array.from(new Set([
+      ...existing.sourceClassIds,
+      ...entry.sourceClassIds
+    ]));
 
-    if (!existing.sourceClassId && entry.sourceClassId) {
-      existing.sourceClassId = entry.sourceClassId;
-    }
+    existing.preparedSourceClassIds = Array.from(new Set([
+      ...existing.preparedSourceClassIds,
+      ...entry.preparedSourceClassIds
+    ]));
   }
 
   character.magic.spells = [...unique.values()];
 
-  // Після зміни мультикласу перев'язуємо spell з актуальним джерелом.
+  // Після зміни мультикласу відновлюємо актуальне джерело
+  // для старих записів, у яких sourceClassId був порожнім або застарілим.
   for (const entry of character.magic.spells) {
     const spell = getSpellById(entry.spellId);
     if (!spell) continue;
 
     const availableSources = getAvailableSourcesForSpell(character, spell);
-
-    const sourceStillExists = availableSources.some(source =>
-      source.classEntry.classId === entry.sourceClassId
+    const availableIds = availableSources.map(
+      source => source.classEntry.classId
     );
 
-    if (!sourceStillExists) {
-      entry.sourceClassId = availableSources[0]?.classEntry.classId ?? "";
+    entry.sourceClassIds = entry.sourceClassIds.filter(
+      id => availableIds.includes(id)
+    );
 
-      if (!entry.sourceClassId) {
-        entry.prepared = false;
-      }
+    if (!entry.sourceClassIds.length && availableIds.length) {
+      entry.sourceClassIds = [availableIds[0]];
     }
+
+    entry.preparedSourceClassIds = entry.preparedSourceClassIds.filter(id => {
+      const source = availableSources.find(
+        item => item.classEntry.classId === id
+      );
+
+      return Boolean(
+        source &&
+        entry.sourceClassIds.includes(id) &&
+        source.spellcasting?.preparation === MAGIC_PREPARATION.PREPARED
+      );
+    });
   }
 
   return character.magic.spells;
 }
+
 export function getKnownSpellEntries(character) {
   const state = ensureMagicState(character);
 
@@ -241,10 +271,20 @@ export function getKnownSpellEntries(character) {
       const spell = getSpellById(entry.spellId);
       if (!spell) return null;
 
+      const sourceClassIds = [...entry.sourceClassIds];
+      const preparedSourceClassIds = [...entry.preparedSourceClassIds];
+      const sources = getSpellcastingSources(character).filter(source =>
+        sourceClassIds.includes(source.classEntry.classId)
+      );
+
       return {
         ...spell,
-        sourceClassId: entry.sourceClassId,
-        prepared: Boolean(entry.prepared)
+        sourceClassIds,
+        preparedSourceClassIds,
+        sourceClassId:
+          preparedSourceClassIds[0] ?? sourceClassIds[0] ?? "",
+        sources,
+        prepared: preparedSourceClassIds.length > 0
       };
     })
     .filter(Boolean);
@@ -262,7 +302,7 @@ export function getPreparedSpells(character) {
 
 function countKnownForSource(character, sourceClassId, level = null) {
   return getKnownSpellEntries(character).filter(spell => {
-    if (spell.sourceClassId !== sourceClassId) return false;
+    if (!spell.sourceClassIds.includes(sourceClassId)) return false;
     return level === null || spell.level === level;
   }).length;
 }
@@ -279,33 +319,96 @@ export function getSpellLimits(character) {
     cantripsKnown: countKnownForSource(character, source.classEntry.classId, 0),
     cantripsLimit: getCantripsKnownLimitForSource(source),
     prepared: getKnownSpellEntries(character).filter(spell =>
-      spell.sourceClassId === source.classEntry.classId && spell.prepared
+      spell.preparedSourceClassIds.includes(source.classEntry.classId)
     ).length,
     preparedLimit: getPreparedLimitForSource(character, source)
   }));
 }
 
+function getSourceKnownCapacity(character, source, spell) {
+  if (spell.level === 0) {
+    const limit = getCantripsKnownLimitForSource(source);
+    return limit === null ||
+      countKnownForSource(character, source.classEntry.classId, 0) < limit;
+  }
+
+  const limit = getSpellKnownLimitForSource(source);
+  if (limit === null) return true;
+
+  const knownLevelled =
+    countKnownForSource(character, source.classEntry.classId) -
+    countKnownForSource(character, source.classEntry.classId, 0);
+
+  return knownLevelled < limit;
+}
+
 export function addSpellToCharacter(character, spellId, sourceClassId = "") {
   const spell = getSpellById(spellId);
-  if (!spell) return { ok: false, message: "Заклинання не знайдено в каталозі." };
+  if (!spell) {
+    return {
+      ok: false,
+      message: "Заклинання не знайдено в каталозі."
+    };
+  }
 
   ensureMagicState(character);
 
   const availableSources = getAvailableSourcesForSpell(character, spell);
   if (!availableSources.length) {
-    return { ok: false, message: "Персонажу недоступне це заклинання на поточному рівні." };
+    return {
+      ok: false,
+      message: "Персонажу недоступне це заклинання на поточному рівні."
+    };
   }
 
-  // Один і той самий spell не додаємо двічі, навіть через різні класи.
-  if (character.magic.spells.some(entry => entry.spellId === spellId)) {
-    return { ok: false, message: "Це заклинання вже додане персонажу." };
+  const existing = character.magic.spells.find(
+    entry => entry.spellId === spellId
+  );
+
+  if (existing) {
+    const source = sourceClassId
+      ? availableSources.find(item =>
+          item.classEntry.classId === sourceClassId
+        )
+      : availableSources.find(item =>
+          !existing.sourceClassIds.includes(item.classEntry.classId)
+        );
+
+    if (!source) {
+      return {
+        ok: false,
+        message: "Це заклинання вже додане для всіх доступних класів."
+      };
+    }
+
+    const sourceId = source.classEntry.classId;
+
+    if (!existing.sourceClassIds.includes(sourceId)) {
+      if (!getSourceKnownCapacity(character, source, spell)) {
+        return {
+          ok: false,
+          message: "Для " + source.classData.ukr + " вже досягнуто ліміту відомих заклинань."
+        };
+      }
+
+      existing.sourceClassIds.push(sourceId);
+    }
+
+    return {
+      ok: true,
+      entry: existing,
+      spell,
+      addedSourceClassId: sourceId
+    };
   }
 
   const source = sourceClassId
     ? availableSources.find(item =>
         item.classEntry.classId === sourceClassId
       )
-    : availableSources[0];
+    : availableSources.find(item =>
+        getSourceKnownCapacity(character, item, spell)
+      );
 
   if (!source) {
     return {
@@ -314,39 +417,10 @@ export function addSpellToCharacter(character, spellId, sourceClassId = "") {
     };
   }
 
-  if (spell.level === 0) {
-    const limit = getCantripsKnownLimitForSource(source);
-    if (limit !== null &&
-        countKnownForSource(character, source.classEntry.classId, 0) >= limit) {
-      return {
-        ok: false,
-        message: `Для ${source.classData.ukr} уже вибрано максимальну кількість заговорів (${limit}).`
-      };
-    }
-  } else {
-    const limit = getSpellKnownLimitForSource(source);
-    const knownLevelled = countKnownForSource(
-      character,
-      source.classEntry.classId,
-      null
-    ) - countKnownForSource(
-      character,
-      source.classEntry.classId,
-      0
-    );
-
-    if (limit !== null && knownLevelled >= limit) {
-      return {
-        ok: false,
-        message: `Для ${source.classData.ukr} уже вибрано максимальну кількість відомих заклинань (${limit}).`
-      };
-    }
-  }
-
   const entry = {
     spellId,
-    sourceClassId: source.classEntry.classId,
-    prepared: false
+    sourceClassIds: [source.classEntry.classId],
+    preparedSourceClassIds: []
   };
 
   character.magic.spells.push(entry);
@@ -354,12 +428,18 @@ export function addSpellToCharacter(character, spellId, sourceClassId = "") {
   return { ok: true, entry, spell };
 }
 
-export function toggleSpellPrepared(character, spellId) {
+export function toggleSpellPrepared(character, spellId, sourceClassId = "") {
   ensureMagicState(character);
 
-  const entry = character.magic.spells.find(item => item.spellId === spellId);
+  const entry = character.magic.spells.find(
+    item => item.spellId === spellId
+  );
+
   if (!entry) {
-    return { ok: false, message: "Заклинання не знайдено серед відомих." };
+    return {
+      ok: false,
+      message: "Заклинання не знайдено серед відомих."
+    };
   }
 
   const spell = getSpellById(spellId);
@@ -370,46 +450,74 @@ export function toggleSpellPrepared(character, spellId) {
     };
   }
 
-  if (entry.prepared) {
-    entry.prepared = false;
-    return { ok: true, prepared: false };
-  }
-
   const availableSources = getAvailableSourcesForSpell(character, spell);
-  const source =
-    availableSources.find(item =>
-      item.classEntry.classId === entry.sourceClassId
-    ) ??
-    availableSources[0];
+  const preparedSources = availableSources.filter(source =>
+    source.spellcasting?.preparation === MAGIC_PREPARATION.PREPARED
+  );
+
+  const source = sourceClassId
+    ? preparedSources.find(item =>
+        item.classEntry.classId === sourceClassId
+      )
+    : preparedSources.find(item =>
+        entry.sourceClassIds.includes(item.classEntry.classId)
+      ) ?? preparedSources[0];
 
   if (!source) {
-    entry.prepared = false;
     return {
       ok: false,
-      message: "Це заклинання зараз недоступне жодному spellcasting-класу персонажа."
+      message: "Жоден доступний клас цього заклинання не використовує підготовку заклять."
     };
   }
 
-  entry.sourceClassId = source.classEntry.classId;
+  const classId = source.classEntry.classId;
+
+  if (!entry.sourceClassIds.includes(classId)) {
+    if (!getSourceKnownCapacity(character, source, spell)) {
+      return {
+        ok: false,
+        message: "Для " + source.classData.ukr + " вже досягнуто ліміту відомих заклинань."
+      };
+    }
+
+    entry.sourceClassIds.push(classId);
+  }
+
+  const preparedIds = new Set(entry.preparedSourceClassIds);
+
+  if (preparedIds.has(classId)) {
+    preparedIds.delete(classId);
+    entry.preparedSourceClassIds = [...preparedIds];
+    return {
+      ok: true,
+      prepared: entry.preparedSourceClassIds.length > 0,
+      sourceClassId: classId
+    };
+  }
 
   const limit = getPreparedLimitForSource(character, source);
   if (limit !== null) {
     const currentPrepared = getKnownSpellEntries(character).filter(item =>
-      item.sourceClassId === source.classEntry.classId && item.prepared
+      item.preparedSourceClassIds.includes(classId)
     ).length;
 
     if (currentPrepared >= limit) {
       return {
         ok: false,
-        message: `${source.classData.ukr}: ліміт підготовлених заклинань — ${limit}.`
+        message: source.classData.ukr + ": ліміт підготовлених заклинань — " + limit + "."
       };
     }
   }
 
-  entry.prepared = true;
-  return { ok: true, prepared: true };
-}
+  preparedIds.add(classId);
+  entry.preparedSourceClassIds = [...preparedIds];
 
+  return {
+    ok: true,
+    prepared: true,
+    sourceClassId: classId
+  };
+}
 export function removeSpellFromCharacter(character, spellId) {
   ensureMagicState(character);
 
