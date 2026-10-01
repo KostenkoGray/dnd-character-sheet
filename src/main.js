@@ -17,7 +17,7 @@ import { charactersScreen } from "./screens/characterListScreen.js";
 import { characterSheetScreen } from "./screens/characterSheetScreen.js";
 import { combatScreen } from "./screens/combatScreen.js";
 import { inventoryScreen, renderInventoryList } from "./screens/inventoryScreen.js";
-import { magicScreen, renderMagicSpellsList } from "./screens/magicScreen.js";
+import { magicScreen, renderMagicSpellsLists } from "./screens/magicScreen.js";
 import { getStatModifier, getHitDiceTotal, clamp } from "./services/characterCalculationsService.js";
 import { CLASSES } from "./data/classesData.js";
 import {
@@ -293,14 +293,24 @@ function formatSpellComponents(components) {
   return values.join(", ") || "—";
 }
 
-function renderAddSpellBody(character, state) {
+function renderAddSpellBody(character, state, sourceClassId) {
   const search = String(state.search ?? "").trim().toLowerCase();
   const levelFilter = state.level ?? "all";
-  const knownIds = new Set((character.magic?.spells ?? []).map(entry => entry.spellId));
+  const normalizedSourceId = String(sourceClassId ?? "");
+  const knownIds = new Set(getKnownSpells(character).map(entry => entry.spellId));
+
+  const limit = getSpellLimits(character).find(item =>
+    String(item.classId) === normalizedSourceId
+  );
 
   const available = getAvailableSpells(character)
-    .filter(entry => !knownIds.has(entry.spell.id))
-    .filter(entry => levelFilter === "all" || Number(entry.spell.level) === Number(levelFilter))
+    .filter(entry => entry.sources.some(source =>
+      String(source.classEntry.classId) === normalizedSourceId
+    ))
+    .filter(entry =>
+      levelFilter === "all" ||
+      Number(entry.spell.level) === Number(levelFilter)
+    )
     .filter(entry => {
       if (!search) return true;
       const spell = entry.spell;
@@ -313,7 +323,9 @@ function renderAddSpellBody(character, state) {
       ].join(" ").toLowerCase().includes(search);
     })
     .sort((a, b) => {
-      if (a.spell.level !== b.spell.level) return a.spell.level - b.spell.level;
+      if (a.spell.level !== b.spell.level) {
+        return a.spell.level - b.spell.level;
+      }
       return String(a.spell.ukr ?? a.spell.name).localeCompare(
         String(b.spell.ukr ?? b.spell.name),
         "uk"
@@ -323,28 +335,50 @@ function renderAddSpellBody(character, state) {
   const results = available.length
     ? available.map(entry => {
         const spell = entry.spell;
-        const sources = entry.sources.map(source => source.classData.ukr).join(", ");
+        const alreadyKnown = knownIds.has(spell.id);
+
+        const atCantripLimit =
+          spell.level === 0 &&
+          limit?.cantripsLimit != null &&
+          limit.cantripsKnown >= limit.cantripsLimit;
+
+        const atKnownLimit =
+          spell.level > 0 &&
+          limit?.knownLimit != null &&
+          limit.known >= limit.knownLimit;
+
+        const disabled = alreadyKnown || atCantripLimit || atKnownLimit;
+
+        let buttonLabel = "Додати";
+        if (alreadyKnown) {
+          buttonLabel = "Вже відоме";
+        } else if (atCantripLimit || atKnownLimit) {
+          buttonLabel = "Ліміт";
+        }
 
         return `
           <article class="magic-add-result">
             <div class="magic-add-result-info">
               <strong>${escapeHtml(spell.ukr ?? spell.name)}</strong>
               <span>${escapeHtml(spell.level === 0 ? "Замова" : `Рівень ${spell.level}`)} · ${escapeHtml(SPELL_SCHOOL_LABELS[spell.school] ?? spell.school)}</span>
-              <small>${escapeHtml(sources)}</small>
             </div>
             <div class="magic-add-source-actions">
               <button
                 type="button"
-                class="inventory-action-button primary"
+                class="inventory-action-button ${disabled ? "secondary" : "primary"}"
                 data-add-spell-id="${escapeHtml(spell.id)}"
-              >Додати</button>
+                ${disabled ? "disabled" : ""}
+              >${buttonLabel}</button>
             </div>
           </article>
         `;
       }).join("")
-    : '<p class="inventory-empty">Немає доступних нових заклинань за цими умовами.</p>';
+    : '<p class="inventory-empty">Немає доступних заклинань за цими умовами.</p>';
 
   return `
+    <p class="magic-add-source-note">Клас: <strong>${escapeHtml(
+      limit?.className ?? normalizedSourceId
+    )}</strong></p>
     <section class="inventory-add-filters magic-add-filters">
       <label class="inventory-search">
         <span>Пошук</span>
@@ -355,7 +389,9 @@ function renderAddSpellBody(character, state) {
         <select id="magic-add-level">
           <option value="all" ${levelFilter === "all" ? "selected" : ""}>Усі рівні</option>
           <option value="0" ${String(levelFilter) === "0" ? "selected" : ""}>Замови</option>
-          ${[1,2,3,4,5,6,7,8,9].map(level => `<option value="${level}" ${String(levelFilter) === String(level) ? "selected" : ""}>Рівень ${level}</option>`).join("")}
+          ${[1,2,3,4,5,6,7,8,9].map(level =>
+            `<option value="${level}" ${String(levelFilter) === String(level) ? "selected" : ""}>Рівень ${level}</option>`
+          ).join("")}
         </select>
       </label>
     </section>
@@ -363,14 +399,14 @@ function renderAddSpellBody(character, state) {
   `;
 }
 
-function openAddSpellDialog(character) {
+function openAddSpellDialog(character, sourceClassId) {
   ensureMagicState(character);
 
   const state = { search: "", level: "all" };
 
   showCampDialog({
     title: "Додати заклинання",
-    body: renderAddSpellBody(character, state),
+    body: renderAddSpellBody(character, state, sourceClassId),
     confirmLabel: "Готово"
   });
 
@@ -380,7 +416,7 @@ function openAddSpellDialog(character) {
   const rerenderBody = focusSearch => {
     const body = backdrop.querySelector(".camp-dialog-body");
     if (!body) return;
-    body.innerHTML = renderAddSpellBody(character, state);
+    body.innerHTML = renderAddSpellBody(character, state, sourceClassId);
 
     if (focusSearch) {
       const input = body.querySelector("#magic-add-search");
@@ -403,11 +439,12 @@ function openAddSpellDialog(character) {
 
   backdrop.addEventListener("click", event => {
     const button = event.target.closest("[data-add-spell-id]");
-    if (!button) return;
+    if (!button || button.disabled) return;
 
     const result = addSpellToCharacter(
       character,
-      button.dataset.addSpellId
+      button.dataset.addSpellId,
+      sourceClassId
     );
 
     if (!result.ok) {
@@ -420,9 +457,7 @@ function openAddSpellDialog(character) {
     }
 
     persistCharacters();
-    render();
-
-    setTimeout(() => openAddSpellDialog(character), 0);
+    rerenderBody(false);
   });
 }
 
@@ -1662,7 +1697,7 @@ function render() {
       break;
 
     case "magic":
-      app.innerHTML = magicScreen(currentCharacter, magicFilter, collapseState.magicLevels, Boolean(collapseState.preparedSpells));
+      app.innerHTML = magicScreen(currentCharacter, magicFilter, collapseState.magicLevels);
       break;
 
     case "dice":
@@ -1698,7 +1733,13 @@ app.addEventListener("input", event => {
   if (currentScreen !== "magic" || event.target.id !== "magic-search") return;
   magicFilter.search = event.target.value;
   const list = document.querySelector("#magic-spells-list");
-  if (list) list.innerHTML = renderMagicSpellsList(currentCharacter, magicFilter, collapseState.magicLevels);
+  if (list) {
+    list.innerHTML = renderMagicSpellsLists(
+      currentCharacter,
+      magicFilter,
+      collapseState.magicLevels
+    );
+  }
 });
 
 app.addEventListener("click", (event) => {
@@ -1735,9 +1776,12 @@ app.addEventListener("click", (event) => {
   }
 
   if (currentScreen === "magic" && currentCharacter) {
-    const addButton = event.target.closest("#magic-add-spell");
+    const addButton = event.target.closest("[data-magic-add-source-class-id]");
     if (addButton) {
-      openAddSpellDialog(currentCharacter);
+      openAddSpellDialog(
+        currentCharacter,
+        addButton.dataset.magicAddSourceClassId
+      );
       return;
     }
 
