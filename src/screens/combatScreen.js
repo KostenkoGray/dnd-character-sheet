@@ -324,6 +324,10 @@ export function combatScreen(character, collapseState = {}) {
           </section>
         </section>
 
+        ${spellSlotsCounter(character)}
+
+        ${preparedSpellsBlock(character)}
+
         ${renderDeathSaves(character)}
 
         ${renderClassResources(character)}
@@ -334,10 +338,6 @@ export function combatScreen(character, collapseState = {}) {
         </section>
 
         ${equipmentCard(character, Boolean(collapseState.equipment))}
-
-        ${spellSlotsCounter(character)}
-
-        ${preparedSpellsBlock(character)}
 
         <section class="combat-section">
           <h2>Saving Throws &amp; Skills</h2>
