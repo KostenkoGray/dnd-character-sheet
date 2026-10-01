@@ -1,4 +1,5 @@
 import { getPreparedSpells, getSpellcastingSources } from "../services/magicService.js";
+import { collapsibleSection } from "./collapsibleSection.js";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -9,32 +10,32 @@ function escapeHtml(value) {
     .replace(/'/g, "&#039;");
 }
 
-export function preparedSpellsBlock(character) {
+export function preparedSpellsBlock(character, collapsed = false) {
   const sources = getSpellcastingSources(character);
   if (!sources.length) return "";
 
   const spells = getPreparedSpells(character);
 
-  if (!spells.length) {
-    return `
-      <section class="combat-section prepared-spells-block">
-        <h2>Prepared Spells</h2>
-        <p class="inventory-empty">Поки немає підготовлених заклинань.</p>
-      </section>
-    `;
-  }
+  const rows = spells.length
+    ? spells.map(spell => \`
+        <article class="prepared-spell-row">
+          <div>
+            <strong>\${escapeHtml(spell.ukr ?? spell.name)}</strong>
+            <small>Рівень \${spell.level} · \${escapeHtml(spell.castingTime)}</small>
+          </div>
+          <span>\${escapeHtml(spell.range)}</span>
+        </article>
+      \`).join("")
+    : '<p class="inventory-empty">Поки немає підготовлених заклинань.</p>';
 
-  const rows = spells.map(spell => `
-    <article class="prepared-spell-row">
-      <div>
-        <strong>${escapeHtml(spell.ukr ?? spell.name)}</strong>
-        <small>${spell.level === 0 ? "Замова" : `Рівень ${spell.level}`} · ${escapeHtml(spell.castingTime)}</small>
-      </div>
-      <span>${escapeHtml(spell.range)}</span>
-    </article>
-  `).join("");
-
-  return `
+  return collapsibleSection({
+    id: "prepared-spells",
+    title: "Prepared Spells",
+    collapsed,
+    className: "combat-section prepared-spells-block",
+    content: \`<div class="prepared-spells-list">\${rows}</div>\`
+  });
+}  return `
     <section class="combat-section prepared-spells-block">
       <h2>Prepared Spells</h2>
       <div class="prepared-spells-list">${rows}</div>
