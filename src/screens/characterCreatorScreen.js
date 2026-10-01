@@ -227,8 +227,6 @@ function renderRaceSummary(summary) {
         '<p><span>Броня:</span> ' + escapeHtml(armor || "—") + '</p>' +
         '<p><span>Інструменти:</span> ' + escapeHtml(tools || "—") + '</p>' +
         '<p><span>Навички:</span> ' + escapeHtml((summary.skillProficiencies ?? []).join(", ") || "—") + '</p>' +
-        '<p><span>Інструменти:</span> ' + escapeHtml(tools || "—") + '</p>' +
-        '<p><span>Навички:</span> ' + escapeHtml((summary.skillProficiencies ?? []).join(", ") || "—") + '</p>' +
         (summary.traits ?? []).map(trait => '<p><span>' + escapeHtml(trait[1]) + ':</span> ' + escapeHtml(trait[2]) + '</p>').join("") +
       '</div>' +
     '</section>'
@@ -303,7 +301,6 @@ function renderClassSummary(summary) {
   const weapons = summary.weaponProficiencies.map(id => typeof id === "string" ? id : id?.ukr ?? id?.name ?? id).map(id => CLASS_WEAPON_NAMES[id] ?? id).join(", ");
   const armor = summary.armorProficiencies.map(id => CLASS_ARMOR_NAMES[id] ?? id).join(", ");
   const tools = summary.toolProficiencies.map(id => formatToolName(id)).join(", ");
-  const tools = summary.toolProficiencies.map(id => formatToolName(id)).join(", ");
 
 
   return (
@@ -313,9 +310,6 @@ function renderClassSummary(summary) {
       '</div>' +
       '<div class="creator-summary-lines">' +
         '<p><span>Ряткидки:</span> ' + escapeHtml(saving || "—") + '</p>' +
-        (summary.spellcasting
-          ? '<p><span>Магія:</span> ' + escapeHtml(summary.spellcasting) + '</p>'
-          : "") +
         (summary.spellcasting
           ? '<p><span>Магія:</span> ' + escapeHtml(summary.spellcasting) + '</p>'
           : "") +
