@@ -13,6 +13,7 @@ import {
   getWeaponDamageBonus
 } from "../services/characterCalculationsService.js";
 import { CLASSES } from "../data/classesData.js";
+import { BACKGROUNDS } from "../data/backgroundsData.js";
 import { FEATURES } from "../data/featuresData.js";
 import { bottomNavigation } from "../components/bottomNavigation.js";
 import { collapsibleSection } from "../components/collapsibleSection.js";
@@ -289,6 +290,15 @@ function renderCharacterFeatures(character, collapsed = false) {
       entries: raceEntries.map(feature => ({ feature, race: true }))
     });
   }
+
+  const background = BACKGROUNDS[character.backgroundId];
+  if (background?.feature) {
+    groups.push({
+      title: background.ukr ? `Походження — ${background.ukr}` : "Походження",
+      entries: [{ feature: background.feature, background: true }]
+    });
+  }
+
   for (const cls of character.classes ?? []) {
     const classData = CLASSES[cls.classId];
     if (!classData) continue;
@@ -335,15 +345,17 @@ function renderCharacterFeatures(character, collapsed = false) {
         const feature = entry.feature;
         const source = entry.item
           ? `Предмет: ${entry.feature.sourceItem ?? "спорядження"}`
-          : entry.race
-            ? "Раса"
-            : entry.subclass
-              ? "Підклас"
-              : "Клас";
+          : entry.background
+            ? "Походження"
+            : entry.race
+              ? "Раса"
+              : entry.subclass
+                ? "Підклас"
+                : "Клас";
         const levelText = entry.level ? `Рівень ${entry.level}` : "";
         return `<article class="character-feature-row">
           <div class="character-feature-main"><strong>${escapeHtml(feature.ukr ?? feature.name ?? feature.id)}</strong><span>${escapeHtml(source)}${levelText ? ` · ${levelText}` : ""}</span></div>
-          <p>${escapeHtml(feature.short ?? "")}</p>
+          <p>${escapeHtml(feature.short ?? feature.description ?? "")}</p>
         </article>`;
       }).join("")}
     </section>
