@@ -29,7 +29,7 @@ export function preparedSpellsBlock(character, collapsed = false) {
     : '<p class="inventory-empty">Поки немає підготовлених заклинань.</p>';
 
   return collapsibleSection({
-    id: "prepared-spells",
+    id: "preparedSpells",
     title: "Prepared Spells",
     collapsed,
     className: "combat-section prepared-spells-block",
