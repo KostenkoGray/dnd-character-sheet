@@ -4,6 +4,7 @@ import {
   getSkillBonus,
   getSaveBonus,
   getCharacterLevel,
+  getHitDiceTotal,
   getArmorClass,
   getInitiative,
   getPassivePerception,
