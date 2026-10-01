@@ -330,7 +330,6 @@ function renderAddSpellBody(character, state) {
               <strong>${escapeHtml(spell.ukr ?? spell.name)}</strong>
               <span>${escapeHtml(spell.level === 0 ? "Замова" : `Рівень ${spell.level}`)} · ${escapeHtml(SPELL_SCHOOL_LABELS[spell.school] ?? spell.school)}</span>
               <small>${escapeHtml(sources)}</small>
-              <small>${escapeHtml(spell.description)}</small>
             </div>
             <div class="magic-add-source-actions">
               <button
