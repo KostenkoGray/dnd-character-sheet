@@ -227,6 +227,8 @@ function renderRaceSummary(summary) {
         '<p><span>Броня:</span> ' + escapeHtml(armor || "—") + '</p>' +
         '<p><span>Інструменти:</span> ' + escapeHtml(tools || "—") + '</p>' +
         '<p><span>Навички:</span> ' + escapeHtml((summary.skillProficiencies ?? []).join(", ") || "—") + '</p>' +
+        '<p><span>Інструменти:</span> ' + escapeHtml(tools || "—") + '</p>' +
+        '<p><span>Навички:</span> ' + escapeHtml((summary.skillProficiencies ?? []).join(", ") || "—") + '</p>' +
         (summary.traits ?? []).map(trait => '<p><span>' + escapeHtml(trait[1]) + ':</span> ' + escapeHtml(trait[2]) + '</p>').join("") +
       '</div>' +
     '</section>'
@@ -301,6 +303,7 @@ function renderClassSummary(summary) {
   const weapons = summary.weaponProficiencies.map(id => typeof id === "string" ? id : id?.ukr ?? id?.name ?? id).map(id => CLASS_WEAPON_NAMES[id] ?? id).join(", ");
   const armor = summary.armorProficiencies.map(id => CLASS_ARMOR_NAMES[id] ?? id).join(", ");
   const tools = summary.toolProficiencies.map(id => formatToolName(id)).join(", ");
+  const tools = summary.toolProficiencies.map(id => formatToolName(id)).join(", ");
 
 
   return (
@@ -310,6 +313,9 @@ function renderClassSummary(summary) {
       '</div>' +
       '<div class="creator-summary-lines">' +
         '<p><span>Ряткидки:</span> ' + escapeHtml(saving || "—") + '</p>' +
+        (summary.spellcasting
+          ? '<p><span>Магія:</span> ' + escapeHtml(summary.spellcasting) + '</p>'
+          : "") +
         (summary.spellcasting
           ? '<p><span>Магія:</span> ' + escapeHtml(summary.spellcasting) + '</p>'
           : "") +
@@ -371,6 +377,14 @@ function formatCurrency(currency = {}) {
     .join(", ") || "—";
 }
 
+function formatCurrency(currency = {}) {
+  const names = [["pp", "PP"], ["gp", "GP"], ["ep", "EP"], ["sp", "SP"], ["cp", "CP"]];
+  return names
+    .filter(([id]) => Number(currency?.[id] ?? 0) > 0)
+    .map(([id, label]) => Number(currency[id]) + " " + label)
+    .join(", ") || "—";
+}
+
 function renderBackgroundStep(state) {
   const backgrounds = getBackgroundOptions();
   const recommended = getRecommendedBackgroundId(state);
@@ -395,6 +409,12 @@ function renderBackgroundStep(state) {
         ? '<section class="creator-background-detail">' +
             '<h3>' + escapeHtml(BACKGROUNDS[state.backgroundId]?.feature?.ukr ?? "Особливість") + '</h3>' +
             '<p>' + escapeHtml(BACKGROUNDS[state.backgroundId]?.feature?.description ?? "") + '</p>' +
+            '<div class="creator-summary-lines">' +
+              '<p><span>Навички:</span> ' + escapeHtml((BACKGROUNDS[state.backgroundId]?.skillProficiencies?.granted ?? []).join(", ") || "—") + '</p>' +
+              '<p><span>Інструменти:</span> ' + escapeHtml((BACKGROUNDS[state.backgroundId]?.toolProficiencies?.granted ?? []).join(", ") || "—") + '</p>' +
+              '<p><span>Мови:</span> ' + escapeHtml((BACKGROUNDS[state.backgroundId]?.languages?.granted ?? []).join(", ") || "—") + '</p>' +
+              '<p><span>Стартова валюта:</span> ' + escapeHtml(formatCurrency(BACKGROUNDS[state.backgroundId]?.startingCurrency)) + '</p>' +
+            '</div>' +
             '<div class="creator-summary-lines">' +
               '<p><span>Навички:</span> ' + escapeHtml((BACKGROUNDS[state.backgroundId]?.skillProficiencies?.granted ?? []).join(", ") || "—") + '</p>' +
               '<p><span>Інструменти:</span> ' + escapeHtml((BACKGROUNDS[state.backgroundId]?.toolProficiencies?.granted ?? []).join(", ") || "—") + '</p>' +
