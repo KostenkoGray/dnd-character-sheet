@@ -44,6 +44,36 @@ function clone(value) {
 }
 
 
+
+const UI_STATE_KEY = "dnd-character-sheet.ui.v1";
+
+export function loadUiState(fallbackState = {}) {
+  try {
+    const raw = localStorage.getItem(UI_STATE_KEY);
+    if (!raw) {
+      return clone(fallbackState);
+    }
+
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") {
+      return clone(fallbackState);
+    }
+
+    return parsed;
+  } catch (error) {
+    console.error("Не вдалося завантажити стан інтерфейсу:", error);
+    return clone(fallbackState);
+  }
+}
+
+export function saveUiState(state) {
+  try {
+    localStorage.setItem(UI_STATE_KEY, JSON.stringify(state));
+  } catch (error) {
+    console.error("Не вдалося зберегти стан інтерфейсу:", error);
+  }
+}
+
 const SETTINGS_KEY = "dnd-character-sheet.settings.v1";
 
 export function loadSettings(fallbackSettings = { actionPreferences: {} }) {
