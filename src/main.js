@@ -1758,6 +1758,14 @@ app.addEventListener("change", event => {
 });
 
 app.addEventListener("input", event => {
+  if (currentScreen === "sheet") {
+    const walletInput = event.target.closest('[data-wallet-action="set"]');
+    if (walletInput) {
+      walletInput.value = walletInput.value.replace(/\\D/g, "");
+      return;
+    }
+  }
+
   if (currentScreen !== "inventory" || event.target.id !== "inventory-search") return;
   inventoryFilter.search = event.target.value;
   const sections = document.querySelector(".inventory-sections");
