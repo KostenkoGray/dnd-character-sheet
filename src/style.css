@@ -4242,3 +4242,40 @@ p {
 .combat-weapons-section .combat-weapon-damage {
   display: none;
 }
+
+
+/* ==================================================
+   EQUIPMENT / WEAPONS FINAL BALANCE
+   ================================================== */
+
+.sheet-equipment-wallet-row,
+.combat-equipment-weapons-row {
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1.05fr);
+}
+
+@media (max-width: 380px) {
+  .sheet-equipment-wallet-row {
+    grid-template-columns: minmax(0, 1.15fr) minmax(112px, 1fr);
+  }
+
+  .combat-equipment-weapons-row {
+    grid-template-columns: minmax(0, 1.15fr) minmax(108px, 1fr);
+  }
+}
+
+/* Combat weapon labels centered. */
+.combat-weapons-section .combat-weapon-main {
+  text-align: center;
+  justify-items: center;
+}
+
+.combat-weapons-section .combat-weapon-main strong,
+.combat-weapons-section .combat-weapon-main span,
+.combat-weapons-section .combat-weapon-parameters {
+  width: 100%;
+  text-align: center;
+}
+
+.combat-weapons-section .combat-weapon-parameters {
+  display: block;
+}
