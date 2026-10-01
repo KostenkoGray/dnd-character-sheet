@@ -1860,6 +1860,15 @@ app.addEventListener("click", (event) => {
     currentCharacter &&
     ["sheet", "combat", "magic"].includes(currentScreen)
   ) {
+    const concentrationButton = event.target.closest("[data-spell-concentration]");
+    if (concentrationButton) {
+      ensureCombatState(currentCharacter);
+      currentCharacter.combat.concentration = !currentCharacter.combat.concentration;
+      persistCharacters();
+      render();
+      return;
+    }
+
     const slotDot = event.target.closest("[data-spell-slot-dot]");
     if (slotDot) {
       const level = Number(slotDot.dataset.spellSlotLevel);
