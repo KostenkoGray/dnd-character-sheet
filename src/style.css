@@ -3857,3 +3857,149 @@ p {
   }
 }
 
+
+/* ==================================================
+   FINAL SPELL / SHEET LAYOUT
+   ================================================== */
+
+/* Keep prepared-spell stars in one fixed right column. */
+.prepared-spell-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 92px;
+  align-items: center;
+  gap: 8px;
+}
+
+.prepared-spell-row > div:first-child {
+  min-width: 0;
+}
+
+.prepared-spell-row-actions {
+  width: 92px;
+  min-width: 92px;
+  display: grid;
+  grid-template-columns: 55px 30px;
+  align-items: center;
+  justify-content: end;
+  gap: 7px;
+}
+
+.prepared-spell-row-actions > span {
+  width: 55px;
+  min-width: 55px;
+}
+
+/* In Magic, level stays stable and the favorite star sits below it. */
+.magic-spell-heading-right {
+  width: 64px;
+  min-width: 64px;
+  flex: 0 0 64px;
+  flex-direction: column !important;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 3px;
+}
+
+.magic-spell-heading-right > span {
+  width: 64px;
+  min-width: 64px;
+  order: 1;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.magic-spell-heading-right .magic-favorite-button {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  order: 2;
+}
+
+/* Compact concentration control to the right of spell-slot rows. */
+.spell-slots-counter-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 76px;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.spell-slots-counter-body .spell-slots-counter-list {
+  min-width: 0;
+}
+
+.spell-concentration-button {
+  width: 76px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin: 0;
+  padding: 5px 6px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  color: inherit;
+  cursor: pointer;
+  text-align: center;
+}
+
+.spell-concentration-button span {
+  font-size: .63rem;
+  line-height: 1.05;
+  opacity: .7;
+}
+
+.spell-concentration-button strong {
+  font-size: .7rem;
+  line-height: 1.05;
+}
+
+@media (max-width: 380px) {
+  .prepared-spell-row {
+    grid-template-columns: minmax(0, 1fr) 86px;
+    gap: 6px;
+  }
+
+  .prepared-spell-row-actions {
+    width: 86px;
+    min-width: 86px;
+    grid-template-columns: 50px 30px;
+    gap: 6px;
+  }
+
+  .prepared-spell-row-actions > span {
+    width: 50px;
+    min-width: 50px;
+  }
+
+  .magic-spell-heading-right {
+    width: 58px;
+    min-width: 58px;
+    flex-basis: 58px;
+  }
+
+  .magic-spell-heading-right > span {
+    width: 58px;
+    min-width: 58px;
+    font-size: 10px;
+  }
+
+  .magic-spell-heading-right .magic-favorite-button {
+    width: 26px;
+    height: 26px;
+    flex-basis: 26px;
+    font-size: 16px;
+  }
+
+  .spell-slots-counter-body {
+    grid-template-columns: minmax(0, 1fr) 68px;
+    gap: 6px;
+  }
+
+  .spell-concentration-button {
+    width: 68px;
+    padding: 4px 4px;
+  }
+}
