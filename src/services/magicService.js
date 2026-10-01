@@ -433,7 +433,11 @@ export function getSpellLimits(character) {
     cantripsKnown: countKnownForSource(character, source.classEntry.classId, 0),
     cantripsLimit: getCantripsKnownLimitForSource(source),
     prepared: getKnownSpellEntries(character).filter(spell =>
-      spell.preparedSourceClassIds.includes(source.classEntry.classId)
+      spell.preparedSourceClassIds.includes(source.classEntry.classId) ||
+      (
+        source.spellcasting.preparation === MAGIC_PREPARATION.KNOWN &&
+        String(spell.sourceClassId ?? "") === String(source.classEntry.classId)
+      )
     ).length,
     preparedLimit: getPreparedLimitForSource(character, source)
   }));
