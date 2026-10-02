@@ -399,48 +399,51 @@ export async function startCharacterCreator({ app, onCancel, onCreate, onError }
       return;
     }
 
-    const skillChoice = event.target.closest("[data-creator-skill-choice]");
-    if (skillChoice) {
+    const skillRow = event.target.closest("[data-creator-skill-choice-row]");
+    if (skillRow) {
+      const skillChoice = skillRow.querySelector("[data-creator-skill-choice]");
+      if (!skillChoice) return;
+
       const group = creatorService.getClassChoiceGroups?.(state)?.find(item => item.id === "skills");
       const max = Number(group?.count ?? 0);
       const selected = new Set(state.classChoices.skills ?? []);
 
+      if (skillChoice.checked && selected.size >= max && !selected.has(skillChoice.value)) {
+        state.error = "Можна вибрати не більше " + max + " навичок.";
+        safeRender();
+        return;
+      }
+
       if (skillChoice.checked) {
-        if (selected.size >= max) {
-          skillChoice.checked = false;
-          state.error = "Можна вибрати не більше " + max + " навичок.";
-          safeRender();
-          return;
-        }
         selected.add(skillChoice.value);
       } else {
         selected.delete(skillChoice.value);
       }
 
       state.classChoices.skills = [...selected];
-
-      const proficient = new Set(state.classChoices.skills);
       state.classChoices.expertise =
-        (state.classChoices.expertise ?? []).filter(id => proficient.has(id));
-
+        (state.classChoices.expertise ?? []).filter(id => selected.has(id));
       state.error = "";
       safeRender();
       return;
     }
 
-    const expertiseChoice = event.target.closest("[data-creator-expertise-choice]");
-    if (expertiseChoice) {
+    const expertiseRow = event.target.closest("[data-creator-expertise-choice-row]");
+    if (expertiseRow) {
+      const expertiseChoice = expertiseRow.querySelector("[data-creator-expertise-choice]");
+      if (!expertiseChoice) return;
+
       const group = creatorService.getClassChoiceGroups?.(state)?.find(item => item.id === "expertise");
       const max = Number(group?.count ?? 0);
       const selected = new Set(state.classChoices.expertise ?? []);
 
+      if (expertiseChoice.checked && (max <= 0 || selected.size >= max) && !selected.has(expertiseChoice.value)) {
+        state.error = "Можна вибрати не більше " + max + " експертностей.";
+        safeRender();
+        return;
+      }
+
       if (expertiseChoice.checked) {
-        if (max <= 0 || selected.size >= max) {
-          expertiseChoice.checked = false;
-          state.error = "Можна вибрати не більше " + max + " експертностей.";
-          safeRender();
-          return;
-        }
         selected.add(expertiseChoice.value);
       } else {
         selected.delete(expertiseChoice.value);
@@ -451,7 +454,6 @@ export async function startCharacterCreator({ app, onCancel, onCreate, onError }
       safeRender();
       return;
     }
-
     const raceButton = event.target.closest("[data-creator-race]");
     if (raceButton) {
       const raceId = raceButton.dataset.creatorRace ?? "";
