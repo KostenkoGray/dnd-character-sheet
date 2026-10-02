@@ -15,7 +15,12 @@ import {
   CREATOR_RACE_DETAILS,
   CREATOR_CLASS_EQUIPMENT,
   CREATOR_ABILITY_SCORE_ARRAY,
-  CREATOR_STARTING_SPELLS
+  CREATOR_STARTING_SPELLS,
+  CREATOR_STAT_METHODS,
+  CREATOR_POINT_BUY_BUDGET,
+  CREATOR_POINT_BUY_COST,
+  CREATOR_MANUAL_SCORE_MIN,
+  CREATOR_MANUAL_SCORE_MAX
 } from "../data/characterCreatorData.js";
 
 const CLASS_WEAPON_PROFICIENCY_LABELS = {
@@ -56,6 +61,12 @@ export function createCreatorState() {
       draconicAncestry: "",
       cantrip: ""
     },
+    statsMethod: CREATOR_STAT_METHODS.STANDARD,
+    statsByMethod: {
+      [CREATOR_STAT_METHODS.STANDARD]: Object.fromEntries(ABILITY_KEYS.map(key => [key, null])),
+      [CREATOR_STAT_METHODS.POINT_BUY]: Object.fromEntries(ABILITY_KEYS.map(key => [key, 8])),
+      [CREATOR_STAT_METHODS.MANUAL]: Object.fromEntries(ABILITY_KEYS.map(key => [key, null]))
+    },
     stats: Object.fromEntries(ABILITY_KEYS.map(key => [key, null])),
     classId: "",
     subclassId: "",
@@ -74,6 +85,8 @@ export function createCreatorState() {
       languages: {},
       tools: {}
     },
+    equipmentMode: "",
+    startingGoldGp: null,
     equipmentChoices: {},
     magicChoices: {
       cantrips: [],
@@ -355,18 +368,17 @@ export function getClassChoiceGroups(state) {
   }
 
   if ((classData.featuresByLevel?.[1] ?? []).includes("expertise")) {
+    const proficientIds = getFinalSkillProficiencyIds(state);
+
     groups.push({
       id: "expertise",
       title: "Експертність",
       kind: "expertise",
       count: 2,
       unique: true,
-      options: [
-        ...getAllSkillOptions(),
-        ...(state.classId === "rogue"
-          ? [{ id: "thievesTools", label: "Злодійські інструменти" }]
-          : [])
-      ]
+      options: getAllSkillOptions().filter(option =>
+        proficientIds.has(option.id)
+      )
     });
   }
 
@@ -462,12 +474,14 @@ export function getEquipmentChoiceGroups(state) {
   const groups = [];
   const classEquipment = CREATOR_CLASS_EQUIPMENT[state.classId];
 
-  for (const choice of classEquipment?.choices ?? []) {
-    groups.push({
-      ...normalizeEquipmentChoice(choice),
-      id: "class:" + choice.id,
-      source: "class"
-    });
+  if (state.equipmentMode !== "gold") {
+    for (const choice of classEquipment?.choices ?? []) {
+      groups.push({
+        ...normalizeEquipmentChoice(choice),
+        id: "class:" + choice.id,
+        source: "class"
+      });
+    }
   }
 
   const background = BACKGROUNDS[state.backgroundId];
@@ -780,6 +794,78 @@ export function getFinalRaceAbilityBonuses(state) {
   return result;
 }
 
+export function getPointBuyCost(score) {
+  return CREATOR_POINT_BUY_COST[Number(score)] ?? null;
+}
+
+export function getPointBuyTotal(state) {
+  const scores = state.statsByMethod?.[CREATOR_STAT_METHODS.POINT_BUY] ?? state.stats ?? {};
+  return ABILITY_KEYS.reduce(
+    (total, key) => total + Number(CREATOR_POINT_BUY_COST[Number(scores[key])] ?? 0),
+    0
+  );
+}
+
+export function getPointBuyRemaining(state) {
+  return CREATOR_POINT_BUY_BUDGET - getPointBuyTotal(state);
+}
+
+export function getActiveStats(state) {
+  return state.statsByMethod?.[state.statsMethod] ?? state.stats ?? {};
+}
+
+function syncActiveStats(state) {
+  state.stats = {
+    ...(state.statsByMethod?.[state.statsMethod] ?? state.stats ?? {})
+  };
+  return state.stats;
+}
+
+function validateStandardArrayStats(stats) {
+  const values = ABILITY_KEYS.map(id => Number(stats[id]));
+  if (values.some(value => !CREATOR_ABILITY_SCORE_ARRAY.includes(value))) {
+    return "Розподіліть усі значення характеристик.";
+  }
+  if (new Set(values).size !== CREATOR_ABILITY_SCORE_ARRAY.length) {
+    return "Кожне значення характеристики можна використати лише один раз.";
+  }
+  return "";
+}
+
+function validatePointBuyStats(stats) {
+  const values = ABILITY_KEYS.map(id => Number(stats[id]));
+  if (values.some(value => !Object.prototype.hasOwnProperty.call(CREATOR_POINT_BUY_COST, value))) {
+    return "У Point Buy кожна характеристика має бути від 8 до 15.";
+  }
+  if (getPointBuyTotal({ statsByMethod: { [CREATOR_STAT_METHODS.POINT_BUY]: stats } }) !== CREATOR_POINT_BUY_BUDGET) {
+    return "Розподіліть рівно 27 пунктів Point Buy.";
+  }
+  return "";
+}
+
+function validateManualStats(stats) {
+  const values = ABILITY_KEYS.map(id => Number(stats[id]));
+  if (values.some(value =>
+    !Number.isInteger(value) ||
+    value < CREATOR_MANUAL_SCORE_MIN ||
+    value > CREATOR_MANUAL_SCORE_MAX
+  )) {
+    return "Для ручного вводу використовуйте цілі значення від 3 до 18.";
+  }
+  return "";
+}
+
+export function validateCreatorStats(state) {
+  const stats = getActiveStats(state);
+  if (state.statsMethod === CREATOR_STAT_METHODS.POINT_BUY) {
+    return validatePointBuyStats(stats);
+  }
+  if (state.statsMethod === CREATOR_STAT_METHODS.MANUAL) {
+    return validateManualStats(stats);
+  }
+  return validateStandardArrayStats(stats);
+}
+
 export function validateCreatorStep(state, stepKey) {
   if (stepKey === "race") {
     if (!state.raceId) return "Оберіть расу.";
@@ -806,16 +892,8 @@ export function validateCreatorStep(state, stepKey) {
   }
 
   if (stepKey === "stats") {
-    const values = ABILITY_KEYS.map(id => Number(state.stats[id]));
-    if (values.some(value => !CREATOR_ABILITY_SCORE_ARRAY.includes(value))) {
-      return "Розподіліть усі значення характеристик.";
-    }
-
-    if (new Set(values).size !== CREATOR_ABILITY_SCORE_ARRAY.length) {
-      return "Кожне значення характеристики можна використати лише один раз.";
-    }
-
-    return "";
+    syncActiveStats(state);
+    return validateCreatorStats(state);
   }
 
   if (stepKey === "class") {
@@ -855,6 +933,17 @@ export function validateCreatorStep(state, stepKey) {
   }
 
   if (stepKey === "equipment") {
+    if (!state.equipmentMode) {
+      return "Оберіть спосіб отримання стартового спорядження.";
+    }
+
+    if (state.equipmentMode === "gold") {
+      const gold = Number(state.startingGoldGp);
+      if (!Number.isFinite(gold) || gold < 0 || !Number.isInteger(gold)) {
+        return "Введіть кількість стартового золота після кидка.";
+      }
+    }
+
     for (const group of getEquipmentChoiceGroups(state)) {
       const value = state.equipmentChoices[group.id];
       if (!isChoiceComplete(group, value)) {
@@ -1313,6 +1402,7 @@ export function buildCharacterFromCreator(state, id) {
     throw new Error("Creator state is incomplete.");
   }
 
+  syncActiveStats(state);
   const stats = { ...state.stats };
   const racialBonuses = getFinalRaceAbilityBonuses(state);
 
@@ -1430,24 +1520,26 @@ export function buildCharacterFromCreator(state, id) {
   const inventory = [];
   const classEquipment = CREATOR_CLASS_EQUIPMENT[state.classId];
 
-  for (const item of classEquipment?.fixed ?? []) {
-    addInventoryEntry(
-      inventory,
-      item.source === "custom"
-        ? item
-        : resolveGenericItem(item.source, item.itemId) ?? item,
-      "class-fixed-" + item.itemId
-    );
-  }
+  if (state.equipmentMode !== "gold") {
+    for (const item of classEquipment?.fixed ?? []) {
+      addInventoryEntry(
+        inventory,
+        item.source === "custom"
+          ? item
+          : resolveGenericItem(item.source, item.itemId) ?? item,
+        "class-fixed-" + item.itemId
+      );
+    }
 
-  for (const choice of classEquipment?.choices ?? []) {
-    const selected = state.equipmentChoices["class:" + choice.id];
-    addChoiceItems(
-      inventory,
-      choice,
-      selected,
-      "class-choice-" + choice.id
-    );
+    for (const choice of classEquipment?.choices ?? []) {
+      const selected = state.equipmentChoices["class:" + choice.id];
+      addChoiceItems(
+        inventory,
+        choice,
+        selected,
+        "class-choice-" + choice.id
+      );
+    }
   }
 
   for (const item of background?.startingEquipment?.fixed ?? []) {
@@ -1597,7 +1689,8 @@ export function buildCharacterFromCreator(state, id) {
     },
     currency: {
       pp: Number(background.startingCurrency?.pp ?? 0),
-      gp: Number(background.startingCurrency?.gp ?? 0),
+      gp: Number(background.startingCurrency?.gp ?? 0) +
+        (state.equipmentMode === "gold" ? Number(state.startingGoldGp ?? 0) : 0),
       ep: Number(background.startingCurrency?.ep ?? 0),
       sp: Number(background.startingCurrency?.sp ?? 0),
       cp: Number(background.startingCurrency?.cp ?? 0)
@@ -1627,7 +1720,11 @@ export function buildCharacterFromCreator(state, id) {
 export function getSpellOptionsForCreator(state, level) {
   const requirements = getMagicRequirements(state);
   if (!requirements.spellListClassId) return [];
-  return getSpellOptionsForClass(requirements.spellListClassId, level);
+
+  const racialSpellIds = new Set(getRacialSpellIds(state));
+
+  return getSpellOptionsForClass(requirements.spellListClassId, level)
+    .filter(option => !racialSpellIds.has(option.id));
 }
 
 function getChoiceStateTarget(state, group) {
