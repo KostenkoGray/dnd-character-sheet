@@ -1,12 +1,23 @@
 import { STATS, ABILITY_KEYS } from "../data/rulesData.js";
 import { RACES } from "../data/racesData.js";
 import { CLASSES } from "../data/classesData.js";
-import { CREATOR_ABILITY_SCORE_ARRAY, CREATOR_CLASS_EQUIPMENT, CREATOR_TOOL_OPTIONS, CREATOR_RACE_DETAILS } from "../data/characterCreatorData.js";
+import {
+  CREATOR_ABILITY_SCORE_ARRAY,
+  CREATOR_CLASS_EQUIPMENT,
+  CREATOR_TOOL_OPTIONS,
+  CREATOR_RACE_DETAILS,
+  CREATOR_STAT_METHODS,
+  CREATOR_POINT_BUY_COST,
+  CREATOR_POINT_BUY_BUDGET,
+  CREATOR_MANUAL_SCORE_MIN,
+  CREATOR_MANUAL_SCORE_MAX
+} from "../data/characterCreatorData.js";
 import { WEAPONS } from "../data/weaponsData.js";
 import { ARMOR } from "../data/armorData.js";
 import { OTHER_ITEMS } from "../data/otherItemsData.js";
 import { SPELLS } from "../data/spellsData.js";
 import { BACKGROUNDS } from "../data/backgroundsData.js";
+import { getStatModifier } from "../services/characterCalculationsService.js";
 import {
   getRaceChoices,
   getRaceTraitSummary,
@@ -22,7 +33,11 @@ import {
   getChoiceValue,
   getRecommendedBackgroundId,
   getCreatorSteps,
-  getCurrentStep
+  getCurrentStep,
+  getFinalRaceAbilityBonuses,
+  getActiveStats,
+  getPointBuyTotal,
+  getPointBuyRemaining
 } from "../services/characterCreatorService.js";
 
 const OTHER_LABELS = Object.fromEntries(
@@ -110,8 +125,8 @@ function renderSelect(title, group, selected) {
         ' data-creator-choice-kind="' + escapeHtml(group.kind) + '"' +
         ' data-creator-choice-count="' + max + '"' +
       '>' +
-        (group.kind === "single"
-          ? '<option value="">Оберіть...</option>'
+        (max === 1
+          ? '<option value="" disabled ' + (selectedValues.length ? "" : "selected") + '>Оберіть...</option>'
           : "") +
         group.options.map(option =>
           '<option value="' + escapeHtml(option.id) + '"' +
@@ -264,35 +279,126 @@ function renderRaceSummary(summary) {
   );
 }
 
-function renderStatsStep(state) {
-  return (
-    '<section class="creator-step">' +
-      '<div class="creator-section-heading">' +
-        '<h2>Характеристики</h2>' +
-        '<p>Розподіли стандартний набір значень: 15, 14, 13, 12, 10, 8. Расові бонуси застосуються після вибору.</p>' +
-      '</div>' +
-      '<div class="creator-stats-assignment">' +
-        ABILITY_KEYS.map(id => {
-          const value = state.stats[id];
-          return (
-            '<label class="creator-stat-row">' +
-              '<span><strong>' + escapeHtml(STATS[id].short) + '</strong>' + escapeHtml(STATS[id].ukr) + '</span>' +
-              '<select data-creator-stat="' + escapeHtml(id) + '">' +
-                '<option value="">—</option>' +
-                CREATOR_ABILITY_SCORE_ARRAY.map(score =>
-                  '<option value="' + score + '"' + (Number(value) === Number(score) ? " selected" : "") + '>' + score + '</option>'
-                ).join("") +
-              '</select>' +
-            '</label>'
-          );
-        }).join("") +
-      '</div>' +
-      '<div class="creator-info-box"><strong>Після розподілу</strong><p>Бонуси раси та підраси будуть автоматично додані до цих значень.</p></div>' +
-    '</section>'
-  );
+function formatSigned(value) {
+  const number = Number(value ?? 0);
+  return number >= 0 ? "+" + number : String(number);
 }
 
-function renderClassStep(state) {
+function getStatRaceBonus(state, statId) {
+  return Number(getFinalRaceAbilityBonuses(state)?.[statId] ?? 0);
+}
+
+function renderStatValueSummary(state, statId, baseValue) {
+  const base = Number(baseValue);
+  const raceBonus = getStatRaceBonus(state, statId);
+  const total = Number.isFinite(base) ? base + raceBonus : null;
+  return '<div class="creator-stat-values">' +
+    '<span>База <strong>' + (Number.isFinite(base) ? base : "—") + '</strong></span>' +
+    '<span>Раса <strong>' + (raceBonus ? formatSigned(raceBonus) : "—") + '</strong></span>' +
+    '<span>Разом <strong>' + (total != null ? total : "—") + '</strong></span>' +
+  '</div>';
+}
+
+function renderStatMethods(state) {
+  const methods = [
+    [CREATOR_STAT_METHODS.STANDARD, "Стандартні значення", "15 · 14 · 13 · 12 · 10 · 8", "Рекомендовано"],
+    [CREATOR_STAT_METHODS.POINT_BUY, "Point Buy", "27 пунктів · максимум 15 до раси", "За правилами PHB"],
+    [CREATOR_STAT_METHODS.MANUAL, "Мануальний ввід", "Власні результати кидків", "3–18 до расових бонусів"]
+  ];
+  return '<section class="creator-subsection creator-stat-methods"><h3>Спосіб розподілу</h3><div class="creator-choice-grid">' +
+    methods.map(([id, title, detail, note]) =>
+      '<button type="button" class="creator-card-button ' + (state.statsMethod === id ? "selected" : "") + '" data-creator-stat-method="' + escapeHtml(id) + '">' +
+        '<strong>' + escapeHtml(title) + '</strong>' +
+        '<span>' + escapeHtml(detail) + '</span>' +
+        '<small>' + escapeHtml(note) + '</small>' +
+      '</button>'
+    ).join("") +
+  '</div></section>';
+}
+
+function renderRaceBonusLegend(state) {
+  const bonuses = getFinalRaceAbilityBonuses(state);
+  const items = Object.entries(bonuses).filter(([, value]) => Number(value) !== 0).map(([id, value]) =>
+    '<span><strong>' + escapeHtml(STATS[id]?.short ?? id) + '</strong> ' + escapeHtml(formatSigned(value)) + '</span>'
+  );
+  return '<section class="creator-info-box creator-stat-race-box"><strong>Бонуси раси та підраси</strong><div class="creator-stat-race-list">' +
+    (items.length ? items.join("") : '<span>Ця раса не змінює характеристики.</span>') +
+  '</div></section>';
+}
+
+function renderStandardStats(state) {
+  const stats = getActiveStats(state);
+  return '<section class="creator-stat-allocation-block"><div class="creator-stat-grid">' +
+    ABILITY_KEYS.map(id => {
+      const value = stats[id];
+      const raceBonus = getStatRaceBonus(state, id);
+      return '<article class="creator-stat-card">' +
+        '<div class="creator-stat-card-heading"><div><strong>' + escapeHtml(STATS[id].short) + '</strong><span>' + escapeHtml(STATS[id].ukr) + '</span></div>' +
+        '<span class="creator-stat-racial">' + (raceBonus ? escapeHtml(formatSigned(raceBonus)) + ' раса' : "—") + '</span></div>' +
+        '<select class="creator-stat-select" data-creator-stat="' + escapeHtml(id) + '">' +
+        '<option value="">—</option>' +
+        CREATOR_ABILITY_SCORE_ARRAY.map(score => '<option value="' + score + '"' + (Number(value) === Number(score) ? " selected" : "") + '>' + score + '</option>').join("") +
+        '</select>' + renderStatValueSummary(state, id, value) +
+      '</article>';
+    }).join("") +
+  '</div></section>';
+}
+
+function renderPointBuyStats(state) {
+  const stats = getActiveStats(state);
+  const total = getPointBuyTotal(state);
+  const remaining = getPointBuyRemaining(state);
+  return '<section class="creator-stat-allocation-block">' +
+    '<div class="creator-point-buy-summary"><div><span>Витрачено</span><strong>' + total + ' / ' + CREATOR_POINT_BUY_BUDGET + '</strong></div><div><span>Залишилось</span><strong>' + remaining + '</strong></div></div>' +
+    '<div class="creator-stat-grid">' +
+    ABILITY_KEYS.map(id => {
+      const value = Number(stats[id] ?? 8);
+      const cost = CREATOR_POINT_BUY_COST[value] ?? 0;
+      const raceBonus = getStatRaceBonus(state, id);
+      const canDecrease = value > 8;
+      const canIncrease = value < 15 && remaining > 0;
+      return '<article class="creator-stat-card">' +
+        '<div class="creator-stat-card-heading"><div><strong>' + escapeHtml(STATS[id].short) + '</strong><span>' + escapeHtml(STATS[id].ukr) + '</span></div>' +
+        '<span class="creator-stat-racial">' + (raceBonus ? escapeHtml(formatSigned(raceBonus)) + ' раса' : "—") + '</span></div>' +
+        '<div class="creator-point-buy-controls">' +
+        '<button type="button" data-creator-pointbuy="' + escapeHtml(id) + '" data-creator-pointbuy-delta="-1" ' + (canDecrease ? "" : "disabled") + '>−</button>' +
+        '<strong>' + value + '</strong>' +
+        '<button type="button" data-creator-pointbuy="' + escapeHtml(id) + '" data-creator-pointbuy-delta="1" ' + (canIncrease ? "" : "disabled") + '>+</button>' +
+        '</div>' +
+        '<div class="creator-stat-cost"><span>Вартість</span><strong>' + cost + '</strong></div>' +
+        renderStatValueSummary(state, id, value) +
+      '</article>';
+    }).join("") +
+    '</div></section>';
+}
+
+function renderManualStats(state) {
+  const stats = getActiveStats(state);
+  return '<section class="creator-stat-allocation-block"><div class="creator-stat-grid">' +
+    ABILITY_KEYS.map(id => {
+      const value = stats[id];
+      const raceBonus = getStatRaceBonus(state, id);
+      return '<article class="creator-stat-card">' +
+        '<div class="creator-stat-card-heading"><div><strong>' + escapeHtml(STATS[id].short) + '</strong><span>' + escapeHtml(STATS[id].ukr) + '</span></div>' +
+        '<span class="creator-stat-racial">' + (raceBonus ? escapeHtml(formatSigned(raceBonus)) + ' раса' : "—") + '</span></div>' +
+        '<input class="creator-manual-stat-input" type="number" min="' + CREATOR_MANUAL_SCORE_MIN + '" max="' + CREATOR_MANUAL_SCORE_MAX + '" step="1" data-creator-manual-stat="' + escapeHtml(id) + '" value="' + (value == null ? "" : escapeHtml(value)) + '" placeholder="3–18">' +
+        renderStatValueSummary(state, id, value) +
+      '</article>';
+    }).join("") +
+  '</div></section>';
+}
+
+function renderStatsStep(state) {
+  const allocation = state.statsMethod === CREATOR_STAT_METHODS.POINT_BUY
+    ? renderPointBuyStats(state)
+    : state.statsMethod === CREATOR_STAT_METHODS.MANUAL
+      ? renderManualStats(state)
+      : renderStandardStats(state);
+  return '<section class="creator-step">' +
+    '<div class="creator-section-heading"><h2>Характеристики</h2><p>Обери спосіб розподілу. Расові бонуси видно окремо, а підсумкове значення рахується одразу.</p></div>' +
+    renderRaceBonusLegend(state) + renderStatMethods(state) + allocation +
+  '</section>';
+}function renderClassStep(state) {
   const classes = Object.values(CLASSES);
   const summary = state.classId ? getClassSummary(state) : null;
   const subclassOptions = state.classId ? getSubclassOptions(state) : [];
