@@ -1628,7 +1628,7 @@ export function buildCharacterFromCreator(state, id) {
       spellId,
       sourceClassId: "racial",
       sourceClassIds: ["racial"],
-      preparedSourceClassIds: [],
+      preparedSourceClassIds: ["racial"],
       autoKnown: false,
       racial: true
     }));
