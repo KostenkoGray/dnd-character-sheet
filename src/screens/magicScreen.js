@@ -50,6 +50,10 @@ function renderFavoriteButton(spell) {
 }
 
 function renderSpellActions(spell) {
+  if (spell.racial) {
+    return '<span class="inventory-equipped-badge magic-cantrip-badge">Расове · завжди підготовлене</span>';
+  }
+
   const deleteButton = spell.autoKnown || spell.racial
     ? ""
     : `
