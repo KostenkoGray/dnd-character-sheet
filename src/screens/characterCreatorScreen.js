@@ -519,7 +519,7 @@ function renderSkillRows(state, options, selectedIds, attributeName, mode = "pro
         const abilityBonus = getStatModifier(base);
         const chosen = selected.has(option.id);
         const after = mode === "expertise" ? abilityBonus + 4 : abilityBonus + 2;
-        return '<label class="creator-skill-row ' + (chosen ? "selected" : "") + '">' +
+        return '<label class="creator-skill-row ' + (chosen ? "selected" : "") + '" data-' + attributeName + '-row="' + escapeHtml(option.id) + '">' +
           '<input type="checkbox" data-' + attributeName + ' value="' + escapeHtml(option.id) + '"' + (chosen ? " checked" : "") + '>' +
           '<span class="creator-skill-name"><strong>' + escapeHtml(option.label) + '</strong><small>' +
             (mode === "expertise"
