@@ -1,4 +1,4 @@
-import { STATS, ABILITY_KEYS } from "../data/rulesData.js";
+import { STATS, SKILLS, ABILITY_KEYS } from "../data/rulesData.js";
 import { RACES } from "../data/racesData.js";
 import { CLASSES } from "../data/classesData.js";
 import {
