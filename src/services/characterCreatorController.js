@@ -1,5 +1,4 @@
 import { generateCharacterId } from "../data/charactersData.js";
-import { generateCharacterId } from "../data/charactersData.js";
 import {
   CREATOR_STAT_METHODS,
   CREATOR_POINT_BUY_COST,
