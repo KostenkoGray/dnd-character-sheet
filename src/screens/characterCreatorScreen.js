@@ -547,7 +547,8 @@ function renderSkillChoiceGroup(state, group) {
 function renderExpertiseChoiceGroup(state, group) {
   const selected = state.classChoices.expertise ?? [];
   const proficient = new Set([
-    ...state.classChoices.skills ?? []
+    ...(getRaceTraitSummary(state).skillProficiencies ?? []),
+    ...(state.classChoices.skills ?? [])
   ]);
   const options = group.options.filter(option => proficient.has(option.id));
 
