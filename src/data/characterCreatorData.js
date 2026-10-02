@@ -286,6 +286,43 @@ const pick = (id, label, option, extra = {}) => ({
   ...extra
 });
 
+export const CREATOR_STAT_METHODS = {
+  STANDARD: "standard",
+  POINT_BUY: "pointBuy",
+  MANUAL: "manual"
+};
+
+export const CREATOR_POINT_BUY_BUDGET = 27;
+
+export const CREATOR_POINT_BUY_COST = {
+  8: 0,
+  9: 1,
+  10: 2,
+  11: 3,
+  12: 4,
+  13: 5,
+  14: 7,
+  15: 9
+};
+
+export const CREATOR_MANUAL_SCORE_MIN = 3;
+export const CREATOR_MANUAL_SCORE_MAX = 18;
+
+export const CREATOR_STARTING_WEALTH_BY_CLASS = {
+  barbarian: { diceCount: 2, dieSize: 4, multiplier: 10, formula: "2d4 × 10 GP" },
+  bard: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
+  cleric: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
+  druid: { diceCount: 2, dieSize: 4, multiplier: 10, formula: "2d4 × 10 GP" },
+  fighter: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
+  monk: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
+  paladin: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
+  ranger: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
+  rogue: { diceCount: 4, dieSize: 4, multiplier: 10, formula: "4d4 × 10 GP" },
+  sorcerer: { diceCount: 3, dieSize: 4, multiplier: 10, formula: "3d4 × 10 GP" },
+  warlock: { diceCount: 4, dieSize: 4, multiplier: 10, formula: "4d4 × 10 GP" },
+  wizard: { diceCount: 4, dieSize: 4, multiplier: 10, formula: "4d4 × 10 GP" }
+};
+
 export const CREATOR_CLASS_EQUIPMENT = {
   barbarian: {
     startingGold: CREATOR_STARTING_WEALTH_BY_CLASS.barbarian,
@@ -577,43 +614,6 @@ export const CREATOR_CLASS_EQUIPMENT = {
 };
 
 export const CREATOR_ABILITY_SCORE_ARRAY = [15, 14, 13, 12, 10, 8];
-
-export const CREATOR_STAT_METHODS = {
-  STANDARD: "standard",
-  POINT_BUY: "pointBuy",
-  MANUAL: "manual"
-};
-
-export const CREATOR_POINT_BUY_BUDGET = 27;
-
-export const CREATOR_POINT_BUY_COST = {
-  8: 0,
-  9: 1,
-  10: 2,
-  11: 3,
-  12: 4,
-  13: 5,
-  14: 7,
-  15: 9
-};
-
-export const CREATOR_MANUAL_SCORE_MIN = 3;
-export const CREATOR_MANUAL_SCORE_MAX = 18;
-
-export const CREATOR_STARTING_WEALTH_BY_CLASS = {
-  barbarian: { diceCount: 2, dieSize: 4, multiplier: 10, formula: "2d4 × 10 GP" },
-  bard: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
-  cleric: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
-  druid: { diceCount: 2, dieSize: 4, multiplier: 10, formula: "2d4 × 10 GP" },
-  fighter: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
-  monk: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
-  paladin: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
-  ranger: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
-  rogue: { diceCount: 4, dieSize: 4, multiplier: 10, formula: "4d4 × 10 GP" },
-  sorcerer: { diceCount: 3, dieSize: 4, multiplier: 10, formula: "3d4 × 10 GP" },
-  warlock: { diceCount: 4, dieSize: 4, multiplier: 10, formula: "4d4 × 10 GP" },
-  wizard: { diceCount: 4, dieSize: 4, multiplier: 10, formula: "4d4 × 10 GP" }
-};
 
 /*
  * Кількість відомих заклять 1-го рівня для класів,
