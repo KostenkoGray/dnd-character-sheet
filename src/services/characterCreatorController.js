@@ -1,4 +1,8 @@
 import { generateCharacterId } from "../data/charactersData.js";
+import {
+  CREATOR_STAT_METHODS,
+  CREATOR_POINT_BUY_COST
+} from "../data/characterCreatorData.js";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -13,6 +17,58 @@ function getSelectedValues(select) {
   return Array.from(select?.selectedOptions ?? [])
     .map(option => option.value)
     .filter(Boolean);
+}
+
+function syncActiveStats(state) {
+  state.stats = {
+    ...(state.statsByMethod?.[state.statsMethod] ?? state.stats ?? {})
+  };
+}
+
+function setStatsMethod(state, method) {
+  if (!Object.values(CREATOR_STAT_METHODS).includes(method)) return;
+
+  syncActiveStats(state);
+  state.statsMethod = method;
+  state.stats = {
+    ...(state.statsByMethod?.[method] ?? state.stats ?? {})
+  };
+}
+
+function updateStandardStat(state, key, value) {
+  const stats = state.statsByMethod[CREATOR_STAT_METHODS.STANDARD];
+  const nextValue = value === "" ? null : Number(value);
+
+  if (nextValue !== null) {
+    for (const otherKey of Object.keys(stats)) {
+      if (otherKey !== key && Number(stats[otherKey]) === nextValue) {
+        stats[otherKey] = null;
+      }
+    }
+  }
+
+  stats[key] = nextValue;
+  syncActiveStats(state);
+}
+
+function updatePointBuyStat(state, key, delta) {
+  const stats = state.statsByMethod[CREATOR_STAT_METHODS.POINT_BUY];
+  const current = Number(stats[key] ?? 8);
+  const next = Math.min(15, Math.max(8, current + Number(delta ?? 0)));
+  if (next === current) return;
+  
+  const totalBefore = Object.entries(stats).reduce(
+    (sum, [, value]) => sum + Number(CREATOR_POINT_BUY_COST[Number(value)] ?? 0),
+    0
+  );
+  const currentCost = Number(CREATOR_POINT_BUY_COST[current] ?? 0);
+  const nextCost = Number(CREATOR_POINT_BUY_COST[next] ?? 0);
+  const totalAfter = totalBefore - currentCost + nextCost;
+
+  if (totalAfter > 27) return;
+
+  stats[key] = next;
+  syncActiveStats(state);
 }
 
 function blankRaceChoices() {
@@ -316,6 +372,85 @@ export async function startCharacterCreator({ app, onCancel, onCreate, onError }
       }
     }
 
+    const statMethodButton = event.target.closest("[data-creator-stat-method]");
+    if (statMethodButton) {
+      setStatsMethod(
+        state,
+        statMethodButton.dataset.creatorStatMethod ?? CREATOR_STAT_METHODS.STANDARD
+      );
+      state.error = "";
+      safeRender();
+      return;
+    }
+
+    const pointBuyButton = event.target.closest("[data-creator-pointbuy]");
+    if (pointBuyButton) {
+      if (state.statsMethod !== CREATOR_STAT_METHODS.POINT_BUY) {
+        setStatsMethod(state, CREATOR_STAT_METHODS.POINT_BUY);
+      }
+      updatePointBuyStat(
+        state,
+        pointBuyButton.dataset.creatorPointbuy ?? "",
+        Number(pointBuyButton.dataset.creatorPointbuyDelta ?? 0)
+      );
+      state.error = "";
+      safeRender();
+      return;
+    }
+
+    const skillChoice = event.target.closest("[data-creator-skill-choice]");
+    if (skillChoice) {
+      const group = creatorService.getClassChoiceGroups?.(state)?.find(item => item.id === "skills");
+      const max = Number(group?.count ?? 0);
+      const selected = new Set(state.classChoices.skills ?? []);
+
+      if (skillChoice.checked) {
+        if (selected.size >= max) {
+          skillChoice.checked = false;
+          state.error = "Можна вибрати не більше " + max + " навичок.";
+          safeRender();
+          return;
+        }
+        selected.add(skillChoice.value);
+      } else {
+        selected.delete(skillChoice.value);
+      }
+
+      state.classChoices.skills = [...selected];
+
+      const proficient = new Set(state.classChoices.skills);
+      state.classChoices.expertise =
+        (state.classChoices.expertise ?? []).filter(id => proficient.has(id));
+
+      state.error = "";
+      safeRender();
+      return;
+    }
+
+    const expertiseChoice = event.target.closest("[data-creator-expertise-choice]");
+    if (expertiseChoice) {
+      const group = creatorService.getClassChoiceGroups?.(state)?.find(item => item.id === "expertise");
+      const max = Number(group?.count ?? 0);
+      const selected = new Set(state.classChoices.expertise ?? []);
+
+      if (expertiseChoice.checked) {
+        if (max <= 0 || selected.size >= max) {
+          expertiseChoice.checked = false;
+          state.error = "Можна вибрати не більше " + max + " експертностей.";
+          safeRender();
+          return;
+        }
+        selected.add(expertiseChoice.value);
+      } else {
+        selected.delete(expertiseChoice.value);
+      }
+
+      state.classChoices.expertise = [...selected];
+      state.error = "";
+      safeRender();
+      return;
+    }
+
     const raceButton = event.target.closest("[data-creator-race]");
     if (raceButton) {
       const raceId = raceButton.dataset.creatorRace ?? "";
@@ -427,10 +562,49 @@ export async function startCharacterCreator({ app, onCancel, onCreate, onError }
 
     const statSelect = event.target.closest("[data-creator-stat]");
     if (statSelect) {
-      const key = statSelect.dataset.creatorStat ?? "";
-      state.stats[key] = statSelect.value === ""
-        ? null
-        : Number(statSelect.value);
+      if (state.statsMethod !== CREATOR_STAT_METHODS.STANDARD) {
+        setStatsMethod(state, CREATOR_STAT_METHODS.STANDARD);
+      }
+      updateStandardStat(
+        state,
+        statSelect.dataset.creatorStat ?? "",
+        statSelect.value
+      );
+      state.error = "";
+      safeRender();
+      return;
+    }
+
+    const manualStat = event.target.closest("[data-creator-manual-stat]");
+    if (manualStat) {
+      if (state.statsMethod !== CREATOR_STAT_METHODS.MANUAL) {
+        setStatsMethod(state, CREATOR_STAT_METHODS.MANUAL);
+      }
+      const key = manualStat.dataset.creatorManualStat ?? "";
+      const value = manualStat.value.trim();
+      state.statsByMethod[CREATOR_STAT_METHODS.MANUAL][key] =
+        value === "" ? null : Number(value);
+      syncActiveStats(state);
+      state.error = "";
+      safeRender();
+      return;
+    }
+
+    const equipmentMode = event.target.closest("[data-creator-equipment-mode]");
+    if (equipmentMode) {
+      state.equipmentMode = equipmentMode.value;
+      if (state.equipmentMode !== "gold") {
+        state.startingGoldGp = null;
+      }
+      state.error = "";
+      safeRender();
+      return;
+    }
+
+    const startingGold = event.target.closest("[data-creator-starting-gold]");
+    if (startingGold) {
+      const value = startingGold.value.trim();
+      state.startingGoldGp = value === "" ? null : Number(value);
       state.error = "";
       safeRender();
       return;
