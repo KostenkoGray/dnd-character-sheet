@@ -500,16 +500,82 @@ function formatToolCategoryName(id) {
   return names[id] ?? id;
 }
 
+function renderSkillRows(state, options, selectedIds, attributeName, mode = "proficiency") {
+  const selected = new Set(selectedIds ?? []);
+  const stats = getActiveStats(state);
+  const grouped = {};
+
+  for (const option of options) {
+    const statId = SKILLS[option.id]?.stat ?? "other";
+    grouped[statId] ??= [];
+    grouped[statId].push(option);
+  }
+
+  return Object.entries(grouped).map(([statId, statOptions]) =>
+    '<section class="creator-skill-stat-group">' +
+      '<div class="creator-skill-stat-heading"><strong>' + escapeHtml(STATS[statId]?.short ?? statId) + '</strong><span>' + escapeHtml(STATS[statId]?.ukr ?? statId) + '</span></div>' +
+      statOptions.map(option => {
+        const base = Number(stats[statId] ?? 10) + getStatRaceBonus(state, statId);
+        const abilityBonus = getStatModifier(base);
+        const chosen = selected.has(option.id);
+        const after = mode === "expertise" ? abilityBonus + 4 : abilityBonus + 2;
+        return '<label class="creator-skill-row ' + (chosen ? "selected" : "") + '">' +
+          '<input type="checkbox" data-' + attributeName + ' value="' + escapeHtml(option.id) + '"' + (chosen ? " checked" : "") + '>' +
+          '<span class="creator-skill-name"><strong>' + escapeHtml(option.label) + '</strong><small>' +
+            (mode === "expertise"
+              ? formatSigned(abilityBonus + 2) + ' зараз · ' + formatSigned(after) + ' з експертністю'
+              : formatSigned(abilityBonus) + ' зараз · ' + formatSigned(after) + ' з володінням') +
+          '</small></span>' +
+          '<span class="creator-skill-check">' + (chosen ? "✓" : "") + '</span>' +
+        '</label>';
+      }).join("") +
+    '</section>'
+  ).join("");
+}
+
+function renderSkillChoiceGroup(state, group) {
+  const selected = state.classChoices.skills ?? [];
+  return '<section class="creator-skill-chooser">' +
+    '<div class="creator-skill-chooser-heading"><h3>' + escapeHtml(group.title) + '</h3><span>' + selected.length + ' / ' + group.count + '</span></div>' +
+    '<p>Для кожної навички видно поточний бонус і бонус після вибору володіння.</p>' +
+    '<div class="creator-skill-groups">' +
+      renderSkillRows(state, group.options, selected, "creator-skill-choice") +
+    '</div>' +
+  '</section>';
+}
+
+function renderExpertiseChoiceGroup(state, group) {
+  const selected = state.classChoices.expertise ?? [];
+  const proficient = new Set([
+    ...state.classChoices.skills ?? []
+  ]);
+  const options = group.options.filter(option => proficient.has(option.id));
+
+  return '<section class="creator-skill-chooser creator-expertise-chooser">' +
+    '<div class="creator-skill-chooser-heading"><h3>' + escapeHtml(group.title) + '</h3><span>' + selected.length + ' / ' + group.count + '</span></div>' +
+    '<p>Доступні лише навички, якими персонаж уже володіє.</p>' +
+    '<div class="creator-skill-groups">' +
+      (options.length
+        ? renderSkillRows(state, options, selected, "creator-expertise-choice", "expertise")
+        : '<div class="creator-info-box"><strong>Спочатку вибери навички</strong><p>Після цього вони з’являться в Експертності.</p></div>') +
+    '</div>' +
+  '</section>';
+}
+
 function renderClassChoicesStep(state) {
   const groups = getClassChoiceGroups(state);
   return (
     '<section class="creator-step">' +
       '<div class="creator-section-heading">' +
         '<h2>Навички та вибори</h2>' +
-        '<p>Тут фіксуються всі рішення, які клас вимагає вже на 1 рівні.</p>' +
+        '<p>Навички згруповані за характеристиками. Експертність відкривається тільки для вже вибраних навичок.</p>' +
       '</div>' +
       '<div class="creator-choice-groups">' +
-        groups.map(group => renderChoiceGroup(state, group)).join("") +
+        groups.map(group => {
+          if (group.id === "skills") return renderSkillChoiceGroup(state, group);
+          if (group.id === "expertise") return renderExpertiseChoiceGroup(state, group);
+          return renderChoiceGroup(state, group);
+        }).join("") +
       '</div>' +
       (!groups.length ? '<div class="creator-info-box"><strong>Немає додаткових виборів</strong><p>Для цього класу на 1 рівні окремі вибори не потрібні.</p></div>' : "") +
     '</section>'
@@ -568,25 +634,42 @@ function renderBackgroundStep(state) {
 function renderEquipmentStep(state) {
   const groups = getEquipmentChoiceGroups(state);
   const classEquipment = CREATOR_CLASS_EQUIPMENT[state.classId];
+  const gold = classEquipment?.startingGold;
+  const mode = state.equipmentMode;
 
   return (
     '<section class="creator-step">' +
       '<div class="creator-section-heading">' +
         '<h2>Спорядження</h2>' +
-        '<p>Тут обираються всі варіанти стартового спорядження від класу та походження. Фіксовані предмети додаються автоматично.</p>' +
+        '<p>Обери стандартне класове спорядження або стартове золото замість нього. Спорядження походження додається окремо.</p>' +
       '</div>' +
-      '<section class="creator-info-box">' +
-        '<strong>Клас — фіксоване</strong>' +
-        '<p>' + escapeHtml((classEquipment?.fixed ?? []).map(item => getEntryLabel(item.source, item.itemId, item.customItem)).join(", ") || "—") + '</p>' +
+      '<section class="creator-equipment-mode">' +
+        '<h3>Класове спорядження</h3>' +
+        '<label class="creator-equipment-mode-card ' + (mode === "equipment" ? "selected" : "") + '">' +
+          '<input type="radio" name="creator-equipment-mode" value="equipment" data-creator-equipment-mode="equipment"' + (mode === "equipment" ? " checked" : "") + '>' +
+          '<span><strong>Стартове спорядження</strong><small>Обрати предмети та набори за класом.</small></span>' +
+        '</label>' +
+        '<label class="creator-equipment-mode-card ' + (mode === "gold" ? "selected" : "") + '">' +
+          '<input type="radio" name="creator-equipment-mode" value="gold" data-creator-equipment-mode="gold"' + (mode === "gold" ? " checked" : "") + '>' +
+          '<span><strong>Стартове золото</strong><small>' + escapeHtml(gold?.formula ?? "Стартове золото класу") + ' замість класового спорядження.</small></span>' +
+        '</label>' +
       '</section>' +
+      (mode === "gold"
+        ? '<section class="creator-gold-entry">' +
+            '<label class="creator-name-field"><span>Отримане золото, GP</span><input type="number" min="0" step="1" data-creator-starting-gold value="' + (state.startingGoldGp == null ? "" : escapeHtml(state.startingGoldGp)) + '" placeholder="Введи результат свого кидка"></label>' +
+            '<div class="creator-info-box"><strong>' + escapeHtml(gold?.formula ?? "Стартове золото") + '</strong><p>Зроби кидок за таблицею стартового багатства PHB і введи отриману кількість GP.</p></div>' +
+          '</section>'
+        : '<div class="creator-choice-groups">' +
+            '<section class="creator-info-box"><strong>Клас — фіксоване</strong><p>' + escapeHtml((classEquipment?.fixed ?? []).map(item => getEntryLabel(item.source, item.itemId, item.customItem)).join(", ") || "—") + '</p></section>' +
+            groups.filter(group => group.source === "class").map(group => renderEquipmentGroup(state, group)).join("") +
+          '</div>') +
       '<section class="creator-info-box">' +
         '<strong>Походження — фіксоване</strong>' +
         '<p>' + escapeHtml((BACKGROUNDS[state.backgroundId]?.startingEquipment?.fixed ?? []).map(item => item.name ?? item.id).join(", ") || "—") + '</p>' +
       '</section>' +
       '<div class="creator-choice-groups">' +
-        groups.map(group => renderEquipmentGroup(state, group)).join("") +
+        groups.filter(group => group.source === "background").map(group => renderEquipmentGroup(state, group)).join("") +
       '</div>' +
-      (!groups.length ? '<div class="creator-info-box"><strong>Немає варіантів</strong><p>Усе спорядження цього набору фіксоване.</p></div>' : "") +
     '</section>'
   );
 }
@@ -681,6 +764,7 @@ function renderNameStep(state) {
       '</label>' +
       '<section class="creator-final-summary">' +
         '<div><span>Раса</span><strong>' + escapeHtml(RACES[state.raceId]?.ukr ?? state.raceId ?? "—") + '</strong></div>' +
+        '<div><span>Підраса</span><strong>' + escapeHtml(RACES[state.raceId]?.subraces?.[state.subraceId]?.ukr ?? "—") + '</strong></div>' +
         '<div><span>Клас</span><strong>' + escapeHtml(CLASSES[state.classId]?.ukr ?? state.classId ?? "—") + '</strong></div>' +
         (state.subclassId && CLASSES[state.classId]?.subclasses?.[state.subclassId]
           ? '<div><span>Підклас</span><strong>' + escapeHtml(
@@ -690,7 +774,6 @@ function renderNameStep(state) {
             ) + '</strong></div>'
           : "") +
         '<div><span>Походження</span><strong>' + escapeHtml(BACKGROUNDS[state.backgroundId]?.ukr ?? state.backgroundId ?? "—") + '</strong></div>' +
-        '<div><span>Рівень</span><strong>1</strong></div>' +
       '</section>' +
     '</section>'
   );
