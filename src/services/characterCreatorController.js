@@ -1,7 +1,9 @@
 import { generateCharacterId } from "../data/charactersData.js";
+import { generateCharacterId } from "../data/charactersData.js";
 import {
   CREATOR_STAT_METHODS,
-  CREATOR_POINT_BUY_COST
+  CREATOR_POINT_BUY_COST,
+  CREATOR_POINT_BUY_BUDGET
 } from "../data/characterCreatorData.js";
 
 function escapeHtml(value) {
@@ -601,15 +603,6 @@ export async function startCharacterCreator({ app, onCancel, onCreate, onError }
       return;
     }
 
-    const startingGold = event.target.closest("[data-creator-starting-gold]");
-    if (startingGold) {
-      const value = startingGold.value.trim();
-      state.startingGoldGp = value === "" ? null : Number(value);
-      state.error = "";
-      safeRender();
-      return;
-    }
-
     const choiceSelect = event.target.closest("[data-creator-choice-select]");
     if (choiceSelect) {
       const groupId = choiceSelect.dataset.creatorChoiceSelect ?? "";
@@ -662,6 +655,14 @@ export async function startCharacterCreator({ app, onCancel, onCreate, onError }
     const nameInput = event.target.closest("[data-creator-name]");
     if (nameInput) {
       state.name = nameInput.value;
+      state.error = "";
+      return;
+    }
+
+    const startingGold = event.target.closest("[data-creator-starting-gold]");
+    if (startingGold) {
+      const value = startingGold.value.trim();
+      state.startingGoldGp = value === "" ? null : Number(value);
       state.error = "";
     }
   }
