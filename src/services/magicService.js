@@ -233,7 +233,11 @@ export function ensureMagicState(character) {
         sourceClassId,
         sourceClassIds: sourceClassId ? [sourceClassId] : [],
         preparedSourceClassIds:
-          prepared && sourceClassId ? [sourceClassId] : [],
+          Boolean(raw.racial) || sourceClassId === "racial"
+            ? ["racial"]
+            : prepared && sourceClassId
+              ? [sourceClassId]
+              : [],
         autoKnown: Boolean(raw.autoKnown),
         racial: Boolean(raw.racial),
         classFeature: Boolean(raw.classFeature)
@@ -289,7 +293,7 @@ export function ensureMagicState(character) {
     if (entry.racial) {
       entry.sourceClassId = "racial";
       entry.sourceClassIds = ["racial"];
-      entry.preparedSourceClassIds = [];
+      entry.preparedSourceClassIds = ["racial"];
       entry.autoKnown = false;
       continue;
     }
@@ -426,6 +430,7 @@ export function getKnownSpellEntries(character) {
       );
 
       const automaticPrepared =
+        entry.racial ||
         source?.spellcasting?.preparation === MAGIC_PREPARATION.KNOWN;
 
       return {
@@ -438,7 +443,9 @@ export function getKnownSpellEntries(character) {
         favorite: character.magic.favoriteSpellIds.includes(spell.id),
         racial: Boolean(entry.racial),
         classFeature: Boolean(entry.classFeature),
-        preparation: source?.spellcasting?.preparation ?? null,
+        preparation: entry.racial
+          ? "racial"
+          : source?.spellcasting?.preparation ?? null,
         prepared:
           spell.level === 0 ||
           automaticPrepared ||
@@ -606,6 +613,13 @@ export function toggleSpellPrepared(character, spellId, sourceClassId = "") {
     return {
       ok: false,
       message: "Заклинання не знайдено серед відомих."
+    };
+  }
+
+  if (entry.racial) {
+    return {
+      ok: false,
+      message: "Расове заклинання завжди підготовлене."
     };
   }
 
