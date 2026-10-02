@@ -288,6 +288,7 @@ const pick = (id, label, option, extra = {}) => ({
 
 export const CREATOR_CLASS_EQUIPMENT = {
   barbarian: {
+    startingGold: CREATOR_STARTING_WEALTH_BY_CLASS.barbarian,
     fixed: [
       custom("explorerPack", "Набір дослідника"),
       item("weapon", "javelin", 4)
@@ -305,6 +306,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
   },
 
   bard: {
+    startingGold: CREATOR_STARTING_WEALTH_BY_CLASS.bard,
     fixed: [
       item("armor", "leather"),
       item("weapon", "dagger")
@@ -328,6 +330,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
   },
 
   cleric: {
+    startingGold: CREATOR_STARTING_WEALTH_BY_CLASS.cleric,
     fixed: [
       item("armor", "shield"),
       custom("holySymbol", "Святий символ", "other")
@@ -354,6 +357,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
   },
 
   druid: {
+    startingGold: CREATOR_STARTING_WEALTH_BY_CLASS.druid,
     fixed: [
       item("armor", "leather"),
       custom("explorerPack", "Набір дослідника"),
@@ -372,6 +376,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
   },
 
   fighter: {
+    startingGold: CREATOR_STARTING_WEALTH_BY_CLASS.fighter,
     fixed: [],
     choices: [
       pick("armor", "Броня", [
@@ -409,6 +414,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
   },
 
   monk: {
+    startingGold: CREATOR_STARTING_WEALTH_BY_CLASS.monk,
     fixed: [
       custom("explorerPack", "Набір дослідника"),
       item("weapon", "dart", 10)
@@ -426,6 +432,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
   },
 
   paladin: {
+    startingGold: CREATOR_STARTING_WEALTH_BY_CLASS.paladin,
     fixed: [
       item("armor", "chainMail"),
       custom("holySymbol", "Святий символ")
@@ -458,6 +465,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
   },
 
   ranger: {
+    startingGold: CREATOR_STARTING_WEALTH_BY_CLASS.ranger,
     fixed: [
       item("weapon", "longbow"),
       custom("arrows20", "20 стріл")
@@ -479,6 +487,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
   },
 
   rogue: {
+    startingGold: CREATOR_STARTING_WEALTH_BY_CLASS.rogue,
     fixed: [
       item("armor", "leather"),
       item("weapon", "dagger", 2),
@@ -502,6 +511,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
   },
 
   sorcerer: {
+    startingGold: CREATOR_STARTING_WEALTH_BY_CLASS.sorcerer,
     fixed: [
       item("weapon", "dagger", 2)
     ],
@@ -522,6 +532,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
   },
 
   warlock: {
+    startingGold: CREATOR_STARTING_WEALTH_BY_CLASS.warlock,
     fixed: [
       item("armor", "leather"),
       item("weapon", "dagger", 2)
@@ -544,6 +555,7 @@ export const CREATOR_CLASS_EQUIPMENT = {
   },
 
   wizard: {
+    startingGold: CREATOR_STARTING_WEALTH_BY_CLASS.wizard,
     fixed: [
       custom("spellbook", "Книга заклинань")
     ],
@@ -565,6 +577,43 @@ export const CREATOR_CLASS_EQUIPMENT = {
 };
 
 export const CREATOR_ABILITY_SCORE_ARRAY = [15, 14, 13, 12, 10, 8];
+
+export const CREATOR_STAT_METHODS = {
+  STANDARD: "standard",
+  POINT_BUY: "pointBuy",
+  MANUAL: "manual"
+};
+
+export const CREATOR_POINT_BUY_BUDGET = 27;
+
+export const CREATOR_POINT_BUY_COST = {
+  8: 0,
+  9: 1,
+  10: 2,
+  11: 3,
+  12: 4,
+  13: 5,
+  14: 7,
+  15: 9
+};
+
+export const CREATOR_MANUAL_SCORE_MIN = 3;
+export const CREATOR_MANUAL_SCORE_MAX = 18;
+
+export const CREATOR_STARTING_WEALTH_BY_CLASS = {
+  barbarian: { diceCount: 2, dieSize: 4, multiplier: 10, formula: "2d4 × 10 GP" },
+  bard: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
+  cleric: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
+  druid: { diceCount: 2, dieSize: 4, multiplier: 10, formula: "2d4 × 10 GP" },
+  fighter: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
+  monk: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
+  paladin: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
+  ranger: { diceCount: 5, dieSize: 4, multiplier: 10, formula: "5d4 × 10 GP" },
+  rogue: { diceCount: 4, dieSize: 4, multiplier: 10, formula: "4d4 × 10 GP" },
+  sorcerer: { diceCount: 3, dieSize: 4, multiplier: 10, formula: "3d4 × 10 GP" },
+  warlock: { diceCount: 4, dieSize: 4, multiplier: 10, formula: "4d4 × 10 GP" },
+  wizard: { diceCount: 4, dieSize: 4, multiplier: 10, formula: "4d4 × 10 GP" }
+};
 
 /*
  * Кількість відомих заклять 1-го рівня для класів,
